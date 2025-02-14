@@ -1,4 +1,4 @@
-/*
+package players;/*
  * Course: Software Tools & Process
  * Spring 2025
  * Group
@@ -9,13 +9,14 @@
  * @version 1.0
  */
 
-public class Tester extends Person {
+public class User extends Person {
 
-	public Tester(){
+	public User(){
 
 	}
 
-	public void testWithTextFile(){
+
+	public void guessWord(){
 
 	}
 

@@ -1,3 +1,4 @@
+package players;
 /*
  * Course: Software Tools & Process
  * Spring 2025
@@ -9,14 +10,12 @@
  * @version 1.0
  */
 
-public class User extends Person {
-
-	public User(){
+public class CollegeStudent extends User {
+	public CollegeStudent(){
 
 	}
 
-
-	public void guessWord(){
+	public void viewCommonWords(){
 
 	}
 

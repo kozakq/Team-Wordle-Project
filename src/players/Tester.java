@@ -1,5 +1,4 @@
-
-/*
+package players;/*
  * Course: Software Tools & Process
  * Spring 2025
  * Group
@@ -10,12 +9,13 @@
  * @version 1.0
  */
 
-public class CollegeStudent extends User {
-	public CollegeStudent(){
+public class Tester extends Person {
+
+	public Tester(){
 
 	}
 
-	public void viewCommonWords(){
+	public void testWithTextFile(){
 
 	}
 

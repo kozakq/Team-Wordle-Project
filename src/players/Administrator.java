@@ -1,4 +1,4 @@
-/*
+package players;/*
  * Course: Software Tools & Process
  * Spring 2025
  * Group
@@ -9,14 +9,18 @@
  * @version 1.0
  */
 
-public abstract class Person {
+public class Administrator extends Person {
 
-	public Person(){
+	public Administrator(){
 
 	}
 
-	public void enterLogin(){
+	public void changeDictionary(){
 
+	}
+
+	public int modifyWordLength(){
+		return 0;
 	}
 
 }
