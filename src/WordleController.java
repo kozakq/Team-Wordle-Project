@@ -25,6 +25,7 @@ public class WordleController {
 	private List<Character> guessedLetters;
 	private List<String> guessedWords;
 	private Person person;
+	private Dictionary dict;
 
 	public WordleController(){
 
@@ -49,7 +50,7 @@ public class WordleController {
 
 	}
 
-	public void findNewWord(){
+	public void getGoalWord(){
 
 	}
 
