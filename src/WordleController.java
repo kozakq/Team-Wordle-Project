@@ -82,7 +82,7 @@ public class WordleController {
     private int currentRow;
     private boolean gameOver;
 
-	private final WordleApp app;
+	private WordleApp app;
 	private String goalWord;
     public WordleController() {
         app = new WordleApp();
@@ -544,7 +544,7 @@ public class WordleController {
 	 * @param password
 	 */
 	public void login(String username, String password){
-		app.login(username, password);
+
 	}
 
     public void showHint() {
