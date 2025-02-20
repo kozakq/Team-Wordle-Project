@@ -4,7 +4,10 @@
 <?import javafx.scene.layout.VBox?>
 
 
+<?import javafx.scene.control.Label?>
 <AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="WordleController">
-    <VBox layoutX="-1.0" prefHeight="400.0" prefWidth="600.0"/>
+    <VBox fx:id="box" layoutX="-1.0" prefHeight="400.0" prefWidth="600.0">
+        <Label fx:id="text">Enter Text</Label>
+    </VBox>
 </AnchorPane>

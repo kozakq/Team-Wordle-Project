@@ -1,7 +1,11 @@
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -28,9 +32,24 @@ public class WordleController {
 	private List<String> guessedWords;
 	private Person person;
 
+	@FXML
+	VBox box;
+
+	@FXML
+	Label text;
+
 	public WordleController(){
 		app = new WordleApp();
 		goalWord = app.getGoalWord();
+	}
+
+	@FXML
+	public void initialize(){
+		TextField tf = new TextField();
+		tf.setOnAction(event -> {
+			enterWord(tf.getText());
+		});
+		box.getChildren().add(tf);
 	}
 
 	public void changeDictionary(){
@@ -51,7 +70,9 @@ public class WordleController {
 	 */
 	public void enterWord(String word){
 		if (word.length() == 5) {
-			app.checkWord(word); //TODO show output
+			text.setText(app.checkWord(word) ? "Word!" : "Not word!");
+		} else {
+			text.setText("Not 5 letters!");
 		}
 	}
 
