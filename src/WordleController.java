@@ -21,16 +21,19 @@ import java.util.List;
  */
 public class WordleController {
 
+	private WordleApp app;
 	private String goalWord;
 	private List<Character> guessedLetters;
 	private List<String> guessedWords;
 	private Person person;
 
 	public WordleController(){
-
+		app = new WordleApp();
+		goalWord = app.getGoalWord();
 	}
 
 	public void changeDictionary(){
+
     }
 
 	public void changeWordLength(){
@@ -46,11 +49,9 @@ public class WordleController {
 	 * @param word
 	 */
 	public void enterWord(String word){
-
-	}
-
-	public void findNewWord(){
-
+		if (word.length() == 5) {
+			app.checkWord(word); //TODO show output
+		}
 	}
 
 	public void getAllLettersGuessed(){
@@ -89,6 +90,7 @@ public class WordleController {
 	public void testWithFile(String filePath){
 
 	}
+
 	private void openPlayerStatsController(ActionEvent event){
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("KernelController.fxml"));
