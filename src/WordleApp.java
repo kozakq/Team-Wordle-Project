@@ -20,6 +20,7 @@ import java.util.Map;
 public class WordleApp {
     private List<Account> accountList;
     private Account currentAccount;
+    private final Dictionary dictionary;
     private final WordleDictionary dictionary;
     private final String goalWord;
     private WordleDictionary dictionary;
@@ -92,8 +93,11 @@ public class WordleApp {
         return count;
     }
 
-    public boolean createAccount(String username, String password) {
-        return false;
+    public Account createAccount(String username, String password) {
+        if (!checkWord(username)) {
+            return new Account(username, password);
+        }
+        return null;
     }
 
     public Map<String, Integer> getAllWordsGuesses() {
@@ -109,14 +113,36 @@ public class WordleApp {
         return goalWord;
         return dictionary.getRandomWord();
         return goalWord;
+        return dictionary.getRandomWord();
     }
 
     public int getMostCommonGuesses() {
         return 0;
     }
 
-    public boolean validateLogin(String username, String password) {
-        return false;
+    public boolean login(String username, String password) {
+        if (!checkWord(username)) {
+            currentAccount = createAccount(username, password);
+            accountList.add(currentAccount);
+            return true;
+        } else {
+            Account account = validateLogin(username, password);
+            if (account != null) {
+                currentAccount = account;
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public Account validateLogin(String username, String password) {
+        for (Account account : accountList) {
+            if(account.getUsername().equals(username) && account.getPassword().equals(password)) {
+                return account;
+            }
+        }
+        return null;
     }
 
     public boolean isValidUsername(String username) {
