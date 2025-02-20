@@ -22,12 +22,16 @@ public class WordleApp {
     private Account currentAccount;
     private Dictionary dictionary;
 
+    public WordleApp() {
+        dictionary = new Dictionary();
+    }
+
     public boolean changeDictionary(String filePath) {
         return false;
     }
 
     public boolean checkWord(String word) {
-        return false;
+        return dictionary.isValidWord(word);
     }
 
     public boolean createAccount(String username, String password) {
