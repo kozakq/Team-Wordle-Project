@@ -59,4 +59,13 @@ public class WordleApp {
     public boolean validateLogin(String username, String password) {
         return false;
     }
+
+    public boolean isValidUsername(String username) {
+        for (Account account : accountList) {
+            if(account.getUsername().equals(username)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
