@@ -121,6 +121,15 @@ public class WordleApp {
 
     public boolean isValidUsername(String username) {
         for (Account account : accountList) {
+            if(account.getUsername().equals(username)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isValidUsername(String username) {
+        for (Account account : accountList) {
             if (account.getUsername().equals(username)) {
                 return false;
             }

@@ -23,6 +23,7 @@ public class Account {
     private String username;
     private UserType userType;
 
+	public Account(){
     public Account() {
 
     }
@@ -46,5 +47,13 @@ public class Account {
     public String getPassword() {
         return password;
     }
+
+	public String getUsername() {
+		return username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
 
 }
