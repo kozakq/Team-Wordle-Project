@@ -30,7 +30,7 @@ import java.util.List;
  */
 public class WordleController {
 
-	private final WordleApp app;
+	private WordleApp app;
 	private String goalWord;
 	private List<Character> guessedLetters;
 	private List<String> guessedWords;
@@ -126,7 +126,7 @@ public class WordleController {
 	 * @param password
 	 */
 	public void login(String username, String password){
-		app.login(username, password);
+
 	}
 
 	public void showHint(){

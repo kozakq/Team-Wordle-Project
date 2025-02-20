@@ -22,11 +22,8 @@ public class Account {
 	private String username;
 	private UserType userType;
 
-	public Account(String username, String password){
-		this.username = username;
-		this.password = password;
-		this.playerID = AccountID.getNextID();
-		this.userType = UserType.USER;
+	public Account(){
+
 	}
 
 	public double getAverageGuesses(){
