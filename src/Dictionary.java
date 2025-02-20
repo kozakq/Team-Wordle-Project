@@ -12,6 +12,7 @@
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -24,7 +25,8 @@ public class Dictionary {
 	 * no argument constructor for dictionary object
 	 */
 	public Dictionary(){
-		loadToList(new File("data/wordle-full-1.txt"));
+		wordList = new ArrayList<String>();
+		loadToList(new File("src/data/wordle-full-1.txt"));
 	}
 
 	/**
@@ -32,6 +34,7 @@ public class Dictionary {
 	 * @param filePath file path of txt file
 	 */
 	public Dictionary(String filePath){
+		wordList = new ArrayList<String>();
 		loadToList(new File(filePath));
 	}
 
@@ -51,12 +54,12 @@ public class Dictionary {
 	}
 
 	private void loadToList(File file) {
-		try (Scanner scanner = new Scanner(new File("file.txt"))) {
+		try (Scanner scanner = new Scanner(file)) {
 			while (scanner.hasNextLine()) {
 				wordList.add(scanner.nextLine());
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("File not found");
 		}
 	}
 }
