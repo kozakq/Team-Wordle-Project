@@ -4,6 +4,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -21,6 +22,9 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.HBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
@@ -142,6 +146,7 @@ public class WordleController {
 	private List<String> guessedWords;
 	private Person person;
 	private List<Label> labels;
+	private List<Label> labels;
 	private int guessCount;
 	private static final int MAX_GUESSES = 6;
 
@@ -217,6 +222,7 @@ public class WordleController {
 	private int currentRow;
 	public WordleController(){
 		app = new WordleApp();
+		labels = new ArrayList<>();
 		goalWord = app.getGoalWord();
 		this.guessedWords = new ArrayList<>();
 		labels = new ArrayList<>();
@@ -699,6 +705,18 @@ public class WordleController {
 			}
 	public void enterWord(String word){
 		if (word.length() == 5) {
+			String ret = app.checkWord(word);
+			text.setText(!ret.isEmpty()  ? "Word!" : "Not word!");
+			if (!ret.isEmpty()) {
+				for (int i = 0; i < 5; i++) {
+					labels.get(i).setText(word.substring(i, i + 1).toUpperCase());
+					switch (ret.charAt(i)) {
+						case 'x' -> labels.get(i).setStyle("-fx-background-color: gray;");
+						case 'y' -> labels.get(i).setStyle("-fx-background-color: yellow;");
+						case 'g' -> labels.get(i).setStyle("-fx-background-color: green;");
+					}
+				}
+			}
 			String ret = app.checkWord(word);
 			text.setText(!ret.isEmpty()  ? "Word!" : "Not word!");
 			if (!ret.isEmpty()) {
