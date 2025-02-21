@@ -20,6 +20,8 @@ import java.util.Map;
 public class WordleApp {
     private List<Account> accountList;
     private Account currentAccount;
+    private Dictionary dictionary;
+    private String goalWord;
     private WordleDictionary wordleDictionary;
     private Dictionary dictionary;
     private final Dictionary dictionary;
@@ -30,12 +32,31 @@ public class WordleApp {
         wordleDictionary = new WordleDictionary();
         dictionary = new Dictionary();
         goalWord = "allow";
+        dictionary = new Dictionary();
+        goalWord = "soars";
     }
 
     public boolean changeDictionary(String filePath) {
         return false;
     }
 
+    public String checkWord(String word) {
+        if (dictionary.isValidWord(word)) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < word.length(); i++) {
+                char guess_letter = word.charAt(i);
+                if (guess_letter == goalWord.charAt(i)) {
+                    sb.append('g');
+                } else if (goalWord.indexOf(guess_letter) != -1) {
+                    sb.append('y');
+                } else {
+                    sb.append('x');
+                }
+            }
+            return sb.toString();
+        } else {
+            return "";
+        }
     public boolean checkWord(String word) {
         return wordleDictionary.isValidWord(word);
     }

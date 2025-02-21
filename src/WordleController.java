@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.geometry.Pos;
 import javafx.geometry.Pos;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -13,6 +14,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
@@ -21,6 +26,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import players.Person;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,10 +80,10 @@ public class WordleController {
 	@FXML
 	public GridPane bottomKeyboardPane;
 	private WordleApp app;
-	private String goalWord;
 	private List<Character> guessedLetters;
 	private List<String> guessedWords;
 	private Person person;
+	private List<Label> labels;
 	private int guessCount;
 	private static final int MAX_GUESSES = 6;
 
@@ -107,6 +113,7 @@ public class WordleController {
 		app = new WordleApp();
 		goalWord = app.getGoalWord();
 		this.guessedWords = new ArrayList<>();
+		labels = new ArrayList<>();
 	}
 
     @FXML
@@ -188,6 +195,21 @@ public class WordleController {
     }
 	@FXML
 	public void initialize(){
+		TextField tf = new TextField();
+
+		HBox hbox = new HBox();
+		box.getChildren().addAll(hbox);
+		for (int i = 0; i < 5; i++) {
+			Label l = new Label();
+			l.setPrefSize(40, 40);
+			l.setAlignment(Pos.CENTER);
+			l.setStyle("-fx-background-color: lightgray;");
+			labels.add(l);
+			hbox.getChildren().add(l);
+		}
+
+		tf.setOnAction(event -> {
+			enterWord(tf.getText());
 		guessRows = new GridPane[]{guess1, guess2, guess3, guess4, guess5,guess6};
 		for (GridPane row : guessRows) {
 			for (int col = 0; col < 5; col++) {
@@ -296,6 +318,18 @@ public class WordleController {
 			}
 	public void enterWord(String word){
 		if (word.length() == 5) {
+			String ret = app.checkWord(word);
+			text.setText(!ret.isEmpty()  ? "Word!" : "Not word!");
+			if (!ret.isEmpty()) {
+				for (int i = 0; i < 5; i++) {
+					labels.get(i).setText(word.substring(i, i + 1).toUpperCase());
+					switch (ret.charAt(i)) {
+						case 'x' -> labels.get(i).setStyle("-fx-background-color: gray;");
+						case 'y' -> labels.get(i).setStyle("-fx-background-color: yellow;");
+						case 'g' -> labels.get(i).setStyle("-fx-background-color: green;");
+					}
+				}
+			}
 			boolean isValid = app.checkWord(word);
 			text.setText(isValid ? "Word!" : "Not word!");
 			if (isValid) {
