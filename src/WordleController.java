@@ -493,6 +493,16 @@ public class WordleController {
 		layout.getStyleClass().add("end-game-layout");
 
 		Scene scene = new Scene(layout, 350, 250);
+    private void lockCurrentRowAndAdvance() {
+        currentRow++;
+        if (currentRow < guessRows.length) {
+            // Enable the new current row and set focus to its first cell.
+            guessRows[currentRow].setDisable(false);
+            letterLabels[currentRow][0].requestFocus();
+        } else {
+            show("Game over!");
+        }
+    }
 
     private void lockCurrentRowAndAdvance() {
         guessRows[currentRow].setDisable(true);
