@@ -9,12 +9,14 @@
  * @version 1.0
  */
 public abstract class AccountID {
-	private int nextID;
-	public AccountID(){
+    private int nextID;
 
-	}
-	public int getNextID(){
-		return 0;
-	}
+    public AccountID() {
+
+    }
+
+    public int getNextID() {
+        return 0;
+    }
 
 }

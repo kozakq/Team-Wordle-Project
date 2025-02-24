@@ -20,12 +20,14 @@ import java.util.Map;
 public class WordleApp {
     private List<Account> accountList;
     private Account currentAccount;
+    private WordleDictionary wordleDictionary;
     private Dictionary dictionary;
     private final Dictionary dictionary;
     private Dictionary dictionary;
     private String goalWord;
 
     public WordleApp() {
+        wordleDictionary = new WordleDictionary();
         dictionary = new Dictionary();
         goalWord = "allow";
     }
@@ -35,7 +37,7 @@ public class WordleApp {
     }
 
     public boolean checkWord(String word) {
-        return dictionary.isValidWord(word);
+        return wordleDictionary.isValidWord(word);
     }
 
     public boolean createAccount(String username, String password) {
@@ -66,7 +68,7 @@ public class WordleApp {
 
     public boolean isValidUsername(String username) {
         for (Account account : accountList) {
-            if(account.getUsername().equals(username)) {
+            if (account.getUsername().equals(username)) {
                 return false;
             }
         }

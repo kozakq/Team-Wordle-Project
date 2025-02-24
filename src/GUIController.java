@@ -10,18 +10,17 @@
  */
 public class GUIController {
 
-	public GUIController(){
+    public GUIController() {
 
-	}
+    }
 
 
-	/**
-	 * 
-	 * @param word
-	 * @param guesses
-	 */
-	public void updateView(String word, String[] guesses){
+    /**
+     * @param word
+     * @param guesses
+     */
+    public void updateView(String word, String[] guesses) {
 
-	}
+    }
 
 }

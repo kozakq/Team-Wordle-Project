@@ -12,18 +12,18 @@ import java.util.Map;
  */
 public abstract class GlobalStats {
 
-	private Map<String, Integer> guessList;
+    private Map<String, Integer> guessList;
 
-	public GlobalStats(){
+    public GlobalStats() {
 
-	}
+    }
 
-	public Map<String, Integer> getAllWordsGuessed(){
-		return null;
-	}
+    public Map<String, Integer> getAllWordsGuessed() {
+        return null;
+    }
 
-	public void saveToFIle(){
+    public void saveToFIle() {
 
-	}
+    }
 
 }
