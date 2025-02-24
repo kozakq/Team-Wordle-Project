@@ -9,5 +9,7 @@
             fx:controller="WordleController">
     <VBox fx:id="box" layoutX="-1.0" prefHeight="400.0" prefWidth="600.0">
         <Label fx:id="text">Enter Text</Label>
+        <Label fx:id="GuessLabel">Guesses: </Label>
     </VBox>
+
 </AnchorPane>

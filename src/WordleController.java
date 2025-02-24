@@ -1,3 +1,4 @@
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,12 +32,16 @@ public class WordleController {
 	private List<Character> guessedLetters;
 	private List<String> guessedWords;
 	private Person person;
+	private int guessCount;
+	private static final int MAX_GUESSES = 6;
 
 	@FXML
 	VBox box;
 
 	@FXML
 	Label text;
+	@FXML
+	Label GuessLabel;
 
 	public WordleController(){
 		app = new WordleApp();
@@ -51,7 +56,16 @@ public class WordleController {
 		});
 		box.getChildren().add(tf);
 	}
+	public void isGameOver() {
+		if (guessCount == MAX_GUESSES ) {
+			endGame();
+		}
+	}
 
+	public void updateguessLabel() {
+		GuessLabel.setText(String.valueOf(guessCount) + "/6");
+		isGameOver();
+	}
 	public void changeDictionary(){
 
     }
@@ -61,7 +75,7 @@ public class WordleController {
 	}
 
 	public void endGame(){
-
+		Platform.exit();
 	}
 
 	/**
@@ -70,7 +84,12 @@ public class WordleController {
 	 */
 	public void enterWord(String word){
 		if (word.length() == 5) {
-			text.setText(app.checkWord(word) ? "Word!" : "Not word!");
+			boolean isValid = app.checkWord(word);
+			text.setText(isValid ? "Word!" : "Not word!");
+			if (isValid) {
+				guessCount++;
+				updateguessLabel();
+			}
 		} else {
 			text.setText("Not 5 letters!");
 		}
