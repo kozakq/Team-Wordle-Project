@@ -31,8 +31,10 @@ public class WordleApp {
     private final Dictionary dictionary;
     private Dictionary dictionary;
     private String goalWord;
+    private WordleDictionary wordleDictionary;
 
     public WordleApp() {
+        wordleDictionary = new WordleDictionary();
         dictionary = new WordleDictionary();
         goalWord = dictionary.getRandomWord();
         goalWord = dictionary.getRandomWord();
@@ -73,6 +75,7 @@ public class WordleApp {
             return "";
         }
     public boolean checkWord(String word) {
+        return wordleDictionary.isValidWord(word);
         return wordleDictionary.isValidWord(word);
     }
 
