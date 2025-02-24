@@ -36,7 +36,12 @@ import static java.awt.SystemColor.text;
  * @version 1.0
  */
 public class WordleController {
-
+	@FXML
+	public GridPane topKeyboardPane;
+	@FXML
+	public GridPane middleKeyboardPane;
+	@FXML
+	public GridPane bottomKeyboardPane;
 	private WordleApp app;
 	private String goalWord;
 	private List<Character> guessedLetters;
@@ -133,6 +138,9 @@ public class WordleController {
 			Label label = (Label) children.get(col);
 			label.setText(String.valueOf(guessedChar));
 		}
+		highlightLabel(topKeyboardPane, word);
+		highlightLabel(middleKeyboardPane, word);
+		highlightLabel(bottomKeyboardPane, word);
 		currentRow++;
 		guessTextField.clear();
 	}
@@ -225,6 +233,16 @@ public class WordleController {
 		alert.setContentText(words);
 		alert.showAndWait();
 	}
+	private Label getLabelFromGrid(GridPane gridPane, char letter) {
+		for (Node node : gridPane.getChildren()) {
+			if (node instanceof Label label) {
+				if (label.getText().equalsIgnoreCase(String.valueOf(letter))) {
+					return label;
+				}
+			}
+		}
+		return null;
+	}
 	public void showEndGameWindow() {
 		Stage endGameStage = new Stage();
 		endGameStage.initModality(Modality.WINDOW_MODAL);
@@ -240,6 +258,14 @@ public class WordleController {
 		restartButton.getStyleClass().add("restart-button");
 		restartButton.setOnAction(e -> restartGame(endGameStage));
 
+	public void highlightLabel(GridPane gridPane, String guessedWord) {
+		for (char letter: guessedWord.toCharArray()) {
+			Label label = getLabelFromGrid(gridPane, letter);
+			if (label != null) {
+				label.setStyle("-fx-background-color: yellow; -fx-text-fill: black;");
+			}
+		}
+	}
 		Button closeButton = new Button("Exit Game");
 		closeButton.getStyleClass().add("exit-button");
 		closeButton.setOnAction(e -> {
