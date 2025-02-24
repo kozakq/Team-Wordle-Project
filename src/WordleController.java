@@ -43,21 +43,20 @@ import java.util.List;
  * @version 1.0
  */
 public class WordleController {
-
     @FXML
-    GridPane guess1;
+    private GridPane guess1;
     @FXML
-    GridPane guess2;
+    private GridPane guess2;
     @FXML
-    GridPane guess3;
+    private GridPane guess3;
     @FXML
-    GridPane guess4;
+    private GridPane guess4;
     @FXML
-    GridPane guess5;
+    private GridPane guess5;
     @FXML
-    GridPane guess6;
+    private GridPane guess6;
     @FXML
-    TextField guessTextField;
+    private TextField guessTextField;
     private final WordleApp app;
     private final WordleDictionary dictionary;
     private final String goalWord;
@@ -118,7 +117,7 @@ public class WordleController {
 
     @FXML
     public void initialize() {
-        guessRows = new GridPane[]{guess1, guess2, guess3, guess4, guess5, guess6};
+        guessRows = new GridPane[] {guess1, guess2, guess3, guess4, guess5, guess6};
         handleTyping();
     }
 
@@ -132,7 +131,7 @@ public class WordleController {
                 Label letterLabel = new Label();
                 letterLabel.getStyleClass().add("letter-cell");
                 letterLabel.setMinSize(78, 67);
-                letterLabel.setFont(new Font("Arial", 40));
+                letterLabel.setFont(new Font("Wingding", 40));
                 letterLabel.setAlignment(Pos.CENTER);
                 letterLabel.setFocusTraversable(true);
 
@@ -156,9 +155,10 @@ public class WordleController {
                             // Validate the word
                             if (dictionary.isValidWord(enteredWord.toLowerCase())) {
                                 show("Valid word: " + enteredWord);
+
                                 // Optionally, compare against the mystery word here...
                                 // Lock the current row and move to the next row:
-                                lockCurrentRowAndAdvance();
+                                Feedback(enteredWord, currentRowIndex);
                             } else {
                                 show("Invalid word: " + enteredWord);
                                 // Optionally clear the row or provide feedback so the user can try again.
@@ -185,6 +185,25 @@ public class WordleController {
             }
         }
     }
+
+    private void Feedback(String word, int rowIndex) {
+        if (word.length() == 5) {
+            String ret = app.checkWord(word.toLowerCase());
+            if (!ret.isEmpty()) {
+                for (int i = 0; i < 5; i++) {
+                    // Update the label's text in the given row
+                    letterLabels[rowIndex][i].setText(word.substring(i, i + 1).toUpperCase());
+                    // Update the style based on the checkWord return code.
+                    switch (ret.charAt(i)) {
+                        case 'x' -> letterLabels[rowIndex][i].setStyle("-fx-background-color: gray;");
+                        case 'y' -> letterLabels[rowIndex][i].setStyle("-fx-background-color: yellow;");
+                        case 'g' -> letterLabels[rowIndex][i].setStyle("-fx-background-color: green;");
+                    }
+                }
+            }
+        }
+    }
+
 
     private String getWordFromRow(int rowIndex) {
         StringBuilder sb = new StringBuilder();
@@ -500,4 +519,5 @@ public class WordleController {
 		GuessLabel.setText("0/6");
 		stage.close();
 	}
+
 }

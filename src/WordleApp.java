@@ -20,7 +20,7 @@ import java.util.Map;
 public class WordleApp {
     private List<Account> accountList;
     private Account currentAccount;
-    private Dictionary dictionary;
+    private WordleDictionary dictionary;
     private String goalWord;
     private WordleDictionary wordleDictionary;
     private Dictionary dictionary;
@@ -29,6 +29,8 @@ public class WordleApp {
     private String goalWord;
 
     public WordleApp() {
+        dictionary = new WordleDictionary();
+        goalWord = dictionary.getRandomWord();
         wordleDictionary = new WordleDictionary();
         dictionary = new Dictionary();
         goalWord = "allow";
