@@ -133,11 +133,11 @@ public class WordleController {
 		GridPane activeRow = guessRows[currentRow];
 		ObservableList<Node> children = activeRow.getChildren();
 
-		for (int col = 0; col < word.length(); col++) {
-			char guessedChar = word.charAt(col);
-			Label label = (Label) children.get(col);
-			label.setText(String.valueOf(guessedChar));
-		}
+//		for (int col = 0; col < word.length(); col++) {
+//			char guessedChar = word.charAt(col);
+//			Label label = (Label) children.get(col);
+//			label.setText(String.valueOf(guessedChar));
+//		}
 		highlightLabel(topKeyboardPane, word);
 		highlightLabel(middleKeyboardPane, word);
 		highlightLabel(bottomKeyboardPane, word);
@@ -265,6 +265,11 @@ public class WordleController {
 				label.setStyle("-fx-background-color: yellow; -fx-text-fill: black;");
 			}
 		}
+	}
+
+	public void guessEntered(ActionEvent actionEvent) {
+		String guess = guessTextField.getText();
+		enterWord(guess);
 	}
 		Button closeButton = new Button("Exit Game");
 		closeButton.getStyleClass().add("exit-button");

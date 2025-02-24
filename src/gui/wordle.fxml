@@ -87,7 +87,7 @@
         </GridPane>
     </VBox>
     <Button layoutX="444.0" layoutY="14.0" mnemonicParsing="false" text="Hints" />
-    <Button layoutX="488.0" layoutY="14.0" mnemonicParsing="false" text="Button" />
+    <Button layoutX="489.0" layoutY="14.0" mnemonicParsing="false" onAction="#guessEntered" prefHeight="25.0" prefWidth="51.0" text="Enter" />
     <Button layoutX="540.0" layoutY="14.0" mnemonicParsing="false" text="help" />
     <VBox layoutX="21.0" layoutY="427.0" prefHeight="147.0" prefWidth="459.0">
         <GridPane fx:id="topKeyboardPane" gridLinesVisible="true" prefHeight="60.0" prefWidth="373.0">
@@ -107,16 +107,16 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
          <children>
-            <Label alignment="CENTER_RIGHT" prefHeight="24.0" prefWidth="28.0" text="Q" />
-            <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="25.0" text="E" GridPane.columnIndex="2" />
-            <Label alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="24.0" text="R" GridPane.columnIndex="3" />
-            <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="24.0" text="T" GridPane.columnIndex="4" />
-            <Label alignment="CENTER_RIGHT" prefHeight="13.0" prefWidth="24.0" text="Y" GridPane.columnIndex="5" />
-            <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="27.0" text="U" GridPane.columnIndex="6" />
-            <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="23.0" text="I" GridPane.columnIndex="7" />
-            <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="26.0" text="O" GridPane.columnIndex="8" />
-            <Label alignment="CENTER_RIGHT" prefHeight="13.0" prefWidth="27.0" text="P" GridPane.columnIndex="9" />
-            <Label alignment="CENTER_RIGHT" prefHeight="16.0" prefWidth="28.0" text="W" GridPane.columnIndex="1" />
+            <Label alignment="CENTER" prefHeight="51.0" prefWidth="48.0" text="Q" />
+            <Label alignment="CENTER" prefHeight="52.0" prefWidth="45.0" text="E" GridPane.columnIndex="2" />
+            <Label alignment="CENTER" prefHeight="65.0" prefWidth="55.0" text="R" GridPane.columnIndex="3" />
+            <Label alignment="CENTER" prefHeight="57.0" prefWidth="56.0" text="T" GridPane.columnIndex="4" />
+            <Label alignment="CENTER" prefHeight="112.0" prefWidth="109.0" text="Y" GridPane.columnIndex="5" />
+            <Label alignment="CENTER" prefHeight="140.0" prefWidth="143.0" text="U" GridPane.columnIndex="6" />
+            <Label alignment="CENTER" prefHeight="120.0" prefWidth="153.0" text="I" GridPane.columnIndex="7" />
+            <Label alignment="CENTER" prefHeight="107.0" prefWidth="116.0" text="O" GridPane.columnIndex="8" />
+            <Label alignment="CENTER" prefHeight="110.0" prefWidth="137.0" text="P" GridPane.columnIndex="9" />
+            <Label alignment="CENTER" prefHeight="56.0" prefWidth="46.0" text="W" GridPane.columnIndex="1" />
          </children>
         </GridPane>
         <GridPane fx:id="middleKeyboardPane" gridLinesVisible="true" prefHeight="60.0" prefWidth="373.0">
@@ -135,15 +135,15 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
          <children>
-            <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="28.0" text="A" />
-            <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="27.0" text="S" GridPane.columnIndex="1" />
-            <Label alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="29.0" text="D" GridPane.columnIndex="2" />
-            <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="27.0" text="F" GridPane.columnIndex="3" />
-            <Label alignment="CENTER_RIGHT" prefHeight="15.0" prefWidth="28.0" text="G" GridPane.columnIndex="4" />
-            <Label alignment="CENTER_RIGHT" prefHeight="16.0" prefWidth="28.0" text="H" GridPane.columnIndex="5" />
-            <Label alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="28.0" text="J" GridPane.columnIndex="6" />
-            <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="27.0" text="K" GridPane.columnIndex="7" />
-            <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="27.0" text="L" GridPane.columnIndex="8" />
+            <Label alignment="CENTER" prefHeight="121.0" prefWidth="135.0" text="A" />
+            <Label alignment="CENTER" prefHeight="113.0" prefWidth="148.0" text="S" GridPane.columnIndex="1" />
+            <Label alignment="CENTER" prefHeight="86.0" prefWidth="139.0" text="D" GridPane.columnIndex="2" />
+            <Label alignment="CENTER" prefHeight="125.0" prefWidth="181.0" text="F" GridPane.columnIndex="3" />
+            <Label alignment="CENTER" prefHeight="148.0" prefWidth="196.0" text="G" GridPane.columnIndex="4" />
+            <Label alignment="CENTER" prefHeight="100.0" prefWidth="136.0" text="H" GridPane.columnIndex="5" />
+            <Label alignment="CENTER" prefHeight="146.0" prefWidth="290.0" text="J" GridPane.columnIndex="6" />
+            <Label alignment="CENTER" prefHeight="180.0" prefWidth="263.0" text="K" GridPane.columnIndex="7" />
+            <Label alignment="CENTER" prefHeight="172.0" prefWidth="273.0" text="L" GridPane.columnIndex="8" />
          </children>
         </GridPane>
         <GridPane fx:id="bottomKeyboardPane" gridLinesVisible="true" prefHeight="49.0" prefWidth="410.0">
@@ -163,13 +163,13 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
          <children>
-            <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="25.0" text="Z" GridPane.columnIndex="1" />
-            <Label alignment="CENTER_RIGHT" prefHeight="16.0" prefWidth="23.0" text="X" GridPane.columnIndex="2" />
-            <Label alignment="CENTER_RIGHT" prefHeight="16.0" prefWidth="26.0" text="C" GridPane.columnIndex="3" />
-            <Label alignment="CENTER_RIGHT" prefHeight="18.0" prefWidth="25.0" text="V" GridPane.columnIndex="4" />
-            <Label alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="26.0" text="B" GridPane.columnIndex="5" />
-            <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="27.0" text="N" GridPane.columnIndex="6" />
-            <Label alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="27.0" text="M" GridPane.columnIndex="7" />
+            <Label alignment="CENTER" prefHeight="103.0" prefWidth="223.0" text="Z" GridPane.columnIndex="1" />
+            <Label alignment="CENTER" prefHeight="115.0" prefWidth="206.0" text="X" GridPane.columnIndex="2" />
+            <Label alignment="CENTER" prefHeight="96.0" prefWidth="182.0" text="C" GridPane.columnIndex="3" />
+            <Label alignment="CENTER" prefHeight="141.0" prefWidth="301.0" text="V" GridPane.columnIndex="4" />
+            <Label alignment="CENTER" prefHeight="93.0" prefWidth="188.0" text="B" GridPane.columnIndex="5" />
+            <Label alignment="CENTER" prefHeight="119.0" prefWidth="199.0" text="N" GridPane.columnIndex="6" />
+            <Label alignment="CENTER" prefHeight="139.0" prefWidth="240.0" text="M" GridPane.columnIndex="7" />
             <Label alignment="CENTER_RIGHT" prefHeight="17.0" prefWidth="35.0" text="Enter" />
             <Label alignment="CENTER_RIGHT" prefHeight="19.0" prefWidth="32.0" text="DEL" GridPane.columnIndex="9" />
          </children>
