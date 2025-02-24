@@ -17,6 +17,9 @@ TBD
 
 ## Authors and acknowledgment
 Gavin Childress - childressg@msoe.edu
+
 Jaden Griffith - griffithjr@msoe.edu
+
 Quinn Kozak - kozakq@msoe.edu
+
 Peli Orugbani - orugbanip@msoe.edu
