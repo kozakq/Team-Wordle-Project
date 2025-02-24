@@ -88,6 +88,12 @@ public class WordleController {
     private int currentRow;
     private boolean gameOver;
 
+	@FXML
+	public GridPane topKeyboardPane;
+	@FXML
+	public GridPane middleKeyboardPane;
+	@FXML
+	public GridPane bottomKeyboardPane;
 	private WordleApp app;
 	private String goalWord;
     public WordleController() {
@@ -472,6 +478,9 @@ public class WordleController {
 			Label label = (Label) children.get(col);
 			label.setText(String.valueOf(guessedChar));
 		}
+		highlightLabel(topKeyboardPane, word);
+		highlightLabel(middleKeyboardPane, word);
+		highlightLabel(bottomKeyboardPane, word);
 		currentRow++;
 		guessTextField.clear();
 	}
@@ -813,7 +822,26 @@ public class WordleController {
 		Button restartButton = new Button("Restart Game");
 		restartButton.getStyleClass().add("restart-button");
 		restartButton.setOnAction(e -> restartGame(endGameStage));
+	private Label getLabelFromGrid(GridPane gridPane, char letter) {
+		for (Node node : gridPane.getChildren()) {
+			if (node instanceof Label label) {
+				if (label.getText().equalsIgnoreCase(String.valueOf(letter))) {
+					return label;
+				}
+			}
+		}
+		return null;
+	}
 
+	public void highlightLabel(GridPane gridPane, String guessedWord) {
+		for (char letter: guessedWord.toCharArray()) {
+			Label label = getLabelFromGrid(gridPane, letter);
+			if (label != null) {
+				label.setStyle("-fx-background-color: yellow; -fx-text-fill: black;");
+			}
+		}
+	}
+}
     public void highlightLabel(GridPane gridPane, String guessedWord) {
         for (char letter : guessedWord.toCharArray()) {
             Label label = getLabelFromGrid(gridPane, letter);
