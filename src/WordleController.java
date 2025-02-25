@@ -13,6 +13,7 @@ import javafx.stage.StageStyle;
 import players.Person;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -57,7 +58,7 @@ public class WordleController {
 		box.getChildren().add(tf);
 	}
 	public void isGameOver() {
-		if (guessCount == MAX_GUESSES ) {
+		if (guessedWords != null && (guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES) {
 			endGame();
 		}
 	}
@@ -75,6 +76,7 @@ public class WordleController {
 	}
 
 	public void endGame(){
+		System.out.println("Game Over!");
 		Platform.exit();
 	}
 
