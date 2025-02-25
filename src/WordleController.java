@@ -3,6 +3,8 @@ import javafx.collections.ObservableList;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Node;
 import javafx.geometry.Pos;
 import javafx.geometry.Pos;
@@ -12,9 +14,13 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.GridPane;
+import javafx.scene.text.Font;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
@@ -110,8 +116,42 @@ public class WordleController {
 	Label text;
 	@FXML
 	Label GuessLabel;
+    @FXML
+    public GridPane topKeyboardPane;
+    @FXML
+    public GridPane middleKeyboardPane;
+    @FXML
+    public GridPane bottomKeyboardPane;
+    @FXML
+    private GridPane guess1;
+    @FXML
+    private GridPane guess2;
+    @FXML
+    private GridPane guess3;
+    @FXML
+    private GridPane guess4;
+    @FXML
+    private GridPane guess5;
+    @FXML
+    private GridPane guess6;
+    @FXML
+    private TextField guessTextField;
+    private final WordleApp app;
+    private final WordleDictionary dictionary;
+    private final String goalWord;
+    private List<Character> guessedLetters;
+    private List<String> guessedWords;
+    private Person person;
+    private GridPane[] guessRows;
+    private Label[][] letterLabels;
+    private int currentRow;
 
 
+    public WordleController() {
+        app = new WordleApp();
+        dictionary = new WordleDictionary();
+        goalWord = app.getGoalWord();
+    }
 	GridPane guess6;
 	@FXML
 	TextField guessTextField;
@@ -130,6 +170,106 @@ public class WordleController {
         handleTyping();
     }
 
+    @FXML
+    public void initialize() {
+        guessRows = new GridPane[] {guess1, guess2, guess3, guess4, guess5, guess6};
+        handleTyping();
+    }
+
+    private void handleTyping() {
+        letterLabels = new Label[guessRows.length][5];
+        for (int rowIndex = 0; rowIndex < guessRows.length; rowIndex++) {
+            GridPane row = guessRows[rowIndex];
+            for (int col = 0; col < 5; col++) {
+                final int currentRowIndex = rowIndex;
+                final int[] currentCol = {col};
+                Label letterLabel = new Label();
+                letterLabel.getStyleClass().add("letter-cell");
+                letterLabel.setMinSize(78, 67);
+                letterLabel.setFont(new Font("Wingding", 40));
+                letterLabel.setAlignment(Pos.CENTER);
+                letterLabel.setFocusTraversable(true);
+
+                letterLabel.setOnKeyPressed(event -> {
+                    // Handle Backspace
+                    if (event.getCode() == KeyCode.BACK_SPACE) {
+                        if (!letterLabel.getText().isEmpty()) {
+                            // Clear the current cell if it has text
+                            letterLabel.setText("");
+                        } else if (currentCol[0] > 0) {
+                            // If already empty and not the first cell, move focus back
+                            Label prevLabel = letterLabels[currentRowIndex][currentCol[0] - 1];
+                            prevLabel.setText(""); // clear previous cell
+                            prevLabel.requestFocus();
+                        }
+                        event.consume();
+                    } else if (event.getCode() == KeyCode.ENTER) {
+                        // When ENTER is pressed, gather the word from the entire row.
+                        String enteredWord = getWordFromRow(currentRowIndex);
+                        if (enteredWord.length() == 5) {
+                            // Validate the word
+                            if (dictionary.isValidWord(enteredWord.toLowerCase())) {
+                                show("Valid word: " + enteredWord);
+
+                                // Optionally, compare against the mystery word here...
+                                // Lock the current row and move to the next row:
+                                Feedback(enteredWord, currentRowIndex);
+                            } else {
+                                show("Invalid word: " + enteredWord);
+                                // Optionally clear the row or provide feedback so the user can try again.
+                            }
+                        } else {
+                            show("Incomplete word. Please fill all cells.");
+                        }
+                        event.consume();
+                    } else {
+                        String text = event.getText().toUpperCase();
+                        if (text.matches("[A-Z]")) {
+                            letterLabel.setText(text);
+                            if (currentCol[0] < 4) {
+                                letterLabels[currentRowIndex][currentCol[0] + 1].requestFocus();
+                            }
+                            event.consume();
+                        } else {
+                            show("WE ONLY TAKE LETTERS BITCH");
+                        }
+                    }
+                });
+                row.add(letterLabel, col, 0);
+                letterLabels[rowIndex][col] = letterLabel;
+            }
+        }
+    }
+
+    private void Feedback(String word, int rowIndex) {
+        if (word.length() == 5) {
+            String ret = app.checkWord(word.toLowerCase());
+            if (!ret.isEmpty()) {
+                for (int i = 0; i < 5; i++) {
+                    // Update the label's text in the given row
+                    letterLabels[rowIndex][i].setText(word.substring(i, i + 1).toUpperCase());
+                    // Update the style based on the checkWord return code.
+                    switch (ret.charAt(i)) {
+                        case 'x' -> letterLabels[rowIndex][i].setStyle("-fx-background-color: grey;");
+                        case 'y' -> letterLabels[rowIndex][i].setStyle("-fx-background-color: yellow;");
+                        case 'g' -> letterLabels[rowIndex][i].setStyle("-fx-background-color: green;");
+                    }
+                }
+            }
+            highlightLabel(topKeyboardPane, word);
+            highlightLabel(middleKeyboardPane, word);
+            highlightLabel(bottomKeyboardPane, word);
+        }
+    }
+
+
+    private String getWordFromRow(int rowIndex) {
+        StringBuilder sb = new StringBuilder();
+        for (int col = 0; col < 5; col++) {
+            sb.append(letterLabels[rowIndex][col].getText());
+        }
+        return sb.toString();
+    }
     private void handleTyping() {
         letterLabels = new Label[guessRows.length][5];
         for (int rowIndex = 0; rowIndex < guessRows.length; rowIndex++) {
@@ -273,6 +413,7 @@ public class WordleController {
 
     }
 
+    public void endGame() {
 	public void endGame(){
 		System.out.println("Game Over!");
 		Platform.exit();
@@ -281,6 +422,7 @@ public class WordleController {
 
     }
 
+    public void getAllLettersGuessed() {
     /**
      * @param word
      */
@@ -424,6 +566,63 @@ public class WordleController {
             System.err.println("Error opening player stats controller" + e.getMessage());
         }
     }
+
+    public void show(String words) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Mystery Word Letters");
+        alert.setContentText(words);
+        alert.showAndWait();
+    }
+    private Label getLabelFromGrid(GridPane gridPane, char letter) {
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof Label label) {
+                if (label.getText().equalsIgnoreCase(String.valueOf(letter))) {
+                    return label;
+                }
+            }
+        }
+        return null;
+    }
+
+
+
+    public void highlightLabel(GridPane gridPane, String guessedWord) {
+        String ret = app.checkWord(guessedWord.toLowerCase());
+
+        if (ret.isEmpty()) return;
+
+        for (int i = 0; i < guessedWord.length(); i++) {
+           Label label = getLabelFromGrid(gridPane, guessedWord.charAt(i));
+
+            if (label != null) {
+                 switch (ret.charAt(i)) {
+                    case 'x' -> {
+                        if (label.getProperties().get("locked") == null) {
+                            label.setStyle("-fx-background-color: grey");
+                            label.getProperties().put("locked", true);
+                        }
+                    }
+                    case 'y' -> label.setStyle("-fx-background-color: yellow;");
+                    case 'g' -> label.setStyle("-fx-background-color: green;");
+                 }
+            }
+        }
+    }
+
+
+    private void lockCurrentRowAndAdvance() {
+        currentRow++;
+        if (currentRow < guessRows.length) {
+            // Enable the new current row and set focus to its first cell.
+            guessRows[currentRow].setDisable(false);
+            letterLabels[currentRow][0].requestFocus();
+        } else {
+            show("Game over!");
+        }
+    }
+
+
+}
 
     @FXML
     public void show(String words) {
