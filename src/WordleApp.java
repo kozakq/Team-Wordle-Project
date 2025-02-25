@@ -65,7 +65,13 @@ public class WordleApp {
                 if (guess_letter == goalWord.charAt(i)) {
                     sb.append('g');
                 } else if (goalWord.indexOf(guess_letter) != -1) {
-                    sb.append('y');
+                    if (numberCorrectCharacter(goalWord, word, guess_letter) == characterCount(goalWord, guess_letter)) {
+                        sb.append('x');
+                    } else if (characterCount(word.substring(0, i), guess_letter) < characterCount(goalWord, guess_letter)) {
+                        sb.append('y');
+                    } else {
+                        sb.append('x');
+                    }
                 } else {
                     sb.append('x');
                 }
@@ -100,6 +106,24 @@ public class WordleApp {
     public boolean checkWord(String word) {
         return wordleDictionary.isValidWord(word);
         return wordleDictionary.isValidWord(word);
+    }
+
+    private int characterCount (String str, char c) {
+        int count = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == c) count++;
+        }
+        return count;
+    }
+
+    private int numberCorrectCharacter (String goal, String guess, char character) {
+        int count = 0;
+        for (int i = 0; i < guess.length(); i++) {
+            if (goal.charAt(i) == guess.charAt(i) && guess.charAt(i) == character) {
+                count++;
+            }
+        }
+        return count;
     }
 
     private int characterCount (String str, char c) {
