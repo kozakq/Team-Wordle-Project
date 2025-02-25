@@ -7,6 +7,7 @@ import javafx.scene.Node;
 import javafx.geometry.Pos;
 import javafx.geometry.Pos;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -24,7 +25,6 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import players.Person;
 
 import java.awt.*;
 import java.io.IOException;
@@ -46,6 +46,15 @@ public class WordleController {
     private final WordleApp app;
     private final WordleDictionary dictionary;
     private final String goalWord;
+    private final WordleApp app;
+    private final WordleDictionary dictionary;
+    private final String goalWord;
+    @FXML
+    public GridPane topKeyboardPane;
+    @FXML
+    public GridPane middleKeyboardPane;
+    @FXML
+    public GridPane bottomKeyboardPane;
     @FXML
     private GridPane guess1;
     @FXML
@@ -62,7 +71,6 @@ public class WordleController {
     private TextField guessTextField;
     private List<Character> guessedLetters;
     private List<String> guessedWords;
-    private Person person;
     private GridPane[] guessRows;
     private Label[][] letterLabels;
     private int currentRow;
@@ -189,7 +197,7 @@ public class WordleController {
     private void Feedback(String word, int rowIndex) {
         if (word.length() == 5) {
             String ret = app.checkWord(word.toLowerCase());
-            if (ret.equals("xxxxx")){
+            if (ret.equals("xxxxx")) {
                 gameOver = true;
             }
             if (!ret.isEmpty()) {
@@ -417,6 +425,42 @@ public class WordleController {
         }
     }
 
+    @FXML
+    public void show(String words) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Mystery Word Letters");
+        alert.setContentText(words);
+        alert.showAndWait();
+    }
+
+    private Label getLabelFromGrid(GridPane gridPane, char letter) {
+        for (Node node : gridPane.getChildren()) {
+            if (node instanceof Label label) {
+                if (label.getText().equalsIgnoreCase(String.valueOf(letter))) {
+                    return label;
+                }
+            }
+        }
+        return null;
+    }
+
+    private void openPlayerStatsController(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("KernelController.fxml"));
+            Parent root = loader.load();
+            PlayersStatsController playersStatsController = loader.getController();
+            playersStatsController.setWordleController(this);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initStyle(StageStyle.UTILITY);
+            stage.setTitle("Stats");
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (IOException e) {
+            System.err.println("Error opening player stats controller" + e.getMessage());
+        }
+    }
+
     public void show(String words) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("ALERT WINDOW");
@@ -472,6 +516,14 @@ public class WordleController {
 		restartButton.getStyleClass().add("restart-button");
 		restartButton.setOnAction(e -> restartGame(endGameStage));
 
+    public void highlightLabel(GridPane gridPane, String guessedWord) {
+        for (char letter : guessedWord.toCharArray()) {
+            Label label = getLabelFromGrid(gridPane, letter);
+            if (label != null) {
+                label.setStyle("-fx-background-color: yellow; -fx-text-fill: black;");
+            }
+        }
+    }
 	public void highlightLabel(GridPane gridPane, String guessedWord) {
 		for (char letter: guessedWord.toCharArray()) {
 			Label label = getLabelFromGrid(gridPane, letter);
@@ -514,7 +566,7 @@ public class WordleController {
         if (currentRow < guessRows.length) {
             guessRows[currentRow].setDisable(false);
             letterLabels[currentRow][0].requestFocus();
-        } else if(gameOver){
+        } else if (gameOver) {
             show("Game over!" + '\n' + " Mystery Word is " + app.getGoalWord());
         }
     }
