@@ -38,6 +38,7 @@ public class WordleApp {
 
     public WordleApp() {
         dictionary = new WordleDictionary();
+        goalWord = dictionary.getRandomWord();
         goalWord = "trade";
                 //dictionary.getRandomWord();
         goalWord = dictionary.getRandomWord();
