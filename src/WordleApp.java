@@ -21,9 +21,11 @@ public class WordleApp {
     private List<Account> accountList;
     private Account currentAccount;
     private Dictionary dictionary;
+    private String goalWord;
 
     public WordleApp() {
         dictionary = new Dictionary();
+        goalWord = "allow";
     }
 
     public boolean changeDictionary(String filePath) {
@@ -47,7 +49,7 @@ public class WordleApp {
     }
 
     public String getGoalWord() {
-        return null;
+        return goalWord;
     }
 
     public int getMostCommonGuesses() {
