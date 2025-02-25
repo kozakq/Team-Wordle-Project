@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,6 +15,7 @@ import javafx.stage.StageStyle;
 import players.Person;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -45,9 +45,11 @@ public class WordleController {
 	@FXML
 	Label GuessLabel;
 
+
 	public WordleController(){
 		app = new WordleApp();
 		goalWord = app.getGoalWord();
+		this.guessedWords = new ArrayList<>();
 	}
 
 	@FXML
@@ -66,6 +68,7 @@ public class WordleController {
 
 	public void updateguessLabel() {
 		GuessLabel.setText(String.valueOf(guessCount) + "/6");
+		System.out.println(guessedWords);
 		isGameOver();
 	}
 	
@@ -92,6 +95,7 @@ public class WordleController {
 			boolean isValid = app.checkWord(word);
 			text.setText(isValid ? "Word!" : "Not word!");
 			if (isValid) {
+				guessedWords.add(word);
 				guessCount++;
 				updateguessLabel();
 			}
@@ -155,7 +159,7 @@ public class WordleController {
 	}
 	public void showEndGameWindow() {
 		Stage endGameStage = new Stage();
-		endGameStage.initModality(Modality.APPLICATION_MODAL);
+		endGameStage.initModality(Modality.WINDOW_MODAL);
 		endGameStage.setTitle("Game Over");
 
 		Label message = new Label("Game Over!");
