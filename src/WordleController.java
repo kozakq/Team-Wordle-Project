@@ -2,6 +2,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -15,7 +16,6 @@ import javafx.stage.StageStyle;
 import players.Person;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -40,7 +40,6 @@ public class WordleController {
 
 	@FXML
 	VBox box;
-
 	@FXML
 	Label text;
 	@FXML
@@ -69,6 +68,7 @@ public class WordleController {
 		GuessLabel.setText(String.valueOf(guessCount) + "/6");
 		isGameOver();
 	}
+	
 
 	public void changeDictionary(){
 
@@ -155,23 +155,43 @@ public class WordleController {
 	}
 	public void showEndGameWindow() {
 		Stage endGameStage = new Stage();
-		endGameStage.initModality(Modality.WINDOW_MODAL);
+		endGameStage.initModality(Modality.APPLICATION_MODAL);
 		endGameStage.setTitle("Game Over");
 
+		Label message = new Label("Game Over!");
+		message.getStyleClass().add("game-over-text");
 
-		Label message = new Label("It took you " + guessCount + " guesses!");
+		Label guessInfo = new Label("It took you " + guessCount + " guesses!");
+		guessInfo.getStyleClass().add("guess-info");
+
+		Button restartButton = new Button("Restart Game");
+		restartButton.getStyleClass().add("restart-button");
+		restartButton.setOnAction(e -> restartGame(endGameStage));
+
 		Button closeButton = new Button("Exit Game");
+		closeButton.getStyleClass().add("exit-button");
 		closeButton.setOnAction(e -> {
 			endGameStage.close();
 			Platform.exit();
 		});
 
-		VBox layout = new VBox(15, message, closeButton);
-		layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
+		VBox layout = new VBox(20, message, guessInfo, restartButton, closeButton);
+		layout.setAlignment(Pos.CENTER);
+		layout.getStyleClass().add("end-game-layout");
 
-		Scene scene = new Scene(layout, 300, 150);
+		Scene scene = new Scene(layout, 350, 250);
+
+		scene.getStylesheets().add(getClass().getResource("test.css").toExternalForm());
+
 		endGameStage.setScene(scene);
 		endGameStage.show();
 	}
-
+	public void restartGame(Stage stage) {
+		guessCount = 0;
+		if (guessedWords != null) {
+			guessedWords.clear();
+		}
+		GuessLabel.setText("0/6");
+		stage.close();
+	}
 }

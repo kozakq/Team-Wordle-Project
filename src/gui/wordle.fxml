@@ -11,5 +11,4 @@
         <Label fx:id="text">Enter Text</Label>
         <Label fx:id="GuessLabel">Guesses: </Label>
     </VBox>
-
 </AnchorPane>
