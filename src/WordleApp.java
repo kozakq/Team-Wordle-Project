@@ -33,6 +33,7 @@ public class WordleApp {
     public WordleApp() {
         dictionary = new WordleDictionary();
         goalWord = dictionary.getRandomWord();
+        goalWord = dictionary.getRandomWord();
         wordleDictionary = new WordleDictionary();
         dictionary = new Dictionary();
         goalWord = "allow";
