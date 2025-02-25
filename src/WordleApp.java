@@ -20,6 +20,8 @@ import java.util.Map;
 public class WordleApp {
     private List<Account> accountList;
     private Account currentAccount;
+    private final WordleDictionary dictionary;
+    private final String goalWord;
     private WordleDictionary dictionary;
     private String goalWord;
     private final Dictionary dictionary;
@@ -131,6 +133,7 @@ public class WordleApp {
     }
 
     public String getGoalWord() {
+        return goalWord;
         return null;
         return null;
         return goalWord;

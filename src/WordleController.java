@@ -66,6 +66,9 @@ public class WordleController {
     private final WordleApp app;
     private final WordleDictionary dictionary;
     private final String goalWord;
+    private final WordleApp app;
+    private final WordleDictionary dictionary;
+    private final String goalWord;
     @FXML
     public GridPane topKeyboardPane;
     @FXML
@@ -194,15 +197,13 @@ public class WordleController {
     private GridPane guess6;
     @FXML
     private TextField guessTextField;
-    private final WordleApp app;
-    private final WordleDictionary dictionary;
-    private final String goalWord;
     private List<Character> guessedLetters;
     private List<String> guessedWords;
     private Person person;
     private GridPane[] guessRows;
     private Label[][] letterLabels;
     private int currentRow;
+    private boolean gameOver;
 
 
     public WordleController() {
@@ -348,7 +349,7 @@ public class WordleController {
 
     @FXML
     public void initialize() {
-        guessRows = new GridPane[] {guess1, guess2, guess3, guess4, guess5, guess6};
+        guessRows = new GridPane[]{guess1, guess2, guess3, guess4, guess5, guess6};
         handleTyping();
     }
 
@@ -386,10 +387,9 @@ public class WordleController {
                             // Validate the word
                             if (dictionary.isValidWord(enteredWord.toLowerCase())) {
                                 show("Valid word: " + enteredWord);
-
-                                // Optionally, compare against the mystery word here...
                                 // Lock the current row and move to the next row:
                                 Feedback(enteredWord, currentRowIndex);
+                                lockCurrentRowAndAdvance();
                             } else {
                                 show("Invalid word: " + enteredWord);
                                 // Optionally clear the row or provide feedback so the user can try again.
@@ -420,6 +420,9 @@ public class WordleController {
     private void Feedback(String word, int rowIndex) {
         if (word.length() == 5) {
             String ret = app.checkWord(word.toLowerCase());
+            if (ret.equals("xxxxx")){
+                gameOver = true;
+            }
             if (!ret.isEmpty()) {
                 for (int i = 0; i < 5; i++) {
                     // Update the label's text in the given row
@@ -830,7 +833,7 @@ public class WordleController {
 
     public void show(String words) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Mystery Word Letters");
+        alert.setTitle("ALERT WINDOW");
         alert.setContentText(words);
         alert.showAndWait();
     }
@@ -1102,14 +1105,14 @@ public class WordleController {
             show("Game over!");
         }
     }
+
     private void lockCurrentRowAndAdvance() {
         currentRow++;
         if (currentRow < guessRows.length) {
-            // Enable the new current row and set focus to its first cell.
             guessRows[currentRow].setDisable(false);
             letterLabels[currentRow][0].requestFocus();
-        } else {
-            show("Game over!");
+        } else if(gameOver){
+            show("Game over!" + '\n' + " Mystery Word is " + app.getGoalWord());
         }
     }
 
