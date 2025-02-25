@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
@@ -59,7 +61,7 @@ public class WordleController {
 	}
 	public void isGameOver() {
 		if (guessedWords != null && (guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES) {
-			endGame();
+			showEndGameWindow();
 		}
 	}
 
@@ -67,6 +69,7 @@ public class WordleController {
 		GuessLabel.setText(String.valueOf(guessCount) + "/6");
 		isGameOver();
 	}
+
 	public void changeDictionary(){
 
     }
@@ -149,6 +152,26 @@ public class WordleController {
 		} catch (IOException e) {
 			System.err.println("Error opening player stats controller" + e.getMessage());
 		}
+	}
+	public void showEndGameWindow() {
+		Stage endGameStage = new Stage();
+		endGameStage.initModality(Modality.WINDOW_MODAL);
+		endGameStage.setTitle("Game Over");
+
+
+		Label message = new Label("It took you " + guessCount + " guesses!");
+		Button closeButton = new Button("Exit Game");
+		closeButton.setOnAction(e -> {
+			endGameStage.close();
+			Platform.exit();
+		});
+
+		VBox layout = new VBox(15, message, closeButton);
+		layout.setStyle("-fx-padding: 20; -fx-alignment: center;");
+
+		Scene scene = new Scene(layout, 300, 150);
+		endGameStage.setScene(scene);
+		endGameStage.show();
 	}
 
 }
