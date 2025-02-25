@@ -256,9 +256,7 @@ public class WordleController {
                     }
                 }
             }
-            highlightLabel(topKeyboardPane, word);
-            highlightLabel(middleKeyboardPane, word);
-            highlightLabel(bottomKeyboardPane, word);
+            highlightLabel(word);
         }
     }
 
@@ -573,26 +571,26 @@ public class WordleController {
         alert.setContentText(words);
         alert.showAndWait();
     }
-    private Label getLabelFromGrid(GridPane gridPane, char letter) {
-        for (Node node : gridPane.getChildren()) {
-            if (node instanceof Label label) {
-                if (label.getText().equalsIgnoreCase(String.valueOf(letter))) {
-                    return label;
+    private Label getLabelFromGrid(char letter) {
+        GridPane[] gridPanes = {topKeyboardPane, middleKeyboardPane, bottomKeyboardPane};
+        for (GridPane gridPane : gridPanes) {
+            for (Node node : gridPane.getChildren()) {
+                if (node instanceof Label label) {
+                    if (label.getText().equalsIgnoreCase(String.valueOf(letter))) {
+                        return label;
+                    }
                 }
             }
         }
         return null;
     }
-
-
-
-    public void highlightLabel(GridPane gridPane, String guessedWord) {
+    public void highlightLabel(String guessedWord) {
         String ret = app.checkWord(guessedWord.toLowerCase());
 
         if (ret.isEmpty()) return;
 
         for (int i = 0; i < guessedWord.length(); i++) {
-           Label label = getLabelFromGrid(gridPane, guessedWord.charAt(i));
+           Label label = getLabelFromGrid(guessedWord.charAt(i));
 
             if (label != null) {
                  switch (ret.charAt(i)) {

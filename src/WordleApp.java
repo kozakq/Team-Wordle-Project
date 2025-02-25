@@ -38,6 +38,8 @@ public class WordleApp {
         goalWord = "allow";
         dictionary = new Dictionary();
         goalWord = "soars";
+        goalWord = "trade";
+                //dictionary.getRandomWord();
     }
 
     public boolean changeDictionary(String filePath) {
