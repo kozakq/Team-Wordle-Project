@@ -20,6 +20,8 @@ import java.util.Map;
 public class WordleApp {
     private List<Account> accountList;
     private Account currentAccount;
+    private final WordleDictionary dictionary;
+    private final String goalWord;
     private WordleDictionary dictionary;
     private String goalWord;
     private WordleDictionary wordleDictionary;
@@ -79,6 +81,7 @@ public class WordleApp {
         return null;
         return goalWord;
         return dictionary.getRandomWord();
+        return goalWord;
     }
 
     public int getMostCommonGuesses() {
