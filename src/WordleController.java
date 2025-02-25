@@ -187,6 +187,7 @@ public class WordleController {
 		endGameStage.show();
 	}
 	public void restartGame(Stage stage) {
+
 		guessCount = 0;
 		if (guessedWords != null) {
 			guessedWords.clear();
