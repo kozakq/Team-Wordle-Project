@@ -75,8 +75,10 @@ public class WordleApp {
         return count;
     }
 
-    public void changeGoalWord() {
+    public String changeGoalWord() {
         goalWord = "allow";
+//        goalWord = dictionary.getRandomWord();
+        return goalWord;
     }
 
     public boolean createAccount(String username, String password) {

@@ -33,7 +33,7 @@ import java.util.List;
 public class WordleController {
     private final WordleApp app;
     private final GUIController guiController;
-    private final String goalWord;
+    private String goalWord;
     private String currentWord;
     private final List<String> guessedWords;
     private final Label[][] letterLabels;
@@ -138,7 +138,6 @@ public class WordleController {
     }
 
     private void enterCharacter(String key) {
-        System.out.println(key);
         if (currentWord.length() < goalWord.length() && guessCount < MAX_GUESSES) {
             letterLabels[guessCount][currentWord.length()].setText(key);
             letterLabels[guessCount][currentWord.length()].setStyle("-fx-border-color: #545456; -fx-border-width: 2;");
@@ -147,7 +146,6 @@ public class WordleController {
     }
 
     private void enter() {
-        System.out.println("Enter");
         if (currentWord.length() == goalWord.length()) {
             String info = app.checkWord(currentWord.toLowerCase());
             if (!info.isEmpty()) {
@@ -168,7 +166,6 @@ public class WordleController {
     }
 
     private void backspace() {
-        System.out.println("Backspace");
         if (!currentWord.isEmpty()) {
             letterLabels[guessCount][currentWord.length() - 1].setText("");
             letterLabels[guessCount][currentWord.length() - 1].setStyle("-fx-border-color: #323234; -fx-border-width: 2;");
@@ -187,7 +184,7 @@ public class WordleController {
         endGameStage.initModality(Modality.APPLICATION_MODAL);
         endGameStage.setTitle("Game Over");
 
-        Label message = new Label("Game Over!");
+        Label message = new Label((guessedWords.contains(goalWord)) ? "You Win!" : "Game Over!");
         message.getStyleClass().add("game-over-text");
 
         Label guessInfo = new Label("It took you " + guessCount + " guesses!");
@@ -204,7 +201,7 @@ public class WordleController {
             Platform.exit();
         });
 
-        VBox layout = new VBox(20, message, guessInfo, restartButton, closeButton);
+        VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord),restartButton, closeButton);
         layout.setAlignment(Pos.CENTER);
         layout.getStyleClass().add("end-game-layout");
 
@@ -229,7 +226,7 @@ public class WordleController {
             }
         }
 
-        app.changeGoalWord();
+        goalWord = app.changeGoalWord();
         guiController.reset();
         stage.close();
     }
