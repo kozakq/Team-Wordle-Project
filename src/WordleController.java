@@ -61,8 +61,10 @@ public class WordleController {
 		box.getChildren().add(tf);
 	}
 	public void isGameOver() {
-		if (guessedWords != null && (guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES) {
-			showEndGameWindow();
+		if (guessedWords != null && (guessedWords.contains(goalWord))) {
+			showEndGameWindow(true);
+		} else if (guessCount == MAX_GUESSES) {
+			showEndGameWindow(false);
 		}
 	}
 
@@ -157,12 +159,13 @@ public class WordleController {
 			System.err.println("Error opening player stats controller" + e.getMessage());
 		}
 	}
-	public void showEndGameWindow() {
+	public void showEndGameWindow(boolean isWin) {
 		Stage endGameStage = new Stage();
 		endGameStage.initModality(Modality.WINDOW_MODAL);
-		endGameStage.setTitle("Game Over");
+		endGameStage.setTitle(isWin ? "You Win!" : "Game Over");
 
-		Label message = new Label("Game Over!");
+		// Dynamically change the message based on win/lose condition
+		Label message = new Label(isWin ? "You Win!" : "Game Over!");
 		message.getStyleClass().add("game-over-text");
 
 		Label guessInfo = new Label("It took you " + guessCount + " guesses!");
@@ -184,12 +187,12 @@ public class WordleController {
 		layout.getStyleClass().add("end-game-layout");
 
 		Scene scene = new Scene(layout, 350, 250);
-
 		scene.getStylesheets().add(getClass().getResource("test.css").toExternalForm());
 
 		endGameStage.setScene(scene);
 		endGameStage.show();
 	}
+
 	public void restartGame(Stage stage) {
 
 		guessCount = 0;
