@@ -5,7 +5,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -16,6 +15,7 @@ import javafx.stage.StageStyle;
 import players.Person;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /*
@@ -45,9 +45,11 @@ public class WordleController {
 	@FXML
 	Label GuessLabel;
 
+
 	public WordleController(){
 		app = new WordleApp();
 		goalWord = app.getGoalWord();
+		this.guessedWords = new ArrayList<>();
 	}
 
 	@FXML
@@ -59,13 +61,16 @@ public class WordleController {
 		box.getChildren().add(tf);
 	}
 	public void isGameOver() {
-		if (guessedWords != null && (guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES) {
-			showEndGameWindow();
+		if (guessedWords != null && (guessedWords.contains(goalWord))) {
+			showEndGameWindow(true);
+		} else if (guessCount == MAX_GUESSES) {
+			showEndGameWindow(false);
 		}
 	}
 
 	public void updateguessLabel() {
 		GuessLabel.setText(String.valueOf(guessCount) + "/6");
+		System.out.println(guessedWords);
 		isGameOver();
 	}
 	
@@ -92,6 +97,7 @@ public class WordleController {
 			boolean isValid = app.checkWord(word);
 			text.setText(isValid ? "Word!" : "Not word!");
 			if (isValid) {
+				guessedWords.add(word);
 				guessCount++;
 				updateguessLabel();
 			}
@@ -153,12 +159,13 @@ public class WordleController {
 			System.err.println("Error opening player stats controller" + e.getMessage());
 		}
 	}
-	public void showEndGameWindow() {
+	public void showEndGameWindow(boolean isWin) {
 		Stage endGameStage = new Stage();
-		endGameStage.initModality(Modality.APPLICATION_MODAL);
-		endGameStage.setTitle("Game Over");
+		endGameStage.initModality(Modality.WINDOW_MODAL);
+		endGameStage.setTitle(isWin ? "You Win!" : "Game Over");
 
-		Label message = new Label("Game Over!");
+		// Dynamically change the message based on win/lose condition
+		Label message = new Label(isWin ? "You Win!" : "Game Over!");
 		message.getStyleClass().add("game-over-text");
 
 		Label guessInfo = new Label("It took you " + guessCount + " guesses!");
@@ -180,13 +187,14 @@ public class WordleController {
 		layout.getStyleClass().add("end-game-layout");
 
 		Scene scene = new Scene(layout, 350, 250);
-
 		scene.getStylesheets().add(getClass().getResource("test.css").toExternalForm());
 
 		endGameStage.setScene(scene);
 		endGameStage.show();
 	}
+
 	public void restartGame(Stage stage) {
+
 		guessCount = 0;
 		if (guessedWords != null) {
 			guessedWords.clear();
