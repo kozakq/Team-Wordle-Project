@@ -9,9 +9,9 @@
  * @version 1.0
  */
 public enum UserType {
-	USER,
-	ADMIN,
-	TESTER,
-	COLLEGE_STUDENT,
-	MIDDLE_SCHOOL_STUDENT
+    USER,
+    ADMIN,
+    TESTER,
+    COLLEGE_STUDENT,
+    MIDDLE_SCHOOL_STUDENT
 }

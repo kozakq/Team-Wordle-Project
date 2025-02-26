@@ -1,14 +1,3 @@
-/*
- * Course: Software Tools & Process
- * Spring 2025
- * Group
- ** @author childressg
- ** @author OrugPeli
- ** @author Griffithjr
- ** @author kozakq
- * @version 1.0
- */
-
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -34,7 +23,7 @@ public class Dictionary {
 	 * @param filePath file path of txt file
 	 */
 	public Dictionary(String filePath){
-		wordList = new ArrayList<String>();
+		wordList = new ArrayList<>();
 		loadToList(new File(filePath));
 	}
 
