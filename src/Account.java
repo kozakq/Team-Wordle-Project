@@ -26,11 +26,6 @@ public class Account {
     public Account() {
 
     }
-	}
-	public Account(){
-    public Account() {
-
-    }
 
     public double getAverageGuesses() {
         return 0;
@@ -47,20 +42,8 @@ public class Account {
     public String getUsername() {
         return username;
     }
-    public String getUsername() {
-        return username;
-    }
 
     public String getPassword() {
         return password;
     }
-
-	public String getUsername() {
-		return username;
-	}
-
-    public String getPassword() {
-        return password;
-    }
-
 }

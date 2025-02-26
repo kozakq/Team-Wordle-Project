@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="50.0">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="63.0" prefWidth="600.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="58.0" prefWidth="393.0" spacing="15.0">
+                     <children>
+                        <ImageView fitHeight="38.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.4;">
+                           <image>
+                              <Image url="@help.png" />
+                           </image>
+                        </ImageView>
+                        <Label alignment="CENTER" prefHeight="58.0" prefWidth="270.0" text="WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
+                           <font>
+                              <Font name="System Bold" size="40.0" />
+                           </font>
+                        </Label>
+                        <ImageView fitHeight="38.0" fitWidth="22.0" layoutX="147.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.4;">
+                           <image>
+                              <Image url="@stats.png" />
+                           </image>
+                        </ImageView>
+                        <ImageView fitHeight="38.0" fitWidth="22.0" layoutX="462.0" layoutY="29.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.4;">
+                           <image>
+                              <Image url="@settings.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <Separator opacity="0.5" prefWidth="200.0" style="-fx-max-width: 400;" />
+               </children>
+            </VBox>
+            <VBox fx:id="words" alignment="TOP_CENTER" prefHeight="348.0" prefWidth="600.0" spacing="5.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="55.0" prefWidth="600.0" spacing="5.0">
+                     <children>
+                        <Label alignment="CENTER" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;" text="R" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="280.0" layoutY="11.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="A" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="310.0" layoutY="11.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;" text="N" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="283.0" layoutY="10.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="G" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="373.0" layoutY="10.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2;" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="55.0" prefWidth="600.0" spacing="5.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="191.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="S" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="222.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="C" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="280.0" layoutY="11.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="O" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="310.0" layoutY="11.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;" text="R" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="313.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;" text="N" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="77.0" prefHeight="55.0" prefWidth="600.0" spacing="5.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="191.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="J" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="222.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="U" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="280.0" layoutY="11.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;" text="I" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="222.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="C" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="252.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="E" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="143.0" prefHeight="55.0" prefWidth="600.0" spacing="5.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="191.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="B" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="280.0" layoutY="11.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;" text="R" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="373.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;" text="I" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="283.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;" text="N" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="252.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="G" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="210.0" prefHeight="55.0" prefWidth="600.0" spacing="5.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="191.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="P" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="280.0" layoutY="11.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;" text="R" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="373.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;" text="I" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="283.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;" text="N" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="252.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;" text="T" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="277.0" prefHeight="55.0" prefWidth="600.0" spacing="5.0">
+                     <children>
+                        <Label alignment="CENTER" layoutX="280.0" layoutY="11.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;" text="D" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="373.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;" text="R" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="283.0" layoutY="13.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;" text="I" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="222.0" layoutY="10.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;" text="N" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="373.0" layoutY="10.0" maxHeight="55.0" maxWidth="55.0" prefHeight="55.0" prefWidth="55.0" style="-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;" text="K" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="32.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+            <VBox fx:id="keys" maxHeight="300.0" prefHeight="300.0" prefWidth="600.0" spacing="4.0">
+               <children>
+                  <HBox alignment="CENTER" prefHeight="50.0" prefWidth="600.0" spacing="4.0">
+                     <children>
+                        <Label alignment="CENTER" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #808586; -fx-border-radius: 5; -fx-background-radius: 5;" text="Q" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #808586; -fx-border-radius: 5; -fx-background-radius: 5;" text="W" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="43.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #323234; -fx-border-radius: 5; -fx-background-radius: 5;" text="E" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="77.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #538d4c; -fx-border-radius: 5; -fx-background-radius: 5;" text="R" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="110.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #323234; -fx-border-radius: 5; -fx-background-radius: 5;" text="T" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="143.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #808586; -fx-border-radius: 5; -fx-background-radius: 5;" text="Y" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="177.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #323234; -fx-border-radius: 5; -fx-background-radius: 5;" text="U" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="210.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #538d4c; -fx-border-radius: 5; -fx-background-radius: 5;" text="I" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="243.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #323234; -fx-border-radius: 5; -fx-background-radius: 5;" text="O" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="277.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #323234; -fx-border-radius: 5; -fx-background-radius: 5;" text="P" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="50.0" prefWidth="600.0" spacing="4.0">
+                     <children>
+                        <Label alignment="CENTER" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #323234; -fx-border-radius: 5; -fx-background-radius: 5;" text="A" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #323234; -fx-border-radius: 5; -fx-background-radius: 5;" text="S" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="43.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #538d4c; -fx-border-radius: 5; -fx-background-radius: 5;" text="D" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="77.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #808586; -fx-border-radius: 5; -fx-background-radius: 5;" text="F" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="110.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #323234; -fx-border-radius: 5; -fx-background-radius: 5;" text="G" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="143.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #808586; -fx-border-radius: 5; -fx-background-radius: 5;" text="H" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="177.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #323234; -fx-border-radius: 5; -fx-background-radius: 5;" text="J" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="210.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #538d4c; -fx-border-radius: 5; -fx-background-radius: 5;" text="K" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="243.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #808586; -fx-border-radius: 5; -fx-background-radius: 5;" text="L" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <HBox alignment="CENTER" layoutX="10.0" layoutY="56.0" prefHeight="50.0" prefWidth="600.0" spacing="4.0">
+                     <children>
+                        <Label alignment="CENTER" maxHeight="50.0" maxWidth="60.0" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #808586; -fx-border-radius: 5; -fx-background-radius: 5;" text="ENTER" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="10.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #808586; -fx-border-radius: 5; -fx-background-radius: 5;" text="Z" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="43.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #808586; -fx-border-radius: 5; -fx-background-radius: 5;" text="X" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="77.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #323234; -fx-border-radius: 5; -fx-background-radius: 5;" text="C" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="110.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #808586; -fx-border-radius: 5; -fx-background-radius: 5;" text="V" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="143.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #323234; -fx-border-radius: 5; -fx-background-radius: 5;" text="B" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="177.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #538d4c; -fx-border-radius: 5; -fx-background-radius: 5;" text="N" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="210.0" layoutY="10.0" maxHeight="50.0" maxWidth="33.0" prefHeight="50.0" prefWidth="33.0" style="-fx-background-color: #808586; -fx-border-radius: 5; -fx-background-radius: 5;" text="M" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                        <Label alignment="CENTER" layoutX="243.0" layoutY="10.0" maxHeight="50.0" maxWidth="60.0" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #808586; -fx-border-radius: 5; -fx-background-radius: 5;" text="BKSPC" textFill="WHITE">
+                           <font>
+                              <Font name="System Bold" size="10.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </children>
+</Pane>
