@@ -9,37 +9,41 @@
  ** @author kozakq
  * @version 1.0
  */
+
 import java.util.List;
 import java.util.Map;
 
 public class Account {
 
-	private int accountID;
-	private Map<String, Integer> guessList;
-	private List<Integer> numGuessList;
-	private String password;
-	private int playerID;
-	private String username;
-	private UserType userType;
+    private int accountID;
+    private Map<String, Integer> guessList;
+    private List<Integer> numGuessList;
+    private String password;
+    private int playerID;
+    private String username;
+    private UserType userType;
 
+    public Account() {
 
+    }
 
+    public double getAverageGuesses() {
+        return 0;
+    }
 
+    public List<String> getMostCommonGuesses() {
+        return null;
+    }
 
-	public Account(){
+    public void saveToFile() {
 
-	}
+    }
 
-	public double getAverageGuesses(){
-		return 0;
-	}
+    public String getUsername() {
+        return username;
+    }
 
-	public List<String> getMostCommonGuesses(){
-		return null;
-	}
-
-	public void saveToFile(){
-
-	}
-
+    public String getPassword() {
+        return password;
+    }
 }
