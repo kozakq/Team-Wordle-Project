@@ -10,33 +10,112 @@
  * @version 1.0
  */
 
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 public class Account {
 
     private int accountID;
-    private Map<String, Integer> guessList;
-    private List<Integer> numGuessList;
+    private Map<String, Integer> guesses;
+    private Map<Integer, Integer> guessCounts;
     private String password;
-    private int playerID;
     private String username;
     private UserType userType;
 
     public Account() {
+        username = "Null";
+        password = "Null";
+        accountID = -1;
+        guesses = new HashMap<String, Integer>();
+        guessCounts = new HashMap<Integer, Integer>();
+        userType = UserType.USER;
+    }
 
+    public Account(String username, String password) {
+        this.username = username;
+        this.password = password;
+        accountID = AccountID.getNextID();
+        guesses = new HashMap<String, Integer>();
+        guessCounts = new HashMap<Integer, Integer>();
+        userType = UserType.USER;
+    }
+
+    public Account(File accountFile) {
+        try {
+            List<String> lines = Files.readAllLines(accountFile.toPath());
+            username = lines.get(0).substring(lines.get(0).indexOf(':'));
+            password = lines.get(1).substring(lines.get(1).indexOf(':'));
+            accountID = Integer.parseInt(lines.get(2).substring(lines.get(2).indexOf(':')));
+            userType = UserType.typeFromString(lines.get(3).substring(lines.get(3).indexOf(':')));
+
+            guessCounts = new HashMap<>();
+            for (int i = 5; i <= 10; i++) {
+                String[] nums = lines.get(i).split(":");
+                guessCounts.put(Integer.parseInt(nums[0]), Integer.parseInt(nums[1]));
+            }
+
+            guesses = new HashMap<>();
+            for (int i = 12; i < lines.size(); i++) {
+                String[] splits = lines.get(i).split(":");
+                guesses.put(splits[0], Integer.parseInt(splits[1]));
+            }
+
+        } catch (IOException e) {
+            System.out.println("Error reading from account file " + accountFile.getPath() + ".");
+        } catch (Exception e) {
+            System.out.println("Error parsing from account file " + accountFile.getPath() + ".");
+        }
     }
 
     public double getAverageGuesses() {
-        return 0;
+        double sum = 0;
+        int count = 0;
+        for(int i = 1; i <= 6; i++) {
+            sum += i * guessCounts.get(i);
+            count += guessCounts.get(i);
+        }
+        return sum / count;
     }
 
     public List<String> getMostCommonGuesses() {
-        return null;
+        List<String> keys = new ArrayList<>(guesses.keySet());
+        keys.sort(Comparator.comparingInt(guesses::get));
+        return keys.subList(0, Math.min(keys.size(), 5));
     }
 
     public void saveToFile() {
+        try (FileWriter writer = new FileWriter(String.format("user%07d.txt", accountID), false)) {
+            writer.write("username:" + username + "\n");
+            writer.write("password:" + password + "\n");
+            writer.write("accountID:" + accountID + "\n");
+            writer.write("usertype:" + userType + "\n");
 
+            writer.write("\n");
+
+            for (int i = 1; i <= 6; i++) {
+                writer.write(String.format("%d:%d\n", i, guessCounts.get(i)));
+            }
+
+            writer.write("\n");
+
+            for (String key : guesses.keySet()) {
+                writer.write(String.format("%s:%d\n", key, guesses.get(key)));
+            }
+
+            System.out.println("Data has been written to the file for user " + accountID + ".");
+        } catch (IOException e) {
+            System.out.println("Error saving to account file for user " + accountID + ".");
+        }
+    }
+
+    public void addGuess(String guess) {
+        guesses.put(guess, guesses.getOrDefault(guess, 0) + 1);
+    }
+
+    public void addGuessCount(int count) {
+        guessCounts.put(count, guessCounts.getOrDefault(count, 0) + 1);
     }
 
     public String getUsername() {
