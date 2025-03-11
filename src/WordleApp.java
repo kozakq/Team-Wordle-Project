@@ -82,26 +82,32 @@ public class WordleApp {
     }
 
     public boolean createAccount(String username, String password) {
+        if (isValidUsername(username)) {
+            currentAccount = new Account(username, password);
+            accountList.add(currentAccount);
+            return true;
+        }
         return false;
     }
 
-    public Map<String, Integer> getAllWordsGuesses() {
-        return null;
-    }
-
-    public Double getAverageGuessess(int userId) {
-        return null;
+    public Double getAverageGuessess() {
+        return currentAccount.getAverageGuesses();
     }
 
     public String getGoalWord() {
         return goalWord;
     }
 
-    public int getMostCommonGuesses() {
-        return 0;
+    public List<String> getMostCommonGuesses() {
+        return currentAccount.getMostCommonGuesses();
     }
 
     public boolean validateLogin(String username, String password) {
+        for (Account account : accountList) {
+            if(account.getUsername().equals(username)) {
+                return account.getPassword().equals(password);
+            }
+        }
         return false;
     }
 
