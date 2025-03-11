@@ -1,4 +1,5 @@
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -40,6 +41,7 @@ public class WordleController {
     private final Label[][] keyLabels;
     private int guessCount;
     private static final int MAX_GUESSES = 6;
+    private int numHints = 0;
 
     @FXML
     private VBox words;
@@ -165,6 +167,15 @@ public class WordleController {
         }
     }
 
+    private void getHint() {
+        if (currentWord.length() != goalWord.length() && numHints == 0) {
+            String hintLetter = "";
+            hintLetter = goalWord.substring(currentWord.length(), currentWord.length() + 1);
+            enterCharacter(hintLetter.toUpperCase());
+            numHints = 1;
+        }
+    }
+
     private void backspace() {
         if (!currentWord.isEmpty()) {
             letterLabels[guessCount][currentWord.length() - 1].setText("");
@@ -229,5 +240,9 @@ public class WordleController {
         goalWord = app.changeGoalWord();
         guiController.reset();
         stage.close();
+    }
+
+    public void hintPressed(ActionEvent actionEvent) {
+        getHint();
     }
 }
