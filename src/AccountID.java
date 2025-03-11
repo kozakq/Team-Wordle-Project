@@ -14,4 +14,8 @@ public abstract class AccountID {
     public static int getNextID() {
         return nextID++;
     }
+
+    public static void setNextID(int id) {
+        nextID = id;
+    }
 }

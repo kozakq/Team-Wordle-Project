@@ -6,8 +6,11 @@
  * Created 2/19/2025
  */
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Course SWE2410-121
@@ -18,13 +21,15 @@ import java.util.Map;
  * @version created on 2/19/2025 11:27 AM
  */
 public class WordleApp {
-    private List<Account> accountList;
+    private final List<Account> accountList;
     private Account currentAccount;
     private final Dictionary dictionary;
     private String goalWord;
 
     public WordleApp() {
         dictionary = new Dictionary();
+        accountList = new ArrayList<>();
+        loadAccounts();
         changeGoalWord();
     }
 
@@ -50,6 +55,9 @@ public class WordleApp {
                 } else {
                     sb.append('x');
                 }
+            }
+            if (currentAccount != null) {
+                currentAccount.addGuess(word);
             }
             return sb.toString();
         } else {
@@ -102,13 +110,24 @@ public class WordleApp {
         return currentAccount.getMostCommonGuesses();
     }
 
-    public boolean validateLogin(String username, String password) {
+    public boolean login(String username, String password) {
+        Account account = validateLogin(username, password);
+        if (account != null) {
+            currentAccount = account;
+            return true;
+        } else {
+            System.out.println("Incorrect login!");
+            return false;
+        }
+    }
+
+    public Account validateLogin(String username, String password) {
         for (Account account : accountList) {
-            if(account.getUsername().equals(username)) {
-                return account.getPassword().equals(password);
+            if(account.getUsername().equals(username) && account.getPassword().equals(password)) {
+                return account;
             }
         }
-        return false;
+        return null;
     }
 
     public boolean isValidUsername(String username) {
@@ -118,5 +137,35 @@ public class WordleApp {
             }
         }
         return true;
+    }
+
+    private void loadAccounts() {
+        int maxID = -1;
+        try {
+            File directory = new File(Account.ACCOUNT_DIRECTORY);
+            File[] accountFiles = directory.listFiles();
+            for (File accountFile : accountFiles) {
+                Account account = new Account(accountFile);
+                if (account.getAccountID() > maxID) {
+                    maxID = account.getAccountID();
+                }
+                accountList.add(account);
+            }
+            AccountID.setNextID(maxID + 1);
+        } catch (NullPointerException e) {
+            System.out.println("Directory does not exist");
+        }
+    }
+
+    public void addGuessCount(int count) {
+        if (currentAccount != null) {
+            currentAccount.addGuessCount(count);
+        }
+    }
+
+    public void save() {
+        if (currentAccount != null) {
+            currentAccount.saveToFile();
+        }
     }
 }

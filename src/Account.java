@@ -16,7 +16,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class Account {
-
+    public static final String ACCOUNT_DIRECTORY = "src/accounts";
     private int accountID;
     private Map<String, Integer> guesses;
     private Map<Integer, Integer> guessCounts;
@@ -28,8 +28,8 @@ public class Account {
         username = "Null";
         password = "Null";
         accountID = -1;
-        guesses = new HashMap<String, Integer>();
-        guessCounts = new HashMap<Integer, Integer>();
+        guesses = new HashMap<>();
+        guessCounts = new HashMap<>(Map.of(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0));
         userType = UserType.USER;
     }
 
@@ -37,18 +37,18 @@ public class Account {
         this.username = username;
         this.password = password;
         accountID = AccountID.getNextID();
-        guesses = new HashMap<String, Integer>();
-        guessCounts = new HashMap<Integer, Integer>();
+        guesses = new HashMap<>();
+        guessCounts = new HashMap<>(Map.of(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0));
         userType = UserType.USER;
     }
 
     public Account(File accountFile) {
         try {
             List<String> lines = Files.readAllLines(accountFile.toPath());
-            username = lines.get(0).substring(lines.get(0).indexOf(':'));
-            password = lines.get(1).substring(lines.get(1).indexOf(':'));
-            accountID = Integer.parseInt(lines.get(2).substring(lines.get(2).indexOf(':')));
-            userType = UserType.typeFromString(lines.get(3).substring(lines.get(3).indexOf(':')));
+            username = lines.get(0).substring(lines.get(0).indexOf(':') + 1);
+            password = lines.get(1).substring(lines.get(1).indexOf(':') + 1);
+            accountID = Integer.parseInt(lines.get(2).substring(lines.get(2).indexOf(':') + 1));
+            userType = UserType.typeFromString(lines.get(3).substring(lines.get(3).indexOf(':') + 1));
 
             guessCounts = new HashMap<>();
             for (int i = 5; i <= 10; i++) {
@@ -86,7 +86,7 @@ public class Account {
     }
 
     public void saveToFile() {
-        try (FileWriter writer = new FileWriter(String.format("user%07d.txt", accountID), false)) {
+        try (FileWriter writer = new FileWriter(String.format("%s/user%07d.txt", ACCOUNT_DIRECTORY, accountID), false)) {
             writer.write("username:" + username + "\n");
             writer.write("password:" + password + "\n");
             writer.write("accountID:" + accountID + "\n");
@@ -124,5 +124,9 @@ public class Account {
 
     public String getPassword() {
         return password;
+    }
+
+    public int getAccountID() {
+        return accountID;
     }
 }

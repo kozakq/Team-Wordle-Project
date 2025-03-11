@@ -1,4 +1,5 @@
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,7 +13,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import players.Person;
+import javafx.stage.WindowEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -125,6 +126,11 @@ public class WordleController {
             }
             keys.getChildren().add(keyBox);
         }
+        String username = "gosha";
+        String password = "passwordd";
+        if(!app.login(username, password)) {
+            app.createAccount(username, password);
+        }
     }
 
     private void keyPressed(KeyEvent e) {
@@ -175,6 +181,7 @@ public class WordleController {
 
     public void isGameOver() {
         if (guessedWords != null && ((guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES)) {
+            app.addGuessCount(guessCount);
             showEndGameWindow();
         }
     }
@@ -197,6 +204,7 @@ public class WordleController {
         Button closeButton = new Button("Exit Game");
         closeButton.getStyleClass().add("exit-button");
         closeButton.setOnAction(e -> {
+            closeGame();
             endGameStage.close();
             Platform.exit();
         });
@@ -229,5 +237,11 @@ public class WordleController {
         goalWord = app.changeGoalWord();
         guiController.reset();
         stage.close();
+    }
+
+    public EventHandler<WindowEvent> closeGame() {
+        System.out.println("Closing!");
+        app.save();
+        return null;
     }
 }
