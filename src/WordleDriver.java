@@ -20,10 +20,15 @@ import java.util.Objects;
 public class WordleDriver extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(
+        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(
                 "gui/wordle.fxml")));
+        Parent root = loader.load();
+
+        WordleController controller = loader.getController();
+
         stage.setTitle("");
         stage.setScene(new Scene(root));
+        stage.setOnCloseRequest(e -> controller.closeGame());
         stage.show();
     }
 
