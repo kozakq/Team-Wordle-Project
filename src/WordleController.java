@@ -7,6 +7,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -34,9 +35,9 @@ import java.util.List;
  * @version 1.0
  */
 public class WordleController {
-    private Stage primaryStage;
-    private Scene loginScene;
-    private Scene mainScene;
+    private Stage mainStage;
+    private Scene statsScene;
+    private StatsController statsController;
 
     private final GUIController guiController;
     private String goalWord;
@@ -56,6 +57,9 @@ public class WordleController {
     @FXML
     private Pane pane;
 
+    @FXML
+    private ImageView stats;
+
     public WordleController() {
         goalWord = WordleApp.getGoalWord();
         letterLabels = new Label[MAX_GUESSES][goalWord.length()];
@@ -63,9 +67,9 @@ public class WordleController {
         guiController = new GUIController(keyLabels);
         currentWord = "";
         guessedWords = new ArrayList<>();
-        primaryStage = null;
-        loginScene = null;
-        mainScene = null;
+        mainStage = null;
+        statsScene = null;
+        statsController = null;
     }
 
 
@@ -135,10 +139,17 @@ public class WordleController {
         }
     }
 
-    public void setStageScene(Stage primaryStage, Scene login, Scene main) {
-        this.primaryStage = primaryStage;
-        this.loginScene = login;
-        this.mainScene = main;
+    public void setStageScene(Stage mainStage, Scene stats) {
+        this.mainStage = mainStage;
+        this.statsScene = stats;
+        this.stats.setOnMouseClicked(e -> {
+            this.mainStage.setScene(this.statsScene);
+            this.statsController.updateStats();
+        });
+    }
+
+    public void setStatsController(StatsController statsController) {
+        this.statsController = statsController;
     }
 
     private void keyPressed(KeyEvent e) {

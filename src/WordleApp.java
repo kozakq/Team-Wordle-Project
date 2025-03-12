@@ -138,6 +138,10 @@ public class WordleApp {
         return !username.isEmpty();
     }
 
+    public static boolean isLoggedIn() {
+        return currentAccount != null;
+    }
+
     private static void loadAccounts() {
         int maxID = -1;
         try {
