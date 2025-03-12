@@ -5,6 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -32,7 +34,10 @@ import java.util.List;
  * @version 1.0
  */
 public class WordleController {
-    private final WordleApp app;
+    private Stage primaryStage;
+    private Scene loginScene;
+    private Scene mainScene;
+
     private final GUIController guiController;
     private String goalWord;
     private String currentWord;
@@ -52,13 +57,15 @@ public class WordleController {
     private Pane pane;
 
     public WordleController() {
-        app = new WordleApp();
-        goalWord = app.getGoalWord();
+        goalWord = WordleApp.getGoalWord();
         letterLabels = new Label[MAX_GUESSES][goalWord.length()];
         keyLabels = new Label[][]{{null, null, null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null, null}};
         guiController = new GUIController(keyLabels);
         currentWord = "";
         guessedWords = new ArrayList<>();
+        primaryStage = null;
+        loginScene = null;
+        mainScene = null;
     }
 
 
@@ -126,11 +133,12 @@ public class WordleController {
             }
             keys.getChildren().add(keyBox);
         }
-        String username = "gosha";
-        String password = "passwordd";
-        if(!app.login(username, password)) {
-            app.createAccount(username, password);
-        }
+    }
+
+    public void setStageScene(Stage primaryStage, Scene login, Scene main) {
+        this.primaryStage = primaryStage;
+        this.loginScene = login;
+        this.mainScene = main;
     }
 
     private void keyPressed(KeyEvent e) {
@@ -153,7 +161,7 @@ public class WordleController {
 
     private void enter() {
         if (currentWord.length() == goalWord.length()) {
-            String info = app.checkWord(currentWord.toLowerCase());
+            String info = WordleApp.checkWord(currentWord.toLowerCase());
             if (!info.isEmpty()) {
                 for (int i = 0; i < info.length(); i++) {
                     switch (info.charAt(i)) {
@@ -181,7 +189,7 @@ public class WordleController {
 
     public void isGameOver() {
         if (guessedWords != null && ((guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES)) {
-            app.addGuessCount(guessCount);
+            WordleApp.addGuessCount(guessCount);
             showEndGameWindow();
         }
     }
@@ -234,14 +242,14 @@ public class WordleController {
             }
         }
 
-        goalWord = app.changeGoalWord();
+        goalWord = WordleApp.changeGoalWord();
         guiController.reset();
         stage.close();
     }
 
     public EventHandler<WindowEvent> closeGame() {
         System.out.println("Closing!");
-        app.save();
+        WordleApp.save();
         return null;
     }
 }

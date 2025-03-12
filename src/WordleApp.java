@@ -21,23 +21,23 @@ import java.util.Objects;
  * @version created on 2/19/2025 11:27 AM
  */
 public class WordleApp {
-    private final List<Account> accountList;
-    private Account currentAccount;
-    private final Dictionary dictionary;
-    private String goalWord;
+    private static List<Account> accountList;
+    private static Account currentAccount;
+    private static Dictionary dictionary;
+    private static String goalWord;
 
-    public WordleApp() {
+    public static void initialize() {
         dictionary = new Dictionary();
         accountList = new ArrayList<>();
         loadAccounts();
         changeGoalWord();
     }
 
-    public boolean changeDictionary(String filePath) {
+    public static boolean changeDictionary(String filePath) {
         return false;
     }
 
-    public String checkWord(String word) {
+    public static String checkWord(String word) {
         if (dictionary.isValidWord(word)) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
@@ -65,7 +65,7 @@ public class WordleApp {
         }
     }
 
-    private int characterCount (String str, char c) {
+    private static int characterCount (String str, char c) {
         int count = 0;
         for (int i = 0; i < str.length(); i++) {
             if (str.charAt(i) == c) count++;
@@ -73,7 +73,7 @@ public class WordleApp {
         return count;
     }
 
-    private int numberCorrectCharacter (String goal, String guess, char character) {
+    private static int numberCorrectCharacter (String goal, String guess, char character) {
         int count = 0;
         for (int i = 0; i < guess.length(); i++) {
             if (goal.charAt(i) == guess.charAt(i) && guess.charAt(i) == character) {
@@ -83,14 +83,14 @@ public class WordleApp {
         return count;
     }
 
-    public String changeGoalWord() {
+    public static String changeGoalWord() {
         goalWord = "allow";
 //        goalWord = dictionary.getRandomWord();
         return goalWord;
     }
 
-    public boolean createAccount(String username, String password) {
-        if (isValidUsername(username)) {
+    public static boolean createAccount(String username, String password) {
+        if (isValidUsername(username) && !password.isEmpty()) {
             currentAccount = new Account(username, password);
             accountList.add(currentAccount);
             return true;
@@ -98,30 +98,29 @@ public class WordleApp {
         return false;
     }
 
-    public Double getAverageGuessess() {
+    public static Double getAverageGuessess() {
         return currentAccount.getAverageGuesses();
     }
 
-    public String getGoalWord() {
+    public static String getGoalWord() {
         return goalWord;
     }
 
-    public List<String> getMostCommonGuesses() {
+    public static List<String> getMostCommonGuesses() {
         return currentAccount.getMostCommonGuesses();
     }
 
-    public boolean login(String username, String password) {
+    public static boolean login(String username, String password) {
         Account account = validateLogin(username, password);
         if (account != null) {
             currentAccount = account;
             return true;
         } else {
-            System.out.println("Incorrect login!");
             return false;
         }
     }
 
-    public Account validateLogin(String username, String password) {
+    public static Account validateLogin(String username, String password) {
         for (Account account : accountList) {
             if(account.getUsername().equals(username) && account.getPassword().equals(password)) {
                 return account;
@@ -130,16 +129,16 @@ public class WordleApp {
         return null;
     }
 
-    public boolean isValidUsername(String username) {
+    public static boolean isValidUsername(String username) {
         for (Account account : accountList) {
             if(account.getUsername().equals(username)) {
                 return false;
             }
         }
-        return true;
+        return !username.isEmpty();
     }
 
-    private void loadAccounts() {
+    private static void loadAccounts() {
         int maxID = -1;
         try {
             File directory = new File(Account.ACCOUNT_DIRECTORY);
@@ -157,13 +156,13 @@ public class WordleApp {
         }
     }
 
-    public void addGuessCount(int count) {
+    public static void addGuessCount(int count) {
         if (currentAccount != null) {
             currentAccount.addGuessCount(count);
         }
     }
 
-    public void save() {
+    public static void save() {
         if (currentAccount != null) {
             currentAccount.saveToFile();
         }

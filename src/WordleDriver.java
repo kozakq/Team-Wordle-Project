@@ -11,24 +11,26 @@
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.Objects;
 
 public class WordleDriver extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource(
-                "gui/wordle.fxml")));
-        Parent root = loader.load();
+        WordleApp.initialize();
+        FXMLLoader gameFxmlLoader = new FXMLLoader(getClass().getResource("gui/wordle.fxml"));
+        Scene gameScene = new Scene(gameFxmlLoader.load());
+        WordleController gameController = gameFxmlLoader.getController();
 
-        WordleController controller = loader.getController();
+        FXMLLoader loginFxmlLoader = new FXMLLoader(getClass().getResource("gui/login.fxml"));
+        Scene loginScene = new Scene(loginFxmlLoader.load());
+        LoginController loginController = loginFxmlLoader.getController();
+        loginController.setGameScene(gameScene);
+        loginController.setMainStage(stage);
+        loginController.initialize();
 
-        stage.setTitle("");
-        stage.setScene(new Scene(root));
-        stage.setOnCloseRequest(e -> controller.closeGame());
+        stage.setScene(loginScene);
+        stage.setOnCloseRequest(e -> gameController.closeGame());
         stage.show();
     }
 
