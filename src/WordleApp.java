@@ -84,8 +84,8 @@ public class WordleApp {
     }
 
     public static String changeGoalWord() {
-        goalWord = "allow";
-//        goalWord = dictionary.getRandomWord();
+//        goalWord = "allow";
+        goalWord = dictionary.getRandomWord();
         return goalWord;
     }
 

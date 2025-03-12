@@ -76,6 +76,9 @@ public class Account {
             sum += i * guessCounts.get(i);
             count += guessCounts.get(i);
         }
+        if (count == 0) {
+            return 0;
+        }
         return sum / count;
     }
 
