@@ -34,6 +34,7 @@ import java.util.List;
 public class WordleController {
     private final WordleApp app;
     private final GUIController guiController;
+    public Button hintButton;
     private String goalWord;
     private String currentWord;
     private final List<String> guessedWords;
@@ -41,7 +42,7 @@ public class WordleController {
     private final Label[][] keyLabels;
     private int guessCount;
     private static final int MAX_GUESSES = 6;
-    private int numHints = 0;
+    private boolean allowHint = true;
 
     @FXML
     private VBox words;
@@ -168,11 +169,11 @@ public class WordleController {
     }
 
     private void getHint() {
-        if (currentWord.length() != goalWord.length() && numHints == 0) {
+        if (currentWord.length() != goalWord.length() && allowHint) {
             String hintLetter = "";
             hintLetter = goalWord.substring(currentWord.length(), currentWord.length() + 1);
             enterCharacter(hintLetter.toUpperCase());
-            numHints = 1;
+            allowHint = false;
         }
     }
 
@@ -244,5 +245,6 @@ public class WordleController {
 
     public void hintPressed(ActionEvent actionEvent) {
         getHint();
+        hintButton.setVisible(false);
     }
 }
