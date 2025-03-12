@@ -1,9 +1,13 @@
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -12,7 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import players.Person;
+import javafx.stage.WindowEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +35,10 @@ import java.util.List;
  * @version 1.0
  */
 public class WordleController {
-    private final WordleApp app;
+    private Stage mainStage;
+    private Scene statsScene;
+    private StatsController statsController;
+
     private final GUIController guiController;
     private String goalWord;
     private String currentWord;
@@ -50,14 +57,19 @@ public class WordleController {
     @FXML
     private Pane pane;
 
+    @FXML
+    private ImageView stats;
+
     public WordleController() {
-        app = new WordleApp();
-        goalWord = app.getGoalWord();
+        goalWord = WordleApp.getGoalWord();
         letterLabels = new Label[MAX_GUESSES][goalWord.length()];
         keyLabels = new Label[][]{{null, null, null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null, null}};
         guiController = new GUIController(keyLabels);
         currentWord = "";
         guessedWords = new ArrayList<>();
+        mainStage = null;
+        statsScene = null;
+        statsController = null;
     }
 
 
@@ -127,6 +139,19 @@ public class WordleController {
         }
     }
 
+    public void setStageScene(Stage mainStage, Scene stats) {
+        this.mainStage = mainStage;
+        this.statsScene = stats;
+        this.stats.setOnMouseClicked(e -> {
+            this.mainStage.setScene(this.statsScene);
+            this.statsController.updateStats();
+        });
+    }
+
+    public void setStatsController(StatsController statsController) {
+        this.statsController = statsController;
+    }
+
     private void keyPressed(KeyEvent e) {
         if (e.getCode().isLetterKey()) {
             enterCharacter(e.getCode().getChar());
@@ -147,7 +172,7 @@ public class WordleController {
 
     private void enter() {
         if (currentWord.length() == goalWord.length()) {
-            String info = app.checkWord(currentWord.toLowerCase());
+            String info = WordleApp.checkWord(currentWord.toLowerCase());
             if (!info.isEmpty()) {
                 for (int i = 0; i < info.length(); i++) {
                     switch (info.charAt(i)) {
@@ -175,6 +200,7 @@ public class WordleController {
 
     public void isGameOver() {
         if (guessedWords != null && ((guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES)) {
+            WordleApp.addGuessCount(guessCount);
             showEndGameWindow();
         }
     }
@@ -197,6 +223,7 @@ public class WordleController {
         Button closeButton = new Button("Exit Game");
         closeButton.getStyleClass().add("exit-button");
         closeButton.setOnAction(e -> {
+            closeGame();
             endGameStage.close();
             Platform.exit();
         });
@@ -226,8 +253,15 @@ public class WordleController {
             }
         }
 
-        goalWord = app.changeGoalWord();
+        goalWord = WordleApp.changeGoalWord();
         guiController.reset();
         stage.close();
     }
+
+    public EventHandler<WindowEvent> closeGame() {
+        System.out.println("Closing!");
+        WordleApp.save();
+        return null;
+    }
 }
+
