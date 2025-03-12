@@ -6,10 +6,8 @@
  * Created 2/19/2025
  */
 
-import java.io.File;
-import java.util.*;
-import java.util.stream.Collectors;
-
+import java.util.List;
+import java.util.Map;
 
 /**
  * Course SWE2410-121
@@ -20,25 +18,21 @@ import java.util.stream.Collectors;
  * @version created on 2/19/2025 11:27 AM
  */
 public class WordleApp {
-    private static List<Account> accountList;
-    private static Account currentAccount;
-    private static Dictionary dictionary;
-    private static String goalWord;
-    private static PlayersStatsController playersStatsController;
+    private List<Account> accountList;
+    private Account currentAccount;
+    private final Dictionary dictionary;
+    private String goalWord;
 
-
-    public static void initialize() {
+    public WordleApp() {
         dictionary = new Dictionary();
-        accountList = new ArrayList<>();
-        loadAccounts();
         changeGoalWord();
     }
 
-    public static boolean changeDictionary(String filePath) {
+    public boolean changeDictionary(String filePath) {
         return false;
     }
 
-    public static String checkWord(String word) {
+    public String checkWord(String word) {
         if (dictionary.isValidWord(word)) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
@@ -57,16 +51,13 @@ public class WordleApp {
                     sb.append('x');
                 }
             }
-            if (currentAccount != null) {
-                currentAccount.addGuess(word);
-            }
             return sb.toString();
         } else {
             return "";
         }
     }
 
-    private static int characterCount (String str, char c) {
+    private int characterCount (String str, char c) {
         int count = 0;
         for (int i = 0; i < str.length(); i++) {
             if (str.charAt(i) == c) count++;
@@ -74,7 +65,7 @@ public class WordleApp {
         return count;
     }
 
-    private static int numberCorrectCharacter (String goal, String guess, char character) {
+    private int numberCorrectCharacter (String goal, String guess, char character) {
         int count = 0;
         for (int i = 0; i < guess.length(); i++) {
             if (goal.charAt(i) == guess.charAt(i) && guess.charAt(i) == character) {
@@ -84,162 +75,42 @@ public class WordleApp {
         return count;
     }
 
-    public static String changeGoalWord() {
+    public String changeGoalWord() {
 //        goalWord = "allow";
         goalWord = dictionary.getRandomWord();
         return goalWord;
     }
 
-    public static boolean createAccount(String username, String password) {
-        if (isValidUsername(username) && !password.isEmpty()) {
-            currentAccount = new Account(username, password);
-            accountList.add(currentAccount);
-            return true;
-        }
+    public boolean createAccount(String username, String password) {
         return false;
     }
 
-    public static double getAverageGuessess() {
-        if (currentAccount == null) {
-            System.out.println("Warning: No current account available. Returning 0.0 for average guesses.");
-            return 0.0;
-        }
-        return currentAccount.getAverageGuesses();
-    }
-    public static Account getCurrentAccount(){
-        return currentAccount;
-    }
-
-
-    public static String getGoalWord() {
-        return goalWord;
-    }
-    public static Map<String, Integer> getMostCommonGuessesWithCounts() {
-        PlayersStatsController playersStatsController = Launcher.getPlayersStatsController();
-        if (playersStatsController == null) {
-            System.out.println("Error: PlayersStatsController is null. Returning an empty map.");
-            return new LinkedHashMap<>();
-        }
-
-        Account currentAccount = playersStatsController.getCurrentAccount();
-        if (currentAccount == null) {
-            System.out.println("Error: Current account is null. Returning an empty map.");
-            return new LinkedHashMap<>();
-        }
-
-        Map<String, Integer> guessesMap = currentAccount.getGuesses();
-        if (guessesMap == null) {
-            System.out.println("Error: Guesses map is null. Returning an empty map.");
-            return new LinkedHashMap<>();
-        }
-
-        return guessesMap.entrySet().stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .limit(5)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-    }
-
-
-    public static Map<Character, Integer> getMostCommonLettersWithCounts() {
-        PlayersStatsController playersStatsController = Launcher.getPlayersStatsController();
-        if (playersStatsController == null) {
-            System.out.println("PlayersStatsController is null.");
-            return new HashMap<>();
-        }
-
-        Account currentAccount = playersStatsController.getCurrentAccount();
-        if (currentAccount == null) {
-            System.out.println("CurrentAccount is null.");
-            return new HashMap<>();
-        }
-
-        Map<Character, Integer> letterCounts = new HashMap<>();
-        Map<String, Integer> guessedWords = currentAccount.getGuesses();
-
-        for (Map.Entry<String, Integer> entry : guessedWords.entrySet()) {
-            String word = entry.getKey();
-            int wordCount = entry.getValue();
-
-            for (char c : word.toCharArray()) {
-                letterCounts.put(c, letterCounts.getOrDefault(c, 0) + wordCount);
-            }
-        }
-
-        return letterCounts.entrySet().stream()
-                .sorted(Map.Entry.<Character, Integer>comparingByValue().reversed())
-                .limit(5)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-    }
-
-    public static List<String> getMostCommonGuesses() {
-        return currentAccount.getMostCommonGuesses();
-    }
-
-    public static boolean login(String username, String password) {
-        Account account = validateLogin(username, password);
-        if (account != null) {
-            currentAccount = account;
-            if (playersStatsController != null) {
-                playersStatsController.setCurrentAccount(account);
-                System.out.println("Account successfully set in PlayersStatsController.");
-            }
-            return true;
-        }
-        return false;
-    }
-
-    public static Account validateLogin(String username, String password) {
-        for (Account account : accountList) {
-            if(account.getUsername().equals(username) && account.getPassword().equals(password)) {
-                return account;
-            }
-        }
+    public Map<String, Integer> getAllWordsGuesses() {
         return null;
     }
 
-    public static boolean isValidUsername(String username) {
+    public Double getAverageGuessess(int userId) {
+        return null;
+    }
+
+    public String getGoalWord() {
+        return goalWord;
+    }
+
+    public int getMostCommonGuesses() {
+        return 0;
+    }
+
+    public boolean validateLogin(String username, String password) {
+        return false;
+    }
+
+    public boolean isValidUsername(String username) {
         for (Account account : accountList) {
             if(account.getUsername().equals(username)) {
                 return false;
             }
         }
-        return !username.isEmpty();
-    }
-
-    public static boolean isLoggedIn() {
-        return currentAccount != null;
-    }
-
-    private static void loadAccounts() {
-        int maxID = -1;
-        try {
-            File directory = new File(Account.ACCOUNT_DIRECTORY);
-            File[] accountFiles = directory.listFiles();
-            for (File accountFile : accountFiles) {
-                Account account = new Account(accountFile);
-                if (account.getAccountID() > maxID) {
-                    maxID = account.getAccountID();
-                }
-                accountList.add(account);
-            }
-            AccountID.setNextID(maxID + 1);
-        } catch (NullPointerException e) {
-            System.out.println("Directory does not exist");
-        }
-    }
-
-    public static void addGuessCount(int count) {
-        if (currentAccount != null) {
-            currentAccount.addGuessCount(count);
-        }
-    }
-    public static void setPlayersStatsController(PlayersStatsController controller) {
-        playersStatsController = controller;
-    }
-
-    public static void save() {
-        if (currentAccount != null) {
-            currentAccount.saveToFile();
-        }
+        return true;
     }
 }
