@@ -29,6 +29,16 @@ public class WordleDriver extends Application {
         loginController.setMainStage(stage);
         loginController.initialize();
 
+        FXMLLoader statsFxmlLoader = new FXMLLoader(getClass().getResource("gui/stats.fxml"));
+        Scene statsScene = new Scene(statsFxmlLoader.load());
+        StatsController statsController = statsFxmlLoader.getController();
+        statsController.setGameScene(gameScene);
+        statsController.setMainStage(stage);
+        statsController.initialize();
+
+        gameController.setStatsController(statsController);
+        gameController.setStageScene(stage, statsScene);
+
         stage.setScene(loginScene);
         stage.setOnCloseRequest(e -> gameController.closeGame());
         stage.show();

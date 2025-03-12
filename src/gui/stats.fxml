@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StatsController">
+   <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="20.0">
+      <Label alignment="CENTER" prefHeight="58.0" prefWidth="270.0" text=" WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Label>
+      <Label fx:id="stats" text="Average Guesses: " textFill="WHITE" />
+      <Button fx:id="back" mnemonicParsing="false" text="Back" />
+   </VBox>
+</Pane>
