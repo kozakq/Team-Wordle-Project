@@ -181,6 +181,8 @@ public class WordleController {
 
     public void showEndGameWindow() {
         Stage endGameStage = new Stage();
+        endGameStage.setWidth(400);
+        endGameStage.setHeight(400);
         endGameStage.initModality(Modality.APPLICATION_MODAL);
         endGameStage.setTitle("Game Over");
 
@@ -201,18 +203,40 @@ public class WordleController {
             Platform.exit();
         });
 
-        VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord),restartButton, closeButton);
+        Button statsButton = new Button("Player Stats");
+        statsButton.getStyleClass().add("stats-button");
+        statsButton.setOnAction(e -> showPlayerStats());
+
+        VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
         layout.setAlignment(Pos.CENTER);
         layout.getStyleClass().add("end-game-layout");
 
         Scene scene = new Scene(layout, 350, 250);
-
         scene.getStylesheets().add(getClass().getResource("test.css").toExternalForm());
 
         endGameStage.setScene(scene);
         endGameStage.show();
     }
+    private void showPlayerStats() {
+        Stage statsStage = new Stage();
+        statsStage.setTitle("Player Stats");
 
+        Label statsLabel = new Label("Your game statistics go here."); // Replace with actual stats
+        statsLabel.getStyleClass().add("stats-text");
+
+        Button closeButton = new Button("Close");
+        closeButton.setOnAction(e -> statsStage.close());
+
+        VBox layout = new VBox(20, statsLabel, closeButton);
+        layout.setAlignment(Pos.CENTER);
+        layout.getStyleClass().add("stats-layout");
+
+        Scene scene = new Scene(layout, 300, 200);
+        scene.getStylesheets().add(getClass().getResource("test.css").toExternalForm());
+
+        statsStage.setScene(scene);
+        statsStage.show();
+    }
     public void restartGame(Stage stage) {
         guessCount = 0;
         if (guessedWords != null) {
