@@ -5,6 +5,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -15,6 +17,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import players.Person;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,6 +56,8 @@ public class WordleController {
     @FXML
     private Pane pane;
 
+    private final ImageView lightbulb = new ImageView(new Image("gui/lightbulb.png"));
+
     public WordleController() {
         app = new WordleApp();
         goalWord = app.getGoalWord();
@@ -66,6 +71,7 @@ public class WordleController {
 
     @FXML
     public void initialize() {
+        createHintButton();
         pane.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if (newScene != null) {
                 Scene scene = pane.getScene();
@@ -246,5 +252,13 @@ public class WordleController {
     public void hintPressed(ActionEvent actionEvent) {
         getHint();
         hintButton.setVisible(false);
+    }
+
+    private void createHintButton() {
+        lightbulb.setStyle("-fx-opacity: 0.4");
+        lightbulb.setFitWidth(40);
+        lightbulb.setFitHeight(40);
+        hintButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+        hintButton.setGraphic(lightbulb);
     }
 }
