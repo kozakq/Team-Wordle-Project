@@ -1,11 +1,5 @@
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Stream;
 
 /*
@@ -20,9 +14,15 @@ import java.util.stream.Stream;
  */
 public class GlobalStats {
     public static void main(String[] args) {
-        File file = new File("src/data/wordle-full-1.txt");
-        Map<String, Integer> wordFreqMap = wordFreq(file);
-        Map<Character, Integer> letterFreqMap = letterFreq(file);
+        InputStream input = GlobalStats.class
+                .getResourceAsStream("/data/wordle-official-1.txt");
+        if (input == null) {
+            System.err.println("File not found in resources!");
+            return;
+        }
+        ArrayList<String> wordStorage = readFile(input);
+        Map<String, Integer> wordFreqMap = wordFreq(wordStorage);
+        Map<Character, Integer> letterFreqMap = letterFreq(wordStorage);
         printFreq(letterFreqMap);
         printFreq(wordFreqMap);
     }
@@ -51,17 +51,8 @@ public class GlobalStats {
 
     }
 
-    public static Map<String, Integer> wordFreq(File wordStorage) {
-        List<String> words = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(wordStorage))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                words.add(line.trim().toLowerCase());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+    public static Map<String, Integer> wordFreq(ArrayList<String> wordStorage) {
+        List<String> words = wordStorage;
         Map<String, Integer> wordfreq = new HashMap<>();
         for (String word : words) {
             wordfreq.put(word, wordfreq.getOrDefault(word, 0) + 1);
@@ -69,24 +60,32 @@ public class GlobalStats {
         return wordfreq;
     }
 
-    public static Map<Character, Integer> letterFreq(File wordStorage) {
-        List<String> words = new ArrayList<>();
-        try (BufferedReader reader = new BufferedReader(new FileReader(wordStorage))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                words.add(line.trim().toLowerCase());
-            }
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
+    public static Map<Character, Integer> letterFreq(ArrayList<String> wordStorage) {
+        List<String> words = wordStorage;
         Map<Character, Integer> letterfreq = new HashMap<>();
         for (String word : words) {
             for (Character letter : word.toCharArray()) {
                 letterfreq.put(letter, letterfreq.getOrDefault(letter, 0) + 1);
             }
-            
+
         }
         return letterfreq;
+    }
+
+    public static ArrayList<String> readFile(InputStream file) {
+        ArrayList<String> wordStorage = new ArrayList<String>();
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(file))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                wordStorage.add(line.trim().toLowerCase());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            System.out.println("File Read");
+
+        }
+        return wordStorage;
     }
 }

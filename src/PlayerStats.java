@@ -10,15 +10,13 @@
  * @version 1.0
  */
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class PlayerStats {
 
-    private Map<String, Integer> guessList;
-    private List<String> guessedWords;
-
-    private List<Integer> numGuessList;
     private int playerID;
 
 
@@ -26,11 +24,28 @@ public class PlayerStats {
 
     }
 
+    public static Map<String, Integer> wordFreq(ArrayList<String> wordStorage) {
+        List<String> words = wordStorage;
+        Map<String, Integer> wordfreq = new HashMap<>();
+        for (String word : words) {
+            wordfreq.put(word, wordfreq.getOrDefault(word, 0) + 1);
+        }
+        return wordfreq;
+    }
+
+    public static Map<Character, Integer> letterFreq(ArrayList<String> wordStorage) {
+        List<String> words = wordStorage;
+        Map<Character, Integer> letterfreq = new HashMap<>();
+        for (String word : words) {
+            for (Character letter : word.toCharArray()) {
+                letterfreq.put(letter, letterfreq.getOrDefault(letter, 0) + 1);
+            }
+
+        }
+        return letterfreq;
+    }
     public double getAverageGuesses() {
         return 0;
-    }
-    public List<String> getGuessedWords() {
-        return guessedWords;
     }
 
     public List<String> getMostCommonGuesses() {

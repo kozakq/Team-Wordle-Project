@@ -22,13 +22,11 @@ public class Account {
     private String password;
     private String username;
     private UserType userType;
-    private Account currentAccount;
-
 
     public Account() {
         username = "Null";
         password = "Null";
-        accountID = -1;
+        accountID = 0;
         guesses = new HashMap<>();
         guessCounts = new HashMap<>(Map.of(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0));
         userType = UserType.USER;
@@ -69,30 +67,6 @@ public class Account {
             System.out.println("Error parsing from account file " + accountFile.getPath() + ".");
         }
     }
-    public Account getCurrentAccount() {
-        return currentAccount;
-    }
-    public List<Character> getMostCommonLetters() {
-        Map<Character, Integer> letterCounts = new HashMap<>();
-        for (String word : guesses.keySet()) {
-            for (char c : word.toCharArray()) {
-                letterCounts.put(c, letterCounts.getOrDefault(c, 0) + guesses.get(word));
-            }
-        }
-
-        System.out.println("Letter Counts in Account: " + letterCounts);
-
-        List<Map.Entry<Character, Integer>> entries = new ArrayList<>(letterCounts.entrySet());
-        entries.sort(Map.Entry.<Character, Integer>comparingByValue(Comparator.reverseOrder()));
-
-        List<Character> topLetters = new ArrayList<>();
-        for (int i = 0; i < Math.min(5, entries.size()); i++) {
-            topLetters.add(entries.get(i).getKey());
-        }
-
-        System.out.println("Top Letters in Account: " + topLetters);
-        return topLetters;
-    }
 
     public double getAverageGuesses() {
         double sum = 0;
@@ -101,22 +75,13 @@ public class Account {
             sum += i * guessCounts.get(i);
             count += guessCounts.get(i);
         }
-        if (count == 0) {
-            return 0;
-        }
         return sum / count;
     }
 
     public List<String> getMostCommonGuesses() {
-        List<Map.Entry<String, Integer>> entries = new ArrayList<>(guesses.entrySet());
-        entries.sort(Map.Entry.<String, Integer>comparingByValue(Comparator.reverseOrder())); // Sort by count in descending order
-
-        List<String> topGuesses = new ArrayList<>();
-        for (int i = 0; i < Math.min(5, entries.size()); i++) {
-            topGuesses.add(entries.get(i).getKey());
-        }
-
-        return topGuesses;
+        List<String> keys = new ArrayList<>(guesses.keySet());
+        keys.sort(Comparator.comparingInt(guesses::get));
+        return keys.subList(0, Math.min(keys.size(), 5));
     }
 
     public void saveToFile() {
@@ -147,10 +112,6 @@ public class Account {
     public void addGuess(String guess) {
         guesses.put(guess, guesses.getOrDefault(guess, 0) + 1);
     }
-    public Map<String, Integer> getGuesses() {
-        System.out.println("Account Guesses: " + guesses); // Debug print
-        return guesses;
-    }
 
     public void addGuessCount(int count) {
         guessCounts.put(count, guessCounts.getOrDefault(count, 0) + 1);
@@ -167,5 +128,7 @@ public class Account {
     public int getAccountID() {
         return accountID;
     }
-
+    public UserType getUserType(){
+        return userType;
+    }
 }

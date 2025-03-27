@@ -26,6 +26,7 @@ public class WordleDriver extends Application {
         FXMLLoader loginFxmlLoader = new FXMLLoader(getClass().getResource("gui/login.fxml"));
         Scene loginScene = new Scene(loginFxmlLoader.load());
         LoginController loginController = loginFxmlLoader.getController();
+        loginController.setWordleController(gameController);
         loginController.setGameScene(gameScene);
         loginController.setMainStage(stage);
 
