@@ -11,6 +11,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -18,9 +19,12 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+
+
+
 /*
  * Course: Software Tools & Process
  * Spring 2025
@@ -35,9 +39,7 @@ public class WordleController {
     private Stage mainStage;
     private Scene statsScene;
     private StatsController statsController;
-
     private final GUIController guiController;
-    public Button hintButton;
     private String goalWord;
     private String currentWord;
     private final List<String> guessedWords;
@@ -45,7 +47,6 @@ public class WordleController {
     private final Label[][] keyLabels;
     private int guessCount;
     private static final int MAX_GUESSES = 6;
-    private boolean allowHint = true;
 
     @FXML
     private VBox words;
@@ -58,8 +59,8 @@ public class WordleController {
 
     @FXML
     private ImageView stats;
-    Stage endGameStage = new Stage();
-
+    @FXML
+    private Label adminLabel;
 
     public WordleController() {
         goalWord = WordleApp.getGoalWord();
@@ -71,13 +72,11 @@ public class WordleController {
         mainStage = null;
         statsScene = null;
         statsController = null;
-
     }
 
 
     @FXML
     public void initialize() {
-        createHintButton();
         pane.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if (newScene != null) {
                 Scene scene = pane.getScene();
@@ -193,15 +192,6 @@ public class WordleController {
         }
     }
 
-    private void getHint() {
-        if (currentWord.length() != goalWord.length() && allowHint) {
-            String hintLetter = "";
-            hintLetter = goalWord.substring(currentWord.length(), currentWord.length() + 1);
-            enterCharacter(hintLetter.toUpperCase());
-            allowHint = false;
-        }
-    }
-
     private void backspace() {
         if (!currentWord.isEmpty()) {
             letterLabels[guessCount][currentWord.length() - 1].setText("");
@@ -218,8 +208,8 @@ public class WordleController {
     }
 
     public void showEndGameWindow() {
-        endGameStage.setWidth(400);
-        endGameStage.setHeight(400);
+        Stage endGameStage = new Stage();
+        endGameStage.initModality(Modality.APPLICATION_MODAL);
         endGameStage.setTitle("Game Over");
 
         Label message = new Label((guessedWords.contains(goalWord)) ? "You Win!" : "Game Over!");
@@ -240,26 +230,18 @@ public class WordleController {
             Platform.exit();
         });
 
-        Button statsButton = new Button("Player Stats");
-        statsButton.getStyleClass().add("stats-button");
-        statsButton.setOnAction(e -> showPlayerStats());
-
-        VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
+        VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord),restartButton, closeButton);
         layout.setAlignment(Pos.CENTER);
         layout.getStyleClass().add("end-game-layout");
 
         Scene scene = new Scene(layout, 350, 250);
+
         scene.getStylesheets().add(getClass().getResource("test.css").toExternalForm());
 
         endGameStage.setScene(scene);
         endGameStage.show();
     }
-    private void showPlayerStats() {
-        this.mainStage.setScene(this.statsScene);
-        this.statsController.updateStats();
-        endGameStage.close();
-        restartGame(endGameStage);
-    }
+
     public void restartGame(Stage stage) {
         guessCount = 0;
         if (guessedWords != null) {
@@ -276,7 +258,6 @@ public class WordleController {
         goalWord = WordleApp.changeGoalWord();
         guiController.reset();
         stage.close();
-
     }
 
     public EventHandler<WindowEvent> closeGame() {
@@ -284,11 +265,13 @@ public class WordleController {
         WordleApp.save();
         return null;
     }
-
-    public EventHandler<WindowEvent> closeGame() {
-        System.out.println("Closing!");
-        WordleApp.save();
-        return null;
+    public void updateAdminUI() {
+        if (WordleApp.isAdmin()){
+            adminLabel.setVisible(true);
+            adminLabel.setManaged(true);
+        } else {
+            adminLabel.setVisible(false);
+            adminLabel.setManaged(false);
+        }
     }
 }
-
