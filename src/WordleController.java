@@ -146,7 +146,6 @@ public class WordleController {
         this.statsScene = stats;
         this.stats.setOnMouseClicked(e -> {
             this.mainStage.setScene(this.statsScene);
-            this.statsController.updateStats();
         });
     }
 

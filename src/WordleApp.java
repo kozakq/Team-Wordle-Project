@@ -22,10 +22,11 @@ import java.util.Objects;
  * @version created on 2/19/2025 11:27 AM
  */
 public class WordleApp {
-    private static List<Account> accountList;
+    static List<Account> accountList;
     private static Account currentAccount;
     private static Dictionary dictionary;
-    private static WordStorage wordStorage;
+    static WordStorage wordStorage;
+    private static String ResourcePath = "src/Accounts";
     private static String goalWord;
     public static boolean isAdmin;
 
@@ -119,6 +120,9 @@ public class WordleApp {
     public static boolean login(String username, String password) {
         Account account = validateLogin(username, password);
         if (account != null) {
+            if (isAdmin()){
+                System.out.println("THis is admin");
+            }
             currentAccount = account;
             return true;
         } else {
@@ -153,7 +157,6 @@ public class WordleApp {
         try {
             File directory = new File(Account.ACCOUNT_DIRECTORY);
             File[] accountFiles = directory.listFiles();
-            InputStream[] accountfiles =
             for (File accountFile : accountFiles) {
                 Account account = new Account(accountFile);
                 if (account.getAccountID() > maxID) {
@@ -178,7 +181,7 @@ public class WordleApp {
             currentAccount.saveToFile();
         }
         if(wordStorage != null){
-            wordStorage.saveToFile();;
+            wordStorage.saveToFile();
         }
     }
     public static boolean isAdmin() {

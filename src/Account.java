@@ -17,7 +17,7 @@ import java.util.*;
 public class Account {
     public static final String ACCOUNT_DIRECTORY = "src/accounts";
     private int accountID;
-    private Map<String, Integer> guesses;
+    Map<String, Integer> guesses;
     private Map<Integer, Integer> guessCounts;
     private String password;
     private String username;

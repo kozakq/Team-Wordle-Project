@@ -18,7 +18,6 @@ public class WordleDriver extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         WordleApp.initialize();
-
         FXMLLoader gameFxmlLoader = new FXMLLoader(getClass().getResource("gui/wordle.fxml"));
         Scene gameScene = new Scene(gameFxmlLoader.load());
         WordleController gameController = gameFxmlLoader.getController();
@@ -29,34 +28,22 @@ public class WordleDriver extends Application {
         loginController.setWordleController(gameController);
         loginController.setGameScene(gameScene);
         loginController.setMainStage(stage);
+        loginController.initialize();
 
-        try {
-            FXMLLoader statsFxmlLoader = new FXMLLoader(getClass().getResource("/gui/stats.fxml"));
-            Scene statsScene = new Scene(statsFxmlLoader.load());
-            StatsController statsController = statsFxmlLoader.getController();
+        FXMLLoader statsFxmlLoader = new FXMLLoader(getClass().getResource("gui/adminstatspanel.fxml"));
+        Scene statsScene = new Scene(statsFxmlLoader.load());
+        StatsController statsController = statsFxmlLoader.getController();
+        statsController.setGameScene(gameScene);
+        statsController.setMainStage(stage);
+        statsController.initialize();
 
-            PlayersStatsController playersStatsController = new PlayersStatsController();
-            Launcher.setPlayersStatsController(playersStatsController);
-            WordleApp.setPlayersStatsController(playersStatsController);
-
-            loginController.setPlayersStatsController(playersStatsController);
-            statsController.setPlayersStatsController(playersStatsController);
-
-            statsController.setGameScene(gameScene);
-            statsController.setMainStage(stage);
-            gameController.setStatsController(statsController);
-            gameController.setStageScene(stage, statsScene);
-
-            statsController.updateStats();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        gameController.setStatsController(statsController);
+        gameController.setStageScene(stage, statsScene);
 
         stage.setScene(loginScene);
         stage.setOnCloseRequest(e -> gameController.closeGame());
         stage.show();
     }
-
 
     public static void main(String[] args) {
         launch(args);
