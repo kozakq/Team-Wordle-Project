@@ -15,7 +15,7 @@ import java.nio.file.Files;
 import java.util.*;
 
 public class Account {
-    public static final String ACCOUNT_DIRECTORY = "src/accounts";
+    public static final String ACCOUNT_DIRECTORY = "accounts";
     private int accountID;
     Map<String, Integer> guesses;
     private Map<Integer, Integer> guessCounts;

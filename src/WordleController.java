@@ -38,7 +38,6 @@ import java.util.List;
 public class WordleController {
     private Stage mainStage;
     private Scene statsScene;
-    private StatsController statsController;
     private final GUIController guiController;
     private String goalWord;
     private String currentWord;
@@ -47,6 +46,11 @@ public class WordleController {
     private final Label[][] keyLabels;
     private int guessCount;
     private static final int MAX_GUESSES = 6;
+    private Stage stage;
+    private Scene adminStatsScene;
+    private Scene playerStatsScene;
+    private AdminStatsController adminStatsController;
+    private StatsController playerStatsController;
 
     @FXML
     private VBox words;
@@ -71,7 +75,8 @@ public class WordleController {
         guessedWords = new ArrayList<>();
         mainStage = null;
         statsScene = null;
-        statsController = null;
+        adminStatsController = null;
+        playerStatsController = null;
     }
 
 
@@ -149,9 +154,7 @@ public class WordleController {
         });
     }
 
-    public void setStatsController(StatsController statsController) {
-        this.statsController = statsController;
-    }
+
 
     private void keyPressed(KeyEvent e) {
         if (e.getCode().isLetterKey()) {
@@ -271,6 +274,29 @@ public class WordleController {
         } else {
             adminLabel.setVisible(false);
             adminLabel.setManaged(false);
+        }
+    }
+
+    public void setAdminStatsController(AdminStatsController controller) {
+        this.adminStatsController = controller;
+    }
+
+    public void setPlayerStatsController(StatsController controller) {
+        this.playerStatsController = controller;
+    }
+
+    public void setStageScene(Stage stage, Scene adminScene, Scene playerScene) {
+        this.stage = stage;
+        this.adminStatsScene = adminScene;
+        this.playerStatsScene = playerScene;
+    }
+
+    @FXML
+    private void onStatsButtonClick() {
+        if (WordleApp.isAdmin()) {
+            stage.setScene(adminStatsScene);
+        } else {
+            stage.setScene(playerStatsScene);
         }
     }
 }
