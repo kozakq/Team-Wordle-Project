@@ -30,16 +30,25 @@ public class WordleDriver extends Application {
         loginController.setMainStage(stage);
         loginController.initialize();
 
-        FXMLLoader statsFxmlLoader = new FXMLLoader(getClass().getResource("gui/adminstatspanel.fxml"));
-        Scene statsScene = new Scene(statsFxmlLoader.load());
-        StatsController statsController = statsFxmlLoader.getController();
-        statsController.setGameScene(gameScene);
-        statsController.setMainStage(stage);
-        statsController.initialize();
+        FXMLLoader adminStatsFxmlLoader = new FXMLLoader(getClass().getResource("gui/adminstatspanel.fxml"));
+        Scene adminStatsScene = new Scene(adminStatsFxmlLoader.load());
+        AdminStatsController adminStatsController = adminStatsFxmlLoader.getController();
 
-        gameController.setStatsController(statsController);
-        gameController.setStageScene(stage, statsScene);
+        FXMLLoader playerStatsFxmlLoader = new FXMLLoader(getClass().getResource("gui/stats.fxml"));
+        Scene playerStatsScene = new Scene(playerStatsFxmlLoader.load());
+        StatsController playerStatsController = playerStatsFxmlLoader.getController();
 
+        adminStatsController.setGameScene(gameScene);
+        adminStatsController.setMainStage(stage);
+        adminStatsController.initialize();
+
+        playerStatsController.setGameScene(gameScene);
+        playerStatsController.setMainStage(stage);
+        playerStatsController.initialize();
+
+        gameController.setAdminStatsController(adminStatsController);
+        gameController.setPlayerStatsController(playerStatsController);
+        gameController.setStageScene(stage, adminStatsScene, playerStatsScene);
         stage.setScene(loginScene);
         stage.setOnCloseRequest(e -> gameController.closeGame());
         stage.show();

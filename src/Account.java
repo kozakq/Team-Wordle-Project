@@ -1,4 +1,3 @@
-
 /*
  * Course: Software Tools & Process
  * Spring 2025
@@ -19,9 +18,13 @@ public class Account {
     private int accountID;
     Map<String, Integer> guesses;
     private Map<Integer, Integer> guessCounts;
+    private Map<String, Integer> gameStats;
     private String password;
     private String username;
     private UserType userType;
+    private int gamesWon = 0;
+    private int gamesLost = 0;
+    private int totalGames = 0;
 
     public Account() {
         username = "Null";
@@ -29,16 +32,20 @@ public class Account {
         accountID = 0;
         guesses = new HashMap<>();
         guessCounts = new HashMap<>(Map.of(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0));
+        gameStats = new HashMap<>(Map.of("wins", 0, "losses", 0, "total", 0));
         userType = UserType.USER;
     }
 
     public Account(String username, String password) {
-        this.username = username;
+        this.username = username.toLowerCase();
         this.password = password;
         accountID = AccountID.getNextID();
         guesses = new HashMap<>();
         guessCounts = new HashMap<>(Map.of(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0));
-        userType = UserType.USER;
+        gameStats = new HashMap<>(Map.of("wins", 0, "losses", 0, "total", 0));
+        if(accountID == 0){
+            userType = UserType.ADMIN;
+        }
     }
 
     public Account(File accountFile) {
@@ -54,11 +61,19 @@ public class Account {
                 String[] nums = lines.get(i).split(":");
                 guessCounts.put(Integer.parseInt(nums[0]), Integer.parseInt(nums[1]));
             }
-
+            int lineIndex = 12;
+            gameStats = new HashMap<>();
+            while (lineIndex < 15) {
+                String[] splits = lines.get(lineIndex).split(":");
+                gameStats.put(splits[0], Integer.parseInt(splits[1]));
+                lineIndex++;
+            }
+            lineIndex++;
             guesses = new HashMap<>();
-            for (int i = 12; i < lines.size(); i++) {
-                String[] splits = lines.get(i).split(":");
+            while (lineIndex < lines.size()) {
+                String[] splits = lines.get(lineIndex).split(":");
                 guesses.put(splits[0], Integer.parseInt(splits[1]));
+                lineIndex++;
             }
 
         } catch (IOException e) {
@@ -96,12 +111,18 @@ public class Account {
             for (int i = 1; i <= 6; i++) {
                 writer.write(String.format("%d:%d\n", i, guessCounts.get(i)));
             }
+            writer.write("\n");
+
+            for (String key : gameStats.keySet()) {
+                writer.write(String.format("%s:%d\n", key, gameStats.get(key)));
+            }
 
             writer.write("\n");
 
             for (String key : guesses.keySet()) {
                 writer.write(String.format("%s:%d\n", key, guesses.get(key)));
             }
+
 
             System.out.println("Data has been written to the file for user " + accountID + ".");
         } catch (IOException e) {
@@ -130,5 +151,30 @@ public class Account {
     }
     public UserType getUserType(){
         return userType;
+    }
+
+    public int getGamesWon() {
+        return gamesWon;
+    }
+
+    public int getGamesLost() {
+        return gamesLost;
+    }
+
+    public int getTotalGames() {
+        return totalGames;
+    }
+
+    public void recordGameResult(boolean won) {
+        totalGames++;
+        gameStats.put("total", gameStats.getOrDefault("total", 0) + 1);
+        
+        if (won) {
+            gamesWon++;
+            gameStats.put("wins", gameStats.getOrDefault("wins", 0) + 1);
+        } else {
+            gamesLost++;
+            gameStats.put("losses", gameStats.getOrDefault("losses", 0) + 1);
+        }
     }
 }

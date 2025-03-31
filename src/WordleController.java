@@ -46,11 +46,11 @@ public class WordleController {
     private final Label[][] keyLabels;
     private int guessCount;
     private static final int MAX_GUESSES = 6;
-    private Stage stage;
     private Scene adminStatsScene;
     private Scene playerStatsScene;
     private AdminStatsController adminStatsController;
     private StatsController playerStatsController;
+    private boolean isGameWon;
 
     @FXML
     private VBox words;
@@ -77,6 +77,7 @@ public class WordleController {
         statsScene = null;
         adminStatsController = null;
         playerStatsController = null;
+        isGameWon = false;
     }
 
 
@@ -146,16 +147,6 @@ public class WordleController {
         }
     }
 
-    public void setStageScene(Stage mainStage, Scene stats) {
-        this.mainStage = mainStage;
-        this.statsScene = stats;
-        this.stats.setOnMouseClicked(e -> {
-            this.mainStage.setScene(this.statsScene);
-        });
-    }
-
-
-
     private void keyPressed(KeyEvent e) {
         if (e.getCode().isLetterKey()) {
             enterCharacter(e.getCode().getChar());
@@ -206,10 +197,15 @@ public class WordleController {
         if (guessedWords != null && ((guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES)) {
             WordleApp.addGuessCount(guessCount);
             showEndGameWindow();
+            if(guessedWords.contains(goalWord)){
+                isGameWon = true;
+            }
+            WordleApp.currentAccount.recordGameResult(isGameWon);
         }
     }
 
     public void showEndGameWindow() {
+
         Stage endGameStage = new Stage();
         endGameStage.initModality(Modality.APPLICATION_MODAL);
         endGameStage.setTitle("Game Over");
@@ -286,17 +282,17 @@ public class WordleController {
     }
 
     public void setStageScene(Stage stage, Scene adminScene, Scene playerScene) {
-        this.stage = stage;
+        this.mainStage = stage;
         this.adminStatsScene = adminScene;
         this.playerStatsScene = playerScene;
-    }
-
-    @FXML
-    private void onStatsButtonClick() {
-        if (WordleApp.isAdmin()) {
-            stage.setScene(adminStatsScene);
-        } else {
-            stage.setScene(playerStatsScene);
-        }
+        
+        this.stats.setOnMouseClicked(e -> {
+            if (WordleApp.isAdmin()) {
+                this.mainStage.setScene(this.adminStatsScene);
+            } else {
+                this.mainStage.setScene(this.playerStatsScene);
+                this.playerStatsController.updateStats();
+            }
+        });
     }
 }

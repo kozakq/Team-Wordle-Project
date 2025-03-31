@@ -7,11 +7,8 @@
  */
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 /**
  * Course SWE2410-121
@@ -23,10 +20,9 @@ import java.util.Objects;
  */
 public class WordleApp {
     static List<Account> accountList;
-    private static Account currentAccount;
+    protected static Account currentAccount;
     private static Dictionary dictionary;
     static WordStorage wordStorage;
-    private static String ResourcePath = "src/Accounts";
     private static String goalWord;
     public static boolean isAdmin;
 
@@ -120,9 +116,6 @@ public class WordleApp {
     public static boolean login(String username, String password) {
         Account account = validateLogin(username, password);
         if (account != null) {
-            if (isAdmin()){
-                System.out.println("THis is admin");
-            }
             currentAccount = account;
             return true;
         } else {
