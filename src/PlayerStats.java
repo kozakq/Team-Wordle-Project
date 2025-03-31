@@ -16,6 +16,8 @@ import java.util.Map;
 public class PlayerStats {
 
     private Map<String, Integer> guessList;
+    private List<String> guessedWords;
+
     private List<Integer> numGuessList;
     private int playerID;
 
@@ -26,6 +28,9 @@ public class PlayerStats {
 
     public double getAverageGuesses() {
         return 0;
+    }
+    public List<String> getGuessedWords() {
+        return guessedWords;
     }
 
     public List<String> getMostCommonGuesses() {
