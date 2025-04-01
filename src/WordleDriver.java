@@ -11,19 +11,36 @@
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-
-import java.util.Objects;
 
 public class WordleDriver extends Application {
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource(
-                "gui/wordle.fxml")));
-        stage.setTitle("");
-        stage.setScene(new Scene(root));
+        WordleApp.initialize();
+        FXMLLoader gameFxmlLoader = new FXMLLoader(getClass().getResource("gui/wordle.fxml"));
+        Scene gameScene = new Scene(gameFxmlLoader.load());
+        WordleController gameController = gameFxmlLoader.getController();
+
+        FXMLLoader loginFxmlLoader = new FXMLLoader(getClass().getResource("gui/login.fxml"));
+        Scene loginScene = new Scene(loginFxmlLoader.load());
+        LoginController loginController = loginFxmlLoader.getController();
+        loginController.setGameScene(gameScene);
+        loginController.setMainStage(stage);
+        loginController.initialize();
+
+        FXMLLoader statsFxmlLoader = new FXMLLoader(getClass().getResource("gui/stats.fxml"));
+        Scene statsScene = new Scene(statsFxmlLoader.load());
+        StatsController statsController = statsFxmlLoader.getController();
+        statsController.setGameScene(gameScene);
+        statsController.setMainStage(stage);
+        statsController.initialize();
+
+        gameController.setStatsController(statsController);
+        gameController.setStageScene(stage, statsScene);
+
+        stage.setScene(loginScene);
+        stage.setOnCloseRequest(e -> gameController.closeGame());
         stage.show();
     }
 
