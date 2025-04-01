@@ -18,6 +18,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class WordleController {
     private StatsController statsController;
 
     private final GUIController guiController;
+    public Button hintButton;
     private String goalWord;
     private String currentWord;
     private final List<String> guessedWords;
@@ -47,6 +49,7 @@ public class WordleController {
     private final Label[][] keyLabels;
     private int guessCount;
     private static final int MAX_GUESSES = 6;
+    private boolean allowHint = true;
 
     @FXML
     private VBox words;
@@ -75,6 +78,7 @@ public class WordleController {
 
     @FXML
     public void initialize() {
+        createHintButton();
         pane.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if (newScene != null) {
                 Scene scene = pane.getScene();
@@ -187,6 +191,15 @@ public class WordleController {
                 guiController.updateView(currentWord, info);
                 currentWord = "";
             }
+        }
+    }
+
+    private void getHint() {
+        if (currentWord.length() != goalWord.length() && allowHint) {
+            String hintLetter = "";
+            hintLetter = goalWord.substring(currentWord.length(), currentWord.length() + 1);
+            enterCharacter(hintLetter.toUpperCase());
+            allowHint = false;
         }
     }
 
