@@ -7,10 +7,9 @@
  */
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
+
 
 /**
  * Course SWE2410-121
@@ -25,6 +24,8 @@ public class WordleApp {
     private static Account currentAccount;
     private static Dictionary dictionary;
     private static String goalWord;
+    private static PlayersStatsController playersStatsController;
+
 
     public static void initialize() {
         dictionary = new Dictionary();
@@ -98,12 +99,76 @@ public class WordleApp {
         return false;
     }
 
-    public static Double getAverageGuessess() {
+    public static double getAverageGuessess() {
+        if (currentAccount == null) {
+            System.out.println("Warning: No current account available. Returning 0.0 for average guesses.");
+            return 0.0;
+        }
         return currentAccount.getAverageGuesses();
     }
+    public static Account getCurrentAccount(){
+        return currentAccount;
+    }
+
 
     public static String getGoalWord() {
         return goalWord;
+    }
+    public static Map<String, Integer> getMostCommonGuessesWithCounts() {
+        PlayersStatsController playersStatsController = Launcher.getPlayersStatsController();
+        if (playersStatsController == null) {
+            System.out.println("Error: PlayersStatsController is null. Returning an empty map.");
+            return new LinkedHashMap<>();
+        }
+
+        Account currentAccount = playersStatsController.getCurrentAccount();
+        if (currentAccount == null) {
+            System.out.println("Error: Current account is null. Returning an empty map.");
+            return new LinkedHashMap<>();
+        }
+
+        Map<String, Integer> guessesMap = currentAccount.getGuesses();
+        if (guessesMap == null) {
+            System.out.println("Error: Guesses map is null. Returning an empty map.");
+            return new LinkedHashMap<>();
+        }
+
+        return guessesMap.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(5)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
+
+    public static Map<Character, Integer> getMostCommonLettersWithCounts() {
+        PlayersStatsController playersStatsController = Launcher.getPlayersStatsController();
+        if (playersStatsController == null) {
+            System.out.println("PlayersStatsController is null.");
+            return new HashMap<>();
+        }
+
+        Account currentAccount = playersStatsController.getCurrentAccount();
+        if (currentAccount == null) {
+            System.out.println("CurrentAccount is null.");
+            return new HashMap<>();
+        }
+
+        Map<Character, Integer> letterCounts = new HashMap<>();
+        Map<String, Integer> guessedWords = currentAccount.getGuesses();
+
+        for (Map.Entry<String, Integer> entry : guessedWords.entrySet()) {
+            String word = entry.getKey();
+            int wordCount = entry.getValue();
+
+            for (char c : word.toCharArray()) {
+                letterCounts.put(c, letterCounts.getOrDefault(c, 0) + wordCount);
+            }
+        }
+
+        return letterCounts.entrySet().stream()
+                .sorted(Map.Entry.<Character, Integer>comparingByValue().reversed())
+                .limit(5)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 
     public static List<String> getMostCommonGuesses() {
@@ -114,10 +179,13 @@ public class WordleApp {
         Account account = validateLogin(username, password);
         if (account != null) {
             currentAccount = account;
+            if (playersStatsController != null) {
+                playersStatsController.setCurrentAccount(account);
+                System.out.println("Account successfully set in PlayersStatsController.");
+            }
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     public static Account validateLogin(String username, String password) {
@@ -164,6 +232,9 @@ public class WordleApp {
         if (currentAccount != null) {
             currentAccount.addGuessCount(count);
         }
+    }
+    public static void setPlayersStatsController(PlayersStatsController controller) {
+        playersStatsController = controller;
     }
 
     public static void save() {

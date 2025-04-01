@@ -21,10 +21,6 @@ import javafx.stage.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
-
-
-
 /*
  * Course: Software Tools & Process
  * Spring 2025
@@ -62,6 +58,8 @@ public class WordleController {
 
     @FXML
     private ImageView stats;
+    Stage endGameStage = new Stage();
+
 
     public WordleController() {
         goalWord = WordleApp.getGoalWord();
@@ -73,6 +71,7 @@ public class WordleController {
         mainStage = null;
         statsScene = null;
         statsController = null;
+
     }
 
 
@@ -219,8 +218,8 @@ public class WordleController {
     }
 
     public void showEndGameWindow() {
-        Stage endGameStage = new Stage();
-        endGameStage.initModality(Modality.APPLICATION_MODAL);
+        endGameStage.setWidth(400);
+        endGameStage.setHeight(400);
         endGameStage.setTitle("Game Over");
 
         Label message = new Label((guessedWords.contains(goalWord)) ? "You Win!" : "Game Over!");
@@ -241,18 +240,26 @@ public class WordleController {
             Platform.exit();
         });
 
-        VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord),restartButton, closeButton);
+        Button statsButton = new Button("Player Stats");
+        statsButton.getStyleClass().add("stats-button");
+        statsButton.setOnAction(e -> showPlayerStats());
+
+        VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
         layout.setAlignment(Pos.CENTER);
         layout.getStyleClass().add("end-game-layout");
 
         Scene scene = new Scene(layout, 350, 250);
-
         scene.getStylesheets().add(getClass().getResource("test.css").toExternalForm());
 
         endGameStage.setScene(scene);
         endGameStage.show();
     }
-
+    private void showPlayerStats() {
+        this.mainStage.setScene(this.statsScene);
+        this.statsController.updateStats();
+        endGameStage.close();
+        restartGame(endGameStage);
+    }
     public void restartGame(Stage stage) {
         guessCount = 0;
         if (guessedWords != null) {
@@ -269,6 +276,13 @@ public class WordleController {
         goalWord = WordleApp.changeGoalWord();
         guiController.reset();
         stage.close();
+
+    }
+
+    public EventHandler<WindowEvent> closeGame() {
+        System.out.println("Closing!");
+        WordleApp.save();
+        return null;
     }
 
     public EventHandler<WindowEvent> closeGame() {

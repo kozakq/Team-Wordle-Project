@@ -4,14 +4,41 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StatsController">
+<Pane fx:controller="StatsController" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
+      fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;">
+
    <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="20.0">
-      <Label alignment="CENTER" prefHeight="58.0" prefWidth="270.0" text=" WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
+
+      <!-- Title -->
+      <Label alignment="CENTER" prefHeight="58.0" prefWidth="270.0" text="WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
          <font>
-            <Font name="System Bold" size="40.0" />
+            <Font name="System Bold" size="40.0"/>
          </font>
       </Label>
-      <Label fx:id="stats" text="Average Guesses: " textFill="WHITE" />
-      <Button fx:id="back" mnemonicParsing="false" text="Back" />
+
+      <!-- Display Average Guesses -->
+      <Label fx:id="stats" text="Average Guesses: " textFill="WHITE"/>
+
+      <!-- Back Button -->
+      <Button fx:id="back" mnemonicParsing="false" text="Back"/>
+
+      <!-- Most Guessed Words Section -->
+      <Label text="Most Guessed Words" textFill="#d7d8dc"/>
+      <GridPane fx:id="guessedWordsTable" alignment="CENTER" hgap="10" vgap="10">
+         <!-- Table content will be dynamically populated from the controller -->
+      </GridPane>
+
+      <!-- Most Guessed Letters Section -->
+      <Label text="Most Guessed Letters" textFill="#d7d8dc"/>
+      <GridPane fx:id="mostGuessedLettersTable" alignment="CENTER" hgap="10" vgap="10">
+         <!-- Table content will be dynamically populated from the controller -->
+      </GridPane>
+
+      <!-- Guessed Words Section (Added VBox) -->
+      <Label text="Guessed Words" textFill="#d7d8dc"/>
+      <VBox fx:id="guessedWords" alignment="TOP_CENTER" spacing="10.0">
+         <Label text="Guessed words will appear here." textFill="#d7d8dc"/>
+      </VBox>
    </VBox>
 </Pane>

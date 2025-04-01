@@ -7,6 +7,7 @@
  */
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -48,6 +49,13 @@ public class LoginController {
 
     @FXML
     private Button guestButton;
+    private PlayersStatsController playersStatsController;
+
+    public void setPlayersStatsController(PlayersStatsController playersStatsController) {
+        this.playersStatsController = playersStatsController;
+        System.out.println("PlayersStatsController has been set in LoginController.");
+    }
+
 
     public void setGameScene(Scene gameScene) {
         this.gameScene = gameScene;
@@ -74,13 +82,26 @@ public class LoginController {
         loginButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
-            if(WordleApp.login(username, password)) {
-                switchToGame();
+            if (WordleApp.login(username, password)) {
+                System.out.println("Login successful. Switching to game scene.");
+                mainStage.setScene(gameScene);
+
+                FXMLLoader statsLoader = new FXMLLoader(getClass().getResource("gui/stats.fxml"));
+                try {
+                    Scene statsScene = new Scene(statsLoader.load());
+                    StatsController statsController = statsLoader.getController();
+                    statsController.setPlayersStatsController(Launcher.getPlayersStatsController());
+                    statsController.updateStats();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             } else {
                 loginPrompt.setText("Invalid Username or Password");
                 loginPrompt.setTextFill(Color.RED);
             }
         });
+
+
     }
 
     private void switchToGame() {
