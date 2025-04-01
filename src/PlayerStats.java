@@ -1,4 +1,3 @@
-
 /*
  * Course: Software Tools & Process
  * Spring 2025
@@ -44,6 +43,7 @@ public class PlayerStats {
         }
         return letterfreq;
     }
+
     public double getAverageGuesses() {
         return 0;
     }

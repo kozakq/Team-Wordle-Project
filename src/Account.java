@@ -9,14 +9,16 @@
  * @version 1.0
  */
 
-import java.io.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 
 public class Account {
     public static final String ACCOUNT_DIRECTORY = "accounts";
-    private int accountID;
     Map<String, Integer> guesses;
+    private int accountID;
     private Map<Integer, Integer> guessCounts;
     private Map<String, Integer> gameStats;
     private String password;
@@ -43,9 +45,9 @@ public class Account {
         guesses = new HashMap<>();
         guessCounts = new HashMap<>(Map.of(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0));
         gameStats = new HashMap<>(Map.of("wins", 0, "losses", 0, "total", 0));
-        if(accountID == 0){
+        if (accountID == 0) {
             userType = UserType.ADMIN;
-        } else{
+        } else {
             userType = UserType.USER;
         }
     }
@@ -85,21 +87,53 @@ public class Account {
         }
     }
 
+    public List<Character> getMostCommonLetters() {
+        Map<Character, Integer> letterCounts = new HashMap<>();
+        for (String word : guesses.keySet()) {
+            for (char c : word.toCharArray()) {
+                letterCounts.put(c, letterCounts.getOrDefault(c, 0) + guesses.get(word));
+            }
+        }
+
+        System.out.println("Letter Counts in Account: " + letterCounts);
+
+        List<Map.Entry<Character, Integer>> entries = new ArrayList<>(letterCounts.entrySet());
+        entries.sort(Map.Entry.<Character, Integer>comparingByValue(Comparator.reverseOrder()));
+
+        List<Character> topLetters = new ArrayList<>();
+        for (int i = 0; i < Math.min(5, entries.size()); i++) {
+            topLetters.add(entries.get(i).getKey());
+        }
+
+        System.out.println("Top Letters in Account: " + topLetters);
+        return topLetters;
+    }
+
     public double getAverageGuesses() {
         double sum = 0;
         int count = 0;
-        for(int i = 1; i <= 6; i++) {
+        for (int i = 1; i <= 6; i++) {
             sum += i * guessCounts.get(i);
             count += guessCounts.get(i);
+        }
+        if (count == 0) {
+            return 0;
         }
         return sum / count;
     }
 
     public List<String> getMostCommonGuesses() {
-        List<String> keys = new ArrayList<>(guesses.keySet());
-        keys.sort(Comparator.comparingInt(guesses::get));
-        return keys.subList(0, Math.min(keys.size(), 5));
+        List<Map.Entry<String, Integer>> entries = new ArrayList<>(guesses.entrySet());
+        entries.sort(Map.Entry.<String, Integer>comparingByValue(Comparator.reverseOrder()));
+
+        List<String> topGuesses = new ArrayList<>();
+        for (int i = 0; i < Math.min(5, entries.size()); i++) {
+            topGuesses.add(entries.get(i).getKey());
+        }
+
+        return topGuesses;
     }
+
 
     public void saveToFile() {
         try (FileWriter writer = new FileWriter(String.format("%s/user%07d.txt", ACCOUNT_DIRECTORY, accountID), false)) {
@@ -151,32 +185,52 @@ public class Account {
     public int getAccountID() {
         return accountID;
     }
-    public UserType getUserType(){
+
+    public UserType getUserType() {
         return userType;
     }
 
     public int getGamesWon() {
+        if (gameStats != null && gameStats.containsKey("wins")) {
+            return gameStats.get("wins");
+        }
         return gamesWon;
     }
 
     public int getGamesLost() {
+        if (gameStats != null && gameStats.containsKey("losses")) {
+            return gameStats.get("losses");
+        }
         return gamesLost;
     }
 
     public int getTotalGames() {
+        if (gameStats != null && gameStats.containsKey("total")) {
+            return gameStats.get("total");
+        }
         return totalGames;
     }
 
     public void recordGameResult(boolean won) {
         totalGames++;
-        gameStats.put("total", gameStats.getOrDefault("total", 0) + 1);
-        
         if (won) {
             gamesWon++;
-            gameStats.put("wins", gameStats.getOrDefault("wins", 0) + 1);
         } else {
             gamesLost++;
-            gameStats.put("losses", gameStats.getOrDefault("losses", 0) + 1);
         }
+
+        gameStats.put("total", totalGames);
+        gameStats.put("wins", gamesWon);
+        gameStats.put("losses", gamesLost);
+
+        saveToFile();
     }
+
+
+    public Map<String, Integer> getGuesses() {
+        System.out.println("Account Guesses: " + guesses); // Debug print
+        return guesses;
+    }
+
+
 }

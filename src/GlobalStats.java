@@ -1,5 +1,11 @@
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Stream;
 
 /*
@@ -13,6 +19,12 @@ import java.util.stream.Stream;
  * @version 1.0
  */
 public class GlobalStats {
+    private Map<String, Integer> guessList;
+
+    public GlobalStats() {
+
+    }
+
     public static void main(String[] args) {
         InputStream input = GlobalStats.class
                 .getResourceAsStream("/data/wordle-official-1.txt");
@@ -35,20 +47,6 @@ public class GlobalStats {
 
     private static <K, V extends Comparable<V>> Stream<Map.Entry<K, V>> sortedMap(Map<K, V> map) {
         return map.entrySet().stream().sorted(Map.Entry.<K, V>comparingByValue().reversed());
-    }
-
-    private Map<String, Integer> guessList;
-
-    public GlobalStats() {
-
-    }
-
-    public Map<String, Integer> getAllWordsGuessed() {
-        return null;
-    }
-
-    public void saveToFIle() {
-
     }
 
     public static Map<String, Integer> wordFreq(ArrayList<String> wordStorage) {
@@ -87,5 +85,13 @@ public class GlobalStats {
 
         }
         return wordStorage;
+    }
+
+    public Map<String, Integer> getAllWordsGuessed() {
+        return null;
+    }
+
+    public void saveToFIle() {
+
     }
 }

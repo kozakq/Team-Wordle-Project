@@ -1,12 +1,17 @@
+import javafx.animation.Interpolator;
+import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
@@ -18,11 +23,10 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-
-
 
 
 /*
@@ -36,35 +40,37 @@ import java.util.List;
  * @version 1.0
  */
 public class WordleController {
-    private Stage mainStage;
-    private Scene statsScene;
+    private static final int MAX_GUESSES = 6;
     private final GUIController guiController;
-    private String goalWord;
-    private String currentWord;
     private final List<String> guessedWords;
     private final Label[][] letterLabels;
     private final Label[][] keyLabels;
+    private final HBox[] wordBoxes;
+    private final ImageView lightbulb = new ImageView(new Image("gui/lightbulb.png"));
+    public Button hintButton;
+    private Stage mainStage;
+    private Scene statsScene;
+    private String goalWord;
+    private String currentWord;
     private int guessCount;
-    private static final int MAX_GUESSES = 6;
     private Scene adminStatsScene;
     private Scene playerStatsScene;
     private AdminStatsController adminStatsController;
     private StatsController playerStatsController;
     private boolean isGameWon;
-
+    private int remainingHints = 3;
+    Stage endGameStage = new Stage();
     @FXML
     private VBox words;
-
     @FXML
     private VBox keys;
-
     @FXML
     private Pane pane;
-
     @FXML
     private ImageView stats;
     @FXML
     private Label adminLabel;
+
 
     public WordleController() {
         goalWord = WordleApp.getGoalWord();
@@ -78,11 +84,15 @@ public class WordleController {
         adminStatsController = null;
         playerStatsController = null;
         isGameWon = false;
-    }
+        wordBoxes = new HBox[MAX_GUESSES];
 
+
+    }
 
     @FXML
     public void initialize() {
+        createHintButton();
+
         pane.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if (newScene != null) {
                 Scene scene = pane.getScene();
@@ -110,6 +120,7 @@ public class WordleController {
                 wordBox.getChildren().add(letterLabel);
             }
             words.getChildren().add(wordBox);
+            wordBoxes[i] = wordBox;
         }
 
         String[][] keyTexts = {{"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"}, {"A", "S", "D", "F", "G", "H", "J", "K", "L"}, {"ENTER", "Z", "X", "C", "V", "B", "N", "M", "⌫"}};
@@ -145,7 +156,10 @@ public class WordleController {
             }
             keys.getChildren().add(keyBox);
         }
+        hintButton.setVisible(true);
+        updateHintButton();
     }
+
 
     private void keyPressed(KeyEvent e) {
         if (e.getCode().isLetterKey()) {
@@ -169,21 +183,18 @@ public class WordleController {
         if (currentWord.length() == goalWord.length()) {
             String info = WordleApp.checkWord(currentWord.toLowerCase());
             if (!info.isEmpty()) {
-                for (int i = 0; i < info.length(); i++) {
-                    switch (info.charAt(i)) {
-                        case 'x' -> letterLabels[guessCount][i].setStyle("-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;");
-                        case 'y' -> letterLabels[guessCount][i].setStyle("-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;");
-                        case 'g' ->letterLabels[guessCount][i].setStyle("-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;");
-                    }
-                }
+                flipLabel(letterLabels[guessCount], info, 0);
                 guessedWords.add(currentWord.toLowerCase());
                 guessCount++;
-                isGameOver();
                 guiController.updateView(currentWord, info);
+                isGameOver();
                 currentWord = "";
+            } else {
+                shakeNode(wordBoxes[guessCount]);
             }
         }
     }
+
 
     private void backspace() {
         if (!currentWord.isEmpty()) {
@@ -195,19 +206,36 @@ public class WordleController {
 
     public void isGameOver() {
         if (guessedWords != null && ((guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES)) {
+            boolean won = guessedWords.contains(goalWord);
+            isGameWon = won;
+
             WordleApp.addGuessCount(guessCount);
-            showEndGameWindow();
-            if(guessedWords.contains(goalWord)){
-                isGameWon = true;
+
+            if (WordleApp.isLoggedIn() && WordleApp.currentAccount != null) {
+                Account currentAccount = WordleApp.currentAccount;
+                currentAccount.recordGameResult(won);
+
+                WordleApp.save();
+
+                System.out.println("Game ended: " + (won ? "WON" : "LOST") +
+                        " - Total games: " + currentAccount.getTotalGames() +
+                        ", Wins: " + currentAccount.getGamesWon() +
+                        ", Losses: " + currentAccount.getGamesLost());
             }
-            WordleApp.currentAccount.recordGameResult(isGameWon);
+
+            if (playerStatsController != null) {
+                playerStatsController.updateStats();
+            }
+            if (adminStatsController != null) {
+                adminStatsController.refreshAllStats();
+            }
+
+            showEndGameWindow();
         }
     }
-
     public void showEndGameWindow() {
-
-        Stage endGameStage = new Stage();
-        endGameStage.initModality(Modality.APPLICATION_MODAL);
+        endGameStage.setWidth(400);
+        endGameStage.setHeight(400);
         endGameStage.setTitle("Game Over");
 
         Label message = new Label((guessedWords.contains(goalWord)) ? "You Win!" : "Game Over!");
@@ -228,17 +256,38 @@ public class WordleController {
             Platform.exit();
         });
 
-        VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord),restartButton, closeButton);
+        Button statsButton = new Button("Player Stats");
+        statsButton.getStyleClass().add("stats-button");
+        statsButton.setOnAction(e -> showPlayerStats());
+
+        VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
         layout.setAlignment(Pos.CENTER);
         layout.getStyleClass().add("end-game-layout");
 
         Scene scene = new Scene(layout, 350, 250);
-
         scene.getStylesheets().add(getClass().getResource("test.css").toExternalForm());
 
         endGameStage.setScene(scene);
         endGameStage.show();
     }
+    private void showPlayerStats() {
+        if (WordleApp.isAdmin()) {
+            if (adminStatsController != null) {
+                this.mainStage.setScene(this.adminStatsScene);
+                adminStatsController.refreshAllStats();
+            }
+            this.mainStage.setScene(this.adminStatsScene);
+        } else {
+            if (playerStatsController != null) {
+                this.mainStage.setScene(this.playerStatsScene);
+                playerStatsController.updateStats();
+            }
+        }
+        endGameStage.close();
+        restartGame(endGameStage);
+    }
+
+
 
     public void restartGame(Stage stage) {
         guessCount = 0;
@@ -255,6 +304,11 @@ public class WordleController {
 
         goalWord = WordleApp.changeGoalWord();
         guiController.reset();
+
+        remainingHints = 3;
+        hintButton.setDisable(false);
+        updateHintButton();
+
         stage.close();
     }
 
@@ -263,8 +317,9 @@ public class WordleController {
         WordleApp.save();
         return null;
     }
+
     public void updateAdminUI() {
-        if (WordleApp.isAdmin()){
+        if (WordleApp.isAdmin()) {
             adminLabel.setVisible(true);
             adminLabel.setManaged(true);
         } else {
@@ -272,6 +327,54 @@ public class WordleController {
             adminLabel.setManaged(false);
         }
     }
+
+    private void getHint() {
+        if (currentWord.length() != goalWord.length() && remainingHints > 0) {
+            String hintLetter = "";
+            hintLetter = goalWord.substring(currentWord.length(), currentWord.length() + 1);
+            enterCharacter(hintLetter.toUpperCase());
+
+            remainingHints--;
+
+            updateHintButton();
+        }
+    }
+
+    public void hintPressed(ActionEvent actionEvent) {
+        getHint();
+
+        if (remainingHints <= 0) {
+            hintButton.setDisable(true);
+        }
+    }
+
+    private void createHintButton() {
+        lightbulb.setStyle("-fx-opacity: 1.0"); // Make it fully visible
+        lightbulb.setFitWidth(40);
+        lightbulb.setFitHeight(40);
+
+        updateHintButton();
+    }
+
+    private void updateHintButton() {
+        if (remainingHints > 0) {
+            lightbulb.setStyle("-fx-opacity: 1.0");
+            hintButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+
+            Label countLabel = new Label(String.valueOf(remainingHints));
+            countLabel.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-background-color: #538d4e; -fx-padding: 2px 6px; -fx-background-radius: 10;");
+
+            StackPane buttonContent = new StackPane();
+            buttonContent.getChildren().addAll(lightbulb, countLabel);
+            StackPane.setAlignment(countLabel, Pos.TOP_RIGHT);
+
+            hintButton.setGraphic(buttonContent);
+        } else {
+            lightbulb.setStyle("-fx-opacity: 0.3");
+            hintButton.setGraphic(lightbulb);
+        }
+    }
+
 
     public void setAdminStatsController(AdminStatsController controller) {
         this.adminStatsController = controller;
@@ -285,14 +388,69 @@ public class WordleController {
         this.mainStage = stage;
         this.adminStatsScene = adminScene;
         this.playerStatsScene = playerScene;
-        
+
         this.stats.setOnMouseClicked(e -> {
             if (WordleApp.isAdmin()) {
+                if (adminStatsController != null) {
+                    adminStatsController.refreshAllStats();
+                }
                 this.mainStage.setScene(this.adminStatsScene);
             } else {
+                if (playerStatsController != null) {
+                    playerStatsController.updateStats();
+                }
                 this.mainStage.setScene(this.playerStatsScene);
-                this.playerStatsController.updateStats();
             }
         });
     }
+
+    public void shakeNode(Node node) {
+        double originalX = words.getTranslateX();
+
+        TranslateTransition moveLeft = new TranslateTransition(Duration.millis(50), node);
+        moveLeft.setToX(originalX - 10);
+        moveLeft.setInterpolator(Interpolator.EASE_BOTH);
+
+        TranslateTransition moveRight = new TranslateTransition(Duration.millis(50), node);
+        moveRight.setToX(originalX + 10);
+        moveRight.setInterpolator(Interpolator.EASE_BOTH);
+
+        TranslateTransition moveCenter = new TranslateTransition(Duration.millis(50), node);
+        moveCenter.setToX(originalX);
+        moveCenter.setInterpolator(Interpolator.EASE_BOTH);
+
+        SequentialTransition shake = new SequentialTransition(moveLeft, moveRight, moveCenter);
+        shake.setCycleCount(3);
+        shake.play();
+    }
+
+
+    private void flipLabel(Label[] labels, String info, int index) {
+        Label label = labels[index];
+        ScaleTransition shrink = new ScaleTransition(Duration.millis(150), label);
+        shrink.setToY(0);
+        shrink.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
+
+        shrink.setOnFinished(e -> {
+            if (index < labels.length - 1) {
+                flipLabel(labels, info, index + 1);
+            }
+            switch (info.charAt(index)) {
+                case 'x' ->
+                        labels[index].setStyle("-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;");
+                case 'y' ->
+                        labels[index].setStyle("-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;");
+                case 'g' ->
+                        labels[index].setStyle("-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;");
+            }
+        });
+
+        ScaleTransition expand = new ScaleTransition(Duration.millis(150), label);
+        expand.setToY(1);
+        expand.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
+
+        SequentialTransition flip = new SequentialTransition(shrink, expand);
+        flip.play();
+    }
+
 }

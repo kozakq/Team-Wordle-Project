@@ -8,13 +8,10 @@
 
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -50,7 +47,7 @@ public class AdminStatsController {
     private boolean showAllEntries = false;
 
     @FXML
-    private Button toggleViewButton; 
+    private Button toggleViewButton;
 
     @FXML
     private Label gamesPlayedLabel;
@@ -69,6 +66,7 @@ public class AdminStatsController {
         populateAccounts();
         setupToggleViewButton();
         loadStylesheet();
+        updateGameStats("Global Stats");
     }
 
     public void setMainStage(Stage mainStage) {
@@ -98,7 +96,7 @@ public class AdminStatsController {
     private void setupTableColumns() {
         itemColumn.setCellValueFactory(new PropertyValueFactory<>("item"));
         countColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
-        
+
         // Add sorting capability
         itemColumn.setSortable(true);
         countColumn.setSortable(true);
@@ -128,6 +126,7 @@ public class AdminStatsController {
             toggleViewButton.setText("Show All");
             String selected = accountsComboBox.getValue();
             refreshCurrentView(selected);
+            updateGameStats(selected);
         });
     }
 
@@ -148,7 +147,7 @@ public class AdminStatsController {
         statsTable.getItems().clear();
         Map<String, Integer> wordCounts = WordleApp.wordStorage.getWordCounts();
         ArrayList<StatEntry> entries = new ArrayList<>();
-        
+
         for (Map.Entry<String, Integer> entry : wordCounts.entrySet()) {
             entries.add(new StatEntry(entry.getKey(), entry.getValue()));
         }
@@ -166,13 +165,13 @@ public class AdminStatsController {
                 new ArrayList<>(WordleApp.wordStorage.getWordCounts().keySet())
         );
         ArrayList<StatEntry> entries = new ArrayList<>();
-        
+
         for (Map.Entry<Character, Integer> entry : letterCounts.entrySet()) {
             entries.add(new StatEntry(entry.getKey().toString(), entry.getValue()));
         }
-        
+
         entries.sort((a, b) -> b.getCount().compareTo(a.getCount()));
-        
+
         int limit = showAllEntries ? entries.size() : Math.min(displayLimit, entries.size());
         for (int i = 0; i < limit; i++) {
             statsTable.getItems().add(entries.get(i));
@@ -185,7 +184,7 @@ public class AdminStatsController {
                 .filter(a -> a.getUsername().equals(username))
                 .findFirst()
                 .orElse(null);
-            
+
         if (selected == null || selected.guesses == null || selected.guesses.isEmpty()) {
             return;
         }
@@ -196,21 +195,21 @@ public class AdminStatsController {
                 entries.add(new StatEntry(entry.getKey(), entry.getValue()));
             }
             entries.sort((a, b) -> b.getCount().compareTo(a.getCount()));
-            
+
             int limit = showAllEntries ? entries.size() : Math.min(displayLimit, entries.size());
             for (int i = 0; i < limit && i < entries.size(); i++) {
                 statsTable.getItems().add(entries.get(i));
             }
         } else {
             Map<Character, Integer> letterCounts = PlayerStats.letterFreq(
-                new ArrayList<>(selected.guesses.keySet())
+                    new ArrayList<>(selected.guesses.keySet())
             );
             ArrayList<StatEntry> entries = new ArrayList<>();
             for (Map.Entry<Character, Integer> entry : letterCounts.entrySet()) {
                 entries.add(new StatEntry(entry.getKey().toString(), entry.getValue()));
             }
             entries.sort((a, b) -> b.getCount().compareTo(a.getCount()));
-            
+
             int limit = showAllEntries ? entries.size() : Math.min(displayLimit, entries.size());
             for (int i = 0; i < limit && i < entries.size(); i++) {
                 statsTable.getItems().add(entries.get(i));
@@ -247,9 +246,9 @@ public class AdminStatsController {
 
             if (selectedAccount != null) {
                 updateStatsLabels(
-                    selectedAccount.getTotalGames(),
-                    selectedAccount.getGamesWon(),
-                    selectedAccount.getGamesLost()
+                        selectedAccount.getTotalGames(),
+                        selectedAccount.getGamesWon(),
+                        selectedAccount.getGamesLost()
                 );
             } else {
                 updateStatsLabels(0, 0, 0);
@@ -260,16 +259,19 @@ public class AdminStatsController {
     private void updateStatsLabels(int totalGames, int gamesWon, int gamesLost) {
         gamesPlayedLabel.setText(String.valueOf(totalGames));
         gamesWonLabel.setText(String.valueOf(gamesWon));
-        
+
         // Calculate and format win rate
         double winRate = totalGames > 0 ? (gamesWon * 100.0 / totalGames) : 0.0;
         winRateLabel.setText(String.format("%.1f%%", winRate));
     }
 
     public void refreshAllStats() {
-        String selected = accountsComboBox.getValue();
-        refreshCurrentView(selected);
-        updateGameStats(selected);
+        if (accountsComboBox != null) {
+            String selected = accountsComboBox.getValue();
+            refreshCurrentView(selected);
+            updateGameStats(selected);
+            System.out.println("Refreshed stats for: " + selected); // Debug print
+        }
     }
 
     public static class StatEntry {

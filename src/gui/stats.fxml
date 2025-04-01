@@ -8,7 +8,7 @@
       fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
       prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;">
 
-   <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="20.0">
+   <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="10.0">
 
       <!-- Title -->
       <Label alignment="CENTER" prefHeight="58.0" prefWidth="270.0" text="WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
@@ -16,12 +16,27 @@
             <Font name="System Bold" size="40.0"/>
          </font>
       </Label>
-
+      <!-- Back Button -->
+      <Button fx:id="back" mnemonicParsing="false" text="Back"
+              style="-fx-background-color: #538d4e; -fx-text-fill: white; -fx-font-weight: bold;"/>
       <!-- Display Average Guesses -->
       <Label fx:id="stats" text="Average Guesses: " textFill="WHITE"/>
 
-      <!-- Back Button -->
-      <Button fx:id="back" mnemonicParsing="false" text="Back"/>
+      <!-- Game Statistics Summary - New Section -->
+      <HBox spacing="20" alignment="CENTER">
+         <VBox styleClass="stat-box" alignment="CENTER">
+            <Label fx:id="gamesPlayedLabel" styleClass="stat-number" text="0"/>
+            <Label styleClass="stat-label" text="Played" textFill="#d7d8dc"/>
+         </VBox>
+         <VBox styleClass="stat-box" alignment="CENTER">
+            <Label fx:id="gamesWonLabel" styleClass="stat-number" text="0"/>
+            <Label styleClass="stat-label" text="Won" textFill="#d7d8dc"/>
+         </VBox>
+         <VBox styleClass="stat-box" alignment="CENTER">
+            <Label fx:id="winRateLabel" styleClass="stat-number" text="0%"/>
+            <Label styleClass="stat-label" text="Win Rate" textFill="#d7d8dc"/>
+         </VBox>
+      </HBox>
 
       <!-- Most Guessed Words Section -->
       <Label text="Most Guessed Words" textFill="#d7d8dc"/>
@@ -40,5 +55,6 @@
       <VBox fx:id="guessedWords" alignment="TOP_CENTER" spacing="10.0">
          <Label text="Guessed words will appear here." textFill="#d7d8dc"/>
       </VBox>
+
    </VBox>
 </Pane>

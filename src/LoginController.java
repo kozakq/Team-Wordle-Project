@@ -49,7 +49,8 @@ public class LoginController {
 
     @FXML
     private Button guestButton;
-    public void setWordleController(WordleController wordleController){
+
+    public void setWordleController(WordleController wordleController) {
         this.wordleController = wordleController;
     }
 
@@ -67,7 +68,7 @@ public class LoginController {
         createButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
-            if(WordleApp.createAccount(username, password)) {
+            if (WordleApp.createAccount(username, password)) {
                 switchToGame();
             } else {
                 loginPrompt.setText("Invalid Username or Password");
@@ -78,7 +79,7 @@ public class LoginController {
         loginButton.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
-            if(WordleApp.login(username, password)) {
+            if (WordleApp.login(username, password)) {
                 switchToGame();
             } else {
                 loginPrompt.setText("Invalid Username or Password");
@@ -88,9 +89,9 @@ public class LoginController {
     }
 
     private void switchToGame() {
-        if (wordleController != null){
-        wordleController.updateAdminUI();
-    }
+        if (wordleController != null) {
+            wordleController.updateAdminUI();
+        }
         mainStage.setScene(gameScene);
 
     }

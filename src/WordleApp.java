@@ -7,8 +7,8 @@
  */
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Course SWE2410-121
@@ -19,13 +19,12 @@ import java.util.List;
  * @version created on 2/19/2025 11:27 AM
  */
 public class WordleApp {
-    static List<Account> accountList;
-    protected static Account currentAccount;
-    private static Dictionary dictionary;
-    static WordStorage wordStorage;
-    private static String goalWord;
     public static boolean isAdmin;
-
+    protected static Account currentAccount;
+    static List<Account> accountList;
+    static WordStorage wordStorage;
+    private static Dictionary dictionary;
+    private static String goalWord;
 
     public static void initialize() {
         dictionary = new Dictionary();
@@ -69,7 +68,7 @@ public class WordleApp {
         }
     }
 
-    private static int characterCount (String str, char c) {
+    private static int characterCount(String str, char c) {
         int count = 0;
         for (int i = 0; i < str.length(); i++) {
             if (str.charAt(i) == c) count++;
@@ -77,7 +76,7 @@ public class WordleApp {
         return count;
     }
 
-    private static int numberCorrectCharacter (String goal, String guess, char character) {
+    private static int numberCorrectCharacter(String goal, String guess, char character) {
         int count = 0;
         for (int i = 0; i < guess.length(); i++) {
             if (goal.charAt(i) == guess.charAt(i) && guess.charAt(i) == character) {
@@ -125,7 +124,7 @@ public class WordleApp {
 
     public static Account validateLogin(String username, String password) {
         for (Account account : accountList) {
-            if(account.getUsername().equals(username) && account.getPassword().equals(password)) {
+            if (account.getUsername().equals(username) && account.getPassword().equals(password)) {
                 return account;
             }
         }
@@ -134,7 +133,7 @@ public class WordleApp {
 
     public static boolean isValidUsername(String username) {
         for (Account account : accountList) {
-            if(account.getUsername().equals(username)) {
+            if (account.getUsername().equals(username)) {
                 return false;
             }
         }
@@ -173,13 +172,72 @@ public class WordleApp {
         if (currentAccount != null) {
             currentAccount.saveToFile();
         }
-        if(wordStorage != null){
+        if (wordStorage != null) {
             wordStorage.saveToFile();
         }
     }
+
     public static boolean isAdmin() {
         return currentAccount != null && currentAccount.getUserType() == UserType.ADMIN;
     }
 
 
+    public static Map<String, Integer> getMostCommonGuessesWithCounts() {
+        if (currentAccount == null) {
+            System.out.println("Error: Current account is null. Returning an empty map.");
+            return new LinkedHashMap<>();
+        }
+
+        Map<String, Integer> guessesMap = currentAccount.getGuesses();
+        if (guessesMap == null) {
+            System.out.println("Error: Guesses map is null. Returning an empty map.");
+            return new LinkedHashMap<>();
+        }
+
+        return guessesMap.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(5)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
+
+    public static Map<Character, Integer> getMostCommonLettersWithCounts() {
+        if (currentAccount == null) {
+            System.out.println("CurrentAccount is null.");
+            return new HashMap<>();
+        }
+
+        Map<Character, Integer> letterCounts = new HashMap<>();
+        Map<String, Integer> guessedWords = currentAccount.getGuesses();
+
+        for (Map.Entry<String, Integer> entry : guessedWords.entrySet()) {
+            String word = entry.getKey();
+            int wordCount = entry.getValue();
+
+            for (char c : word.toCharArray()) {
+                letterCounts.put(c, letterCounts.getOrDefault(c, 0) + wordCount);
+            }
+        }
+
+        Object LinkedHashMap;
+        return letterCounts.entrySet().stream()
+                .sorted(Map.Entry.<Character, Integer>comparingByValue().reversed())
+                .limit(5)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
+    public static boolean logout() {
+        if (currentAccount != null) {
+            currentAccount = null;
+            return true;
+        }
+        return false;
+    }
+
+    public static void reloadAccounts() {
+        accountList = new ArrayList<>();
+        loadAccounts();
+
+
+    }
 }
