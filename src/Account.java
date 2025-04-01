@@ -45,6 +45,8 @@ public class Account {
         gameStats = new HashMap<>(Map.of("wins", 0, "losses", 0, "total", 0));
         if(accountID == 0){
             userType = UserType.ADMIN;
+        } else{
+            userType = UserType.USER;
         }
     }
 

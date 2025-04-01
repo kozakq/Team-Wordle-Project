@@ -266,6 +266,12 @@ public class AdminStatsController {
         winRateLabel.setText(String.format("%.1f%%", winRate));
     }
 
+    public void refreshAllStats() {
+        String selected = accountsComboBox.getValue();
+        refreshCurrentView(selected);
+        updateGameStats(selected);
+    }
+
     public static class StatEntry {
         private final String item;
         private final Integer count;
