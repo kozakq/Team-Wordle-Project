@@ -1,7 +1,5 @@
 import javafx.scene.control.Label;
 
-import java.util.List;
-
 /*
  * Course: Software Tools & Process
  * Spring 2025

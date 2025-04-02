@@ -13,5 +13,16 @@ public enum UserType {
     ADMIN,
     TESTER,
     COLLEGE_STUDENT,
-    MIDDLE_SCHOOL_STUDENT
+    MIDDLE_SCHOOL_STUDENT;
+
+    public static UserType typeFromString(String str) {
+        return switch (str) {
+            case "USER" -> USER;
+            case "ADMIN" -> ADMIN;
+            case "TESTER" -> TESTER;
+            case "COLLEGE_STUDENT" -> COLLEGE_STUDENT;
+            case "MIDDLE_SCHOOL_STUDENT" -> MIDDLE_SCHOOL_STUDENT;
+            default -> USER;
+        };
+    }
 }

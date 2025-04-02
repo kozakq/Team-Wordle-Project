@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.ComboBox?>
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="AdminStatsController"
+      styleClass="stats-panel"
+      spacing="20"
+      alignment="CENTER"
+      prefWidth="800"
+      prefHeight="600"
+      minWidth="600"
+      minHeight="400">
+
+   <HBox alignment="CENTER" spacing="10">
+      <Button fx:id="back" text="Back" styleClass="control-button"/>
+      <ComboBox fx:id="accountsComboBox" styleClass="account-selector"/>
+   </HBox>
+
+   <!-- Stats Summary Section -->
+   <VBox styleClass="stats-summary" spacing="10" alignment="CENTER">
+      <Label fx:id="stats" styleClass="stats-header" text="Statistics"/>
+      <HBox spacing="20" alignment="CENTER">
+         <VBox styleClass="stat-box" alignment="CENTER">
+            <Label fx:id="gamesPlayedLabel" styleClass="stat-number" text="0"/>
+            <Label styleClass="stat-label" text="Played"/>
+         </VBox>
+         <VBox styleClass="stat-box" alignment="CENTER">
+            <Label fx:id="gamesWonLabel" styleClass="stat-number" text="0"/>
+            <Label styleClass="stat-label" text="Won"/>
+         </VBox>
+         <VBox styleClass="stat-box" alignment="CENTER">
+            <Label fx:id="winRateLabel" styleClass="stat-number" text="0%"/>
+            <Label styleClass="stat-label" text="Win Rate"/>
+         </VBox>
+      </HBox>
+   </VBox>
+
+   <!-- Control Buttons -->
+   <HBox spacing="10" alignment="CENTER">
+      <Button fx:id="switchButton" text="SWITCH TO LETTERS" styleClass="control-button"/>
+      <Button fx:id="toggleViewButton" text="Show All" styleClass="control-button"/>
+   </HBox>
+
+   <!-- Stats Table -->
+   <TableView fx:id="statsTable" styleClass="stats-table" VBox.vgrow="ALWAYS">
+      <columns>
+         <TableColumn fx:id="itemColumn" text="Item" styleClass="table-column" prefWidth="${statsTable.width * 0.5}"/>
+         <TableColumn fx:id="countColumn" text="Count" styleClass="table-column" prefWidth="${statsTable.width * 0.5}"/>
+      </columns>
+   </TableView>
+
+</VBox>
