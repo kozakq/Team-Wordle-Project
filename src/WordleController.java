@@ -219,7 +219,7 @@ public class WordleController {
     }
 
     public void isGameOver() {
-        if (guessedWords != null && ((guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES)) {
+        if (guessedWords != null && ((guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES) || settingsController.gameOver()) {
             boolean won = guessedWords.contains(goalWord);
             isGameWon = won;
 
@@ -323,7 +323,7 @@ public class WordleController {
         hintButton.setDisable(false);
         updateHintButton();
         runSettings();
-
+        settingsController.restartBar(settingsController.getGamemode());
         stage.close();
     }
 

@@ -41,5 +41,6 @@
       <VBox fx:id="words" alignment="TOP_CENTER" prefHeight="348.0" prefWidth="600.0" spacing="5.0" />
       <VBox fx:id="keys" maxHeight="300.0" prefHeight="300.0" prefWidth="600.0" spacing="4.0" />
    </VBox>
-   <ProgressBar fx:id="countdownBar" layoutX="185.0" layoutY="70.0" prefHeight="36.0" prefWidth="243.0" progress="0.0" />
+   <ProgressBar fx:id="countdownBar" layoutX="185.0" layoutY="70.0" prefHeight="20.0" prefWidth="230.0" progress="0.0"
+                style="-fx-accent: #538d4e; -fx-background-radius: 15; -fx-border-radius: 15; -fx-background-color: #323234;" />
 </Pane>
