@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -25,6 +26,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +49,10 @@ public class WordleController {
     private final Label[][] keyLabels;
     private final HBox[] wordBoxes;
     private final ImageView lightbulb = new ImageView(new Image("gui/lightbulb.png"));
+    private final ImageView settings = new ImageView(new Image("gui/settings.png"));
+
     public Button hintButton;
+    public Button settingButton;
     private Stage mainStage;
     private Scene statsScene;
     private String goalWord;
@@ -55,8 +60,12 @@ public class WordleController {
     private int guessCount;
     private Scene adminStatsScene;
     private Scene playerStatsScene;
+    private Scene settingsScene;
+
     private AdminStatsController adminStatsController;
     private StatsController playerStatsController;
+    private SettingsController settingsController;
+
     private boolean isGameWon;
     private int remainingHints = 3;
     Stage endGameStage = new Stage();
@@ -70,7 +79,6 @@ public class WordleController {
     private ImageView stats;
     @FXML
     private Label adminLabel;
-
 
     public WordleController() {
         goalWord = WordleApp.getGoalWord();
@@ -92,6 +100,10 @@ public class WordleController {
     @FXML
     public void initialize() {
         createHintButton();
+        settingButton.setGraphic(settings);
+        settingButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+        settings.setFitWidth(40);
+        settings.setFitHeight(40);
 
         pane.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if (newScene != null) {
@@ -384,10 +396,12 @@ public class WordleController {
         this.playerStatsController = controller;
     }
 
-    public void setStageScene(Stage stage, Scene adminScene, Scene playerScene) {
+    public void setSettingsController(SettingsController controller) {this.settingsController = controller;}
+    public void setStageScene(Stage stage, Scene adminScene, Scene playerScene, Scene settingsScene) {
         this.mainStage = stage;
         this.adminStatsScene = adminScene;
         this.playerStatsScene = playerScene;
+        this.settingsScene = settingsScene;
 
         this.stats.setOnMouseClicked(e -> {
             if (WordleApp.isAdmin()) {
@@ -453,4 +467,10 @@ public class WordleController {
         flip.play();
     }
 
+    public void settingPressed(ActionEvent actionEvent) {
+        openGamemodeWindow();
+    }
+    private void openGamemodeWindow() {
+            this.mainStage.setScene(this.settingsScene);
+    }
 }
