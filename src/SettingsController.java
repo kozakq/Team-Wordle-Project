@@ -26,6 +26,7 @@ public class SettingsController {
     private static final int THREE_MINUTES = 180;
     private int timeLeft = 0;
     private int gamemode;
+    private Timeline timeline = new Timeline();
     public void setGameScene(Scene gameScene) {
         this.gameScene = gameScene;
     }
@@ -47,7 +48,11 @@ public class SettingsController {
         this.wordleController = wordleController;
     }
     public void setupButtons() {
-        unlimitedButton.setOnAction(e -> switchToGame());
+        unlimitedButton.setOnAction(e -> {
+            timeline.stop();
+            progressBar.setVisible(false);
+            switchToGame();
+        });
 
         mediumButton.setOnAction(e -> {
             gamemode = 0;
@@ -65,9 +70,10 @@ public class SettingsController {
     }
     public void restartBar(int gamemode) {
         if (gamemode == 0) {
+            timeline.stop();
             progressBar.setVisible(true);
             timeLeft = THREE_MINUTES;
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), y -> {
+            timeline = new Timeline(new KeyFrame(Duration.seconds(1), y -> {
                 timeLeft--;
                 progressBar.setProgress((double) timeLeft / THREE_MINUTES);
                 if (timeLeft <= 0) {
@@ -79,9 +85,10 @@ public class SettingsController {
             timeline.play();
             switchToGame();
         } else if (gamemode == 1) {
+            timeline.stop();
             progressBar.setVisible(true);
             timeLeft = ONE_MINUTE;
-            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), y -> {
+            timeline = new Timeline(new KeyFrame(Duration.seconds(1), y -> {
                 timeLeft--;
                 progressBar.setProgress((double) timeLeft / ONE_MINUTE);
                 if (timeLeft <= 0) {
