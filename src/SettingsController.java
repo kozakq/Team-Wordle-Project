@@ -1,9 +1,13 @@
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class SettingsController {
 
@@ -13,8 +17,11 @@ public class SettingsController {
     public Button hardButton;
     private Scene gameScene;
     private Stage mainStage;
-    private CountdownTimer countdownTimer = new CountdownTimer();
-
+    private ProgressBar progressBar;
+    private WordleController wordleController;
+    private static final int ONE_MINUTE = 60;
+    private static final int THREE_MINUTES = 180;
+    private int timeLeft = 0;
     public void setGameScene(Scene gameScene) {
         this.gameScene = gameScene;
     }
@@ -24,29 +31,58 @@ public class SettingsController {
     }
 
     public void initialize() {
-        unlimitedButton.setOnAction(e -> switchToGame());
-
-        mediumButton.setOnAction(e -> {
-
-        });
-
-        hardButton.setOnAction(e -> {
-
-        });
+//        unlimitedButton.setOnAction(e -> switchToGame());
+//
+//        mediumButton.setOnAction(e -> {
+//            progressBar.setVisible(true);
+//            timeLeft = THREE_MINUTES;
+//            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), y -> {
+//                timeLeft--;
+//                progressBar.setProgress((double) timeLeft / THREE_MINUTES);
+//                if (timeLeft <= 0) {
+//                    ((Timeline)y.getSource()).stop();
+//                    wordleController.isGameOver();
+//                }
+//            }));
+//            timeline.play();
+//            switchToGame();
+//        });
+//
+//        hardButton.setOnAction(e -> {
+//
+//        });
     }
     private void switchToGame() {
         mainStage.setScene(gameScene);
     }
+    public void setCountdownBar(ProgressBar progressBar) {
+        this.progressBar = progressBar;
+    }
+    public void setWordleController(WordleController wordleController) {
+        this.wordleController = wordleController;
+    }
+    public void setupButtons() {
+        unlimitedButton.setOnAction(e -> switchToGame());
 
-    public void unlimitedPressed(ActionEvent actionEvent) {
-        switchToGame();
+        mediumButton.setOnAction(e -> {
+            progressBar.setVisible(true);
+            timeLeft = THREE_MINUTES;
+            Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), y -> {
+                timeLeft--;
+                progressBar.setProgress((double) timeLeft / THREE_MINUTES);
+                if (timeLeft <= 0) {
+                    ((Timeline)y.getSource()).stop();
+                    wordleController.isGameOver();
+                }
+            }));
+            timeline.setCycleCount(THREE_MINUTES);
+            timeline.play();
+            switchToGame();
+        });
+
+        hardButton.setOnAction(e -> {
+            // logic here
+        });
     }
 
-    public void mediumPressed(ActionEvent actionEvent) {
-
-    }
-
-    public void hardPressed(ActionEvent actionEvent) {
-
-    }
 }

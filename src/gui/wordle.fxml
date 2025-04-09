@@ -7,7 +7,7 @@
 
 <Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WordleController">
    <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="50.0">
-      <VBox alignment="TOP_CENTER" prefHeight="63.0" prefWidth="600.0">
+      <VBox alignment="TOP_CENTER" prefHeight="105.0" prefWidth="600.0">
          <HBox alignment="CENTER" prefHeight="58.0" prefWidth="393.0" spacing="15.0">
             <ImageView fitHeight="38.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.4;">
                <image>
@@ -41,4 +41,5 @@
       <VBox fx:id="words" alignment="TOP_CENTER" prefHeight="348.0" prefWidth="600.0" spacing="5.0" />
       <VBox fx:id="keys" maxHeight="300.0" prefHeight="300.0" prefWidth="600.0" spacing="4.0" />
    </VBox>
+   <ProgressBar fx:id="countdownBar" layoutX="185.0" layoutY="70.0" prefHeight="36.0" prefWidth="243.0" progress="0.0" />
 </Pane>

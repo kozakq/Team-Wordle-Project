@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -53,6 +54,7 @@ public class WordleController {
 
     public Button hintButton;
     public Button settingButton;
+    public ProgressBar countdownBar;
     private Stage mainStage;
     private Scene statsScene;
     private String goalWord;
@@ -64,7 +66,7 @@ public class WordleController {
 
     private AdminStatsController adminStatsController;
     private StatsController playerStatsController;
-    private SettingsController settingsController;
+    public SettingsController settingsController;
 
     private boolean isGameWon;
     private int remainingHints = 3;
@@ -100,10 +102,9 @@ public class WordleController {
     @FXML
     public void initialize() {
         createHintButton();
-        settingButton.setGraphic(settings);
-        settingButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
-        settings.setFitWidth(40);
-        settings.setFitHeight(40);
+        createSettingsButton();
+        countdownBar.setVisible(false);
+
 
         pane.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if (newScene != null) {
@@ -169,6 +170,7 @@ public class WordleController {
             keys.getChildren().add(keyBox);
         }
         hintButton.setVisible(true);
+
         updateHintButton();
     }
 
@@ -320,6 +322,7 @@ public class WordleController {
         remainingHints = 3;
         hintButton.setDisable(false);
         updateHintButton();
+        runSettings();
 
         stage.close();
     }
@@ -366,6 +369,13 @@ public class WordleController {
         lightbulb.setFitHeight(40);
 
         updateHintButton();
+    }
+
+    private void createSettingsButton() {
+        settingButton.setGraphic(settings);
+        settingButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+        settings.setFitWidth(40);
+        settings.setFitHeight(40);
     }
 
     private void updateHintButton() {
@@ -473,4 +483,10 @@ public class WordleController {
     private void openGamemodeWindow() {
             this.mainStage.setScene(this.settingsScene);
     }
+
+    public void runSettings() {
+        settingsController.setWordleController(this);
+        settingsController.setCountdownBar(countdownBar);
+    }
+
 }
