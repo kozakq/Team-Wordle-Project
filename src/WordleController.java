@@ -324,7 +324,9 @@ public class WordleController {
         updateHintButton();
         runSettings();
         settingsController.restartBar(settingsController.getGamemode());
-        stage.close();
+        if (stage != null) {
+            stage.close();
+        }
     }
 
     public EventHandler<WindowEvent> closeGame() {
@@ -348,25 +350,22 @@ public class WordleController {
             String hintLetter = "";
             hintLetter = goalWord.substring(currentWord.length(), currentWord.length() + 1);
             enterCharacter(hintLetter.toUpperCase());
-
             remainingHints--;
-
             updateHintButton();
         }
     }
 
     public void hintPressed(ActionEvent actionEvent) {
         getHint();
-
         if (remainingHints <= 0) {
             hintButton.setDisable(true);
         }
     }
 
     private void createHintButton() {
-        lightbulb.setStyle("-fx-opacity: 1.0"); // Make it fully visible
-        lightbulb.setFitWidth(40);
-        lightbulb.setFitHeight(40);
+        lightbulb.setStyle("-fx-opacity: 1.0");
+        lightbulb.setFitWidth(30);
+        lightbulb.setFitHeight(30);
 
         updateHintButton();
     }
@@ -374,8 +373,8 @@ public class WordleController {
     private void createSettingsButton() {
         settingButton.setGraphic(settings);
         settingButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
-        settings.setFitWidth(40);
-        settings.setFitHeight(40);
+        settings.setFitWidth(30);
+        settings.setFitHeight(30);
     }
 
     private void updateHintButton() {
@@ -487,6 +486,9 @@ public class WordleController {
     public void runSettings() {
         settingsController.setWordleController(this);
         settingsController.setCountdownBar(countdownBar);
+    }
+    public Stage getMainStage() {
+        return mainStage;
     }
 
 }

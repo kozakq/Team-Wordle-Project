@@ -20,9 +20,14 @@
             </Label>
             <AnchorPane prefHeight="175.0" prefWidth="474.0">
                <children>
-                  <Button fx:id="unlimitedButton" layoutX="14.0" layoutY="71.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="119.0" text="Unlimited Time" />
-                  <Button fx:id="mediumButton" layoutX="164.0" layoutY="71.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="119.0" text="3 Min Countdown" />
-                  <Button fx:id="hardButton" layoutX="314.0" layoutY="71.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="119.0" text="1 Min Countdown" />
+                  <Button fx:id="unlimitedButton" layoutX="14.0" layoutY="71.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="119.0" text="Unlimited Time"
+                          style="-fx-background-color: #323234; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;" />
+
+                  <Button fx:id="mediumButton" layoutX="164.0" layoutY="71.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="119.0" text="3 Min Countdown"
+                          style="-fx-background-color: #323234; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;" />
+
+                  <Button fx:id="hardButton" layoutX="314.0" layoutY="71.0" mnemonicParsing="false" prefHeight="58.0" prefWidth="119.0" text="1 Min Countdown"
+                          style="-fx-background-color: #323234; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 12;" />
                </children>
             </AnchorPane>
          </children>

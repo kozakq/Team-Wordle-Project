@@ -24,8 +24,8 @@ public class SettingsController {
     private WordleController wordleController;
     private static final int ONE_MINUTE = 60;
     private static final int THREE_MINUTES = 180;
-    private int timeLeft = 0;
-    private int gamemode;
+    private int timeLeft = 100;
+    private int gamemode = 3;
     private Timeline timeline = new Timeline();
     public void setGameScene(Scene gameScene) {
         this.gameScene = gameScene;
@@ -49,19 +49,18 @@ public class SettingsController {
     }
     public void setupButtons() {
         unlimitedButton.setOnAction(e -> {
-            timeline.stop();
-            progressBar.setVisible(false);
-            switchToGame();
+            gamemode = 3;
+            wordleController.restartGame(null);
         });
 
         mediumButton.setOnAction(e -> {
             gamemode = 0;
-            restartBar(gamemode);
+            wordleController.restartGame(null);
         });
 
         hardButton.setOnAction(e -> {
             gamemode = 1;
-            restartBar(gamemode);
+            wordleController.restartGame(null);
         });
     }
 
@@ -70,36 +69,31 @@ public class SettingsController {
     }
     public void restartBar(int gamemode) {
         if (gamemode == 0) {
-            timeline.stop();
-            progressBar.setVisible(true);
-            timeLeft = THREE_MINUTES;
-            timeline = new Timeline(new KeyFrame(Duration.seconds(1), y -> {
-                timeLeft--;
-                progressBar.setProgress((double) timeLeft / THREE_MINUTES);
-                if (timeLeft <= 0) {
-                    //((Timeline)y.getSource()).stop();
-                    wordleController.isGameOver();
-                }
-            }));
-            timeline.setCycleCount(THREE_MINUTES);
-            timeline.play();
-            switchToGame();
+            updateProgress(THREE_MINUTES);
         } else if (gamemode == 1) {
+            updateProgress(ONE_MINUTE);
+        } else if (gamemode == 3) {
+            progressBar.setVisible(false);
             timeline.stop();
-            progressBar.setVisible(true);
-            timeLeft = ONE_MINUTE;
-            timeline = new Timeline(new KeyFrame(Duration.seconds(1), y -> {
-                timeLeft--;
-                progressBar.setProgress((double) timeLeft / ONE_MINUTE);
-                if (timeLeft <= 0) {
-                    //((Timeline)y.getSource()).stop();
-                    wordleController.isGameOver();
-                }
-            }));
-            timeline.setCycleCount(ONE_MINUTE);
-            timeline.play();
             switchToGame();
         }
+    }
+
+    private void updateProgress(int time) {
+        timeline.stop();
+        progressBar.setVisible(true);
+        timeLeft = time;
+        timeline = new Timeline(new KeyFrame(Duration.seconds(1), y -> {
+            timeLeft--;
+            progressBar.setProgress((double) timeLeft / time);
+            if (timeLeft <= 0) {
+                //((Timeline)y.getSource()).stop();
+                wordleController.isGameOver();
+            }
+        }));
+        timeline.setCycleCount(time);
+        timeline.play();
+        switchToGame();
     }
 
     public int getGamemode() {
