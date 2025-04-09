@@ -60,7 +60,6 @@ public class WordleApp {
             if (currentAccount != null) {
                 currentAccount.addGuess(word);
                 wordStorage.addWord(word);
-
             }
             return sb.toString();
         } else {
@@ -88,6 +87,7 @@ public class WordleApp {
 
     public static String changeGoalWord() {
         goalWord = dictionary.getRandomWord();
+        System.out.println(goalWord);
         return goalWord;
     }
 

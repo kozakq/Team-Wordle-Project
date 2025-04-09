@@ -16,7 +16,7 @@ public class Dictionary {
 
     public Dictionary() {
         wordList = new ArrayList<>();
-        loadToList("/data/wordle-full-1.txt"); // Make sure this file is in resources/data
+        loadToList("/data/words.txt"); // Make sure this file is in resources/data
     }
 
     /**
