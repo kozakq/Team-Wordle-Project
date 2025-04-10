@@ -487,8 +487,5 @@ public class WordleController {
         settingsController.setWordleController(this);
         settingsController.setCountdownBar(countdownBar);
     }
-    public Stage getMainStage() {
-        return mainStage;
-    }
 
 }

@@ -68,14 +68,14 @@ public class SettingsController {
         return timeLeft == 0;
     }
     public void restartBar(int gamemode) {
-        if (gamemode == 0) {
-            updateProgress(THREE_MINUTES);
-        } else if (gamemode == 1) {
-            updateProgress(ONE_MINUTE);
-        } else if (gamemode == 3) {
-            progressBar.setVisible(false);
-            timeline.stop();
-            switchToGame();
+        switch (gamemode) {
+            case 0 -> updateProgress(THREE_MINUTES);
+            case 1 -> updateProgress(ONE_MINUTE);
+            case 3 -> {
+                progressBar.setVisible(false);
+                timeline.stop();
+                switchToGame();
+            }
         }
     }
 
