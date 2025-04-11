@@ -14,12 +14,12 @@
                   <Image url="@help.png" />
                </image>
             </ImageView>
-            <Button fx:id="hintButton" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#hintPressed" prefHeight="50.0" prefWidth="50.0" >
+            <Button fx:id="hintButton" contentDisplay="CENTER" focusTraversable="false" mnemonicParsing="false" onAction="#hintPressed" prefHeight="50.0" prefWidth="50.0">
                <font>
                   <Font name="Book Antiqua" size="12.0" />
                </font>
             </Button>
-            <Label alignment="CENTER" prefHeight="58.0" prefWidth="270.0" text=" WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
+            <Label alignment="CENTER" prefHeight="58.0" prefWidth="228.0" text="WORDLE  " textAlignment="CENTER" textFill="#d7d8dc">
                <font>
                   <Font name="System Bold" size="40.0" />
                </font>
@@ -36,7 +36,7 @@
             </ImageView>
          </HBox>
          <Separator opacity="0.5" prefWidth="200.0" style="-fx-max-width: 400;" />
-         <Label fx:id="adminLabel" alignment="TOP_CENTER" prefHeight="15.0" prefWidth="173.0" text="ADMINISTRATOR " textAlignment="JUSTIFY" textFill="#d7d8dc" visible="false"/>
+         <Label fx:id="adminLabel" alignment="TOP_CENTER" prefHeight="15.0" prefWidth="173.0" text="ADMINISTRATOR " textAlignment="JUSTIFY" textFill="#d7d8dc" visible="false" />
       </VBox>
       <VBox fx:id="words" alignment="TOP_CENTER" prefHeight="348.0" prefWidth="600.0" spacing="5.0" />
       <VBox fx:id="keys" maxHeight="300.0" prefHeight="300.0" prefWidth="600.0" spacing="4.0" />

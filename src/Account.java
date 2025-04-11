@@ -65,6 +65,7 @@ public class Account {
                 String[] nums = lines.get(i).split(":");
                 guessCounts.put(Integer.parseInt(nums[0]), Integer.parseInt(nums[1]));
             }
+
             int lineIndex = 12;
             gameStats = new HashMap<>();
             while (lineIndex < 15) {
@@ -72,6 +73,7 @@ public class Account {
                 gameStats.put(splits[0], Integer.parseInt(splits[1]));
                 lineIndex++;
             }
+
             lineIndex++;
             guesses = new HashMap<>();
             while (lineIndex < lines.size()) {

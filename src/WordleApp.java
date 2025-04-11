@@ -25,6 +25,7 @@ public class WordleApp {
     static WordStorage wordStorage;
     private static Dictionary dictionary;
     private static String goalWord;
+    private static int wordLength = 3;
 
     public static void initialize() {
         dictionary = new Dictionary();
@@ -85,8 +86,12 @@ public class WordleApp {
         return count;
     }
 
+    public void changeWordLength(int length) {
+        wordLength = length;
+    }
+
     public static String changeGoalWord() {
-        goalWord = dictionary.getRandomWord();
+        goalWord = dictionary.getRandomWord(wordLength);
         System.out.println(goalWord);
         return goalWord;
     }

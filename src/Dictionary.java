@@ -3,19 +3,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
 public class Dictionary {
 
-    private final List<String> wordList;
+    private final HashMap<Integer, List<String>> wordDictionary;
 
     /**
      * no argument constructor for a dictionary object
      */
 
     public Dictionary() {
-        wordList = new ArrayList<>();
+        wordDictionary = new HashMap<>();
         loadToList("/data/words.txt"); // Make sure this file is in resources/data
     }
 
@@ -25,14 +26,15 @@ public class Dictionary {
      * @param resourcePath file a path of txt file
      */
     public Dictionary(String resourcePath) {
-        wordList = new ArrayList<>();
+        wordDictionary = new HashMap<>();
         loadToList(resourcePath);
     }
 
     /**
      * method to get a random word
      */
-    public String getRandomWord() {
+    public String getRandomWord(int length) {
+        List<String> wordList = wordDictionary.get(length);
         return wordList.get((int) (Math.random() * wordList.size()));
     }
 
@@ -42,6 +44,7 @@ public class Dictionary {
      * @param word word to check
      */
     public boolean isValidWord(String word) {
+        List<String> wordList = wordDictionary.get(word.length());
         return wordList.contains(word);
     }
 
@@ -51,9 +54,15 @@ public class Dictionary {
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(input))) {
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    wordList.add(line.trim().toLowerCase());
+                    String word = line.trim().toLowerCase();
+                    if (wordDictionary.containsKey(word.length())) {
+                        wordDictionary.get(word.length()).add(word);
+                    } else {
+                        List<String> wordList = new ArrayList<>();
+                        wordList.add(word);
+                        wordDictionary.put(word.length(), wordList);
+                    }
                 }
-
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to load dictionary: " + resourcePath, e);

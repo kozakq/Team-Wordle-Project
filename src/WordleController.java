@@ -58,6 +58,7 @@ public class WordleController {
     private int remainingHints = 3;
     Stage endGameStage = new Stage();
     private boolean isFlipping = false;
+
     @FXML
     private VBox words;
     @FXML
@@ -68,7 +69,6 @@ public class WordleController {
     private ImageView stats;
     @FXML
     private Label adminLabel;
-
 
     public WordleController() {
         goalWord = WordleApp.getGoalWord();
@@ -157,7 +157,6 @@ public class WordleController {
         updateHintButton();
     }
 
-
     private void keyPressed(KeyEvent e) {
         if (e.getCode().isLetterKey()) {
             enterCharacter(e.getCode().getChar());
@@ -185,14 +184,12 @@ public class WordleController {
                 guessedWords.add(currentWord.toLowerCase());
                 guessCount++;
                 guiController.updateView(currentWord, info);
-                isGameOver();
                 currentWord = "";
             } else {
                 shakeNode(wordBoxes[guessCount]);
             }
         }
     }
-
 
     private void backspace() {
         if (!currentWord.isEmpty()) {
@@ -231,6 +228,7 @@ public class WordleController {
             showEndGameWindow();
         }
     }
+
     public void showEndGameWindow() {
         endGameStage.setWidth(400);
         endGameStage.setHeight(400);
@@ -258,7 +256,9 @@ public class WordleController {
 
         Button statsButton = new Button("Player Stats");
         statsButton.getStyleClass().add("stats-button");
-        statsButton.setOnAction(e -> showPlayerStats());
+        statsButton.setOnAction(e -> {
+            if (!isFlipping) showPlayerStats();
+        });
 
         VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
         layout.setAlignment(Pos.CENTER);
@@ -450,10 +450,9 @@ public class WordleController {
         shake.play();
     }
 
-
     private void flipLabel(List<Label> labels, String info, int index) {
         Label label = labels.get(index);
-        ScaleTransition shrink = new ScaleTransition(Duration.millis(150), label);
+        ScaleTransition shrink = new ScaleTransition(Duration.millis(750 / goalWord.length()), label);
         shrink.setToY(0);
         shrink.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
 
@@ -473,16 +472,17 @@ public class WordleController {
             }
         });
 
-
-        ScaleTransition expand = new ScaleTransition(Duration.millis(150), label);
+        ScaleTransition expand = new ScaleTransition(Duration.millis(750 / goalWord.length()), label);
         expand.setToY(1);
         expand.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
         if (index == labels.size() - 1) {
-            expand.setOnFinished(e -> isFlipping = false);
+            expand.setOnFinished(e -> {
+                isFlipping = false;
+                isGameOver();
+            });
         }
 
         SequentialTransition flip = new SequentialTransition(shrink, expand);
         flip.play();
     }
-
 }
