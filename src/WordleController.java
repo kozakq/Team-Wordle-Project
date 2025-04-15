@@ -115,7 +115,7 @@ public class WordleController {
         pane.setFocusTraversable(true);
         pane.requestFocus();
 
-        for (int i = 0; i < MAX_GUESSES; i++) { // creating letter labels
+        for (int i = 0; i < MAX_GUESSES; i++) {
             HBox wordBox = new HBox();
             wordBox.setAlignment(Pos.CENTER);
             wordBox.setPrefHeight(55);
@@ -137,7 +137,7 @@ public class WordleController {
         }
 
         String[][] keyTexts = {{"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"}, {"A", "S", "D", "F", "G", "H", "J", "K", "L"}, {"ENTER", "Z", "X", "C", "V", "B", "N", "M", "⌫"}};
-        for (int i = 0; i < keyTexts.length; i++) { // creating key labels
+        for (int i = 0; i < keyTexts.length; i++) {
             HBox keyBox = new HBox();
             keyBox.setAlignment(Pos.CENTER);
             keyBox.setPrefHeight(50);
@@ -305,6 +305,7 @@ public class WordleController {
 
     public void restartGame(Stage stage) {
         guessCount = 0;
+        currentWord = "";
         if (guessedWords != null) {
             guessedWords.clear();
         }
@@ -487,5 +488,4 @@ public class WordleController {
         settingsController.setWordleController(this);
         settingsController.setCountdownBar(countdownBar);
     }
-
 }

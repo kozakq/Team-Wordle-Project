@@ -1,12 +1,9 @@
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -36,7 +33,7 @@ public class SettingsController {
     }
 
     public void initialize() {
-//
+
     }
     private void switchToGame() {
         mainStage.setScene(gameScene);
@@ -87,7 +84,6 @@ public class SettingsController {
             timeLeft--;
             progressBar.setProgress((double) timeLeft / time);
             if (timeLeft <= 0) {
-                //((Timeline)y.getSource()).stop();
                 wordleController.isGameOver();
             }
         }));

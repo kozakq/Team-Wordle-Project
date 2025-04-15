@@ -91,7 +91,7 @@ public class GlobalStats {
         return null;
     }
 
-    public void saveToFIle() {
+    public void saveToFile() {
 
     }
 }
