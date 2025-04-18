@@ -17,7 +17,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -52,8 +51,10 @@ public class WordleController {
     private int guessCount;
     private Scene adminStatsScene;
     private Scene playerStatsScene;
+    private Scene adminSettingsScene;
     private AdminStatsController adminStatsController;
     private StatsController playerStatsController;
+    private AdminSettingsController adminSettingsController;
     private boolean isGameWon;
     private int remainingHints = 3;
     Stage endGameStage = new Stage();
@@ -68,6 +69,8 @@ public class WordleController {
     @FXML
     private ImageView stats;
     @FXML
+    private ImageView settings;
+    @FXML
     private Label adminLabel;
 
     public WordleController() {
@@ -81,6 +84,7 @@ public class WordleController {
         statsScene = null;
         adminStatsController = null;
         playerStatsController = null;
+        adminSettingsController = null;
         isGameWon = false;
         wordBoxes = new HBox[MAX_GUESSES];
     }
@@ -243,7 +247,9 @@ public class WordleController {
         Button restartButton = new Button("Restart Game");
         restartButton.getStyleClass().add("restart-button");
         restartButton.setOnAction(e -> {
-            if (!isFlipping) restartGame(endGameStage);
+            System.out.println("Restarting");
+            endGameStage.close();
+            if (!isFlipping) restartGame();
         });
 
         Button closeButton = new Button("Exit Game");
@@ -283,11 +289,12 @@ public class WordleController {
                 playerStatsController.updateStats();
             }
         }
+
         endGameStage.close();
-        restartGame(endGameStage);
+        restartGame();
     }
 
-    public void restartGame(Stage stage) {
+    public void restartGame() {
         guessCount = 0;
         if (guessedWords != null) {
             guessedWords.clear();
@@ -309,8 +316,6 @@ public class WordleController {
         remainingHints = 3;
         hintButton.setDisable(false);
         updateHintButton();
-
-        stage.close();
     }
 
     private void updateLabelLength() {
@@ -410,10 +415,15 @@ public class WordleController {
         this.playerStatsController = controller;
     }
 
-    public void setStageScene(Stage stage, Scene adminScene, Scene playerScene) {
+    public void setAdminSettingsController(AdminSettingsController controller) {
+        this.adminSettingsController = controller;
+    }
+
+    public void setStageScene(Stage stage, Scene adminScene, Scene playerScene, Scene adminSettingsScene) {
         this.mainStage = stage;
         this.adminStatsScene = adminScene;
         this.playerStatsScene = playerScene;
+        this.adminSettingsScene = adminSettingsScene;
 
         this.stats.setOnMouseClicked(e -> {
             if (WordleApp.isAdmin()) {
@@ -426,6 +436,15 @@ public class WordleController {
                     playerStatsController.updateStats();
                 }
                 this.mainStage.setScene(this.playerStatsScene);
+            }
+        });
+
+        this.settings.setOnMouseClicked(e -> {
+            if (WordleApp.isAdmin()) {
+                if (adminSettingsController != null) {
+                    adminSettingsController.updateBox();
+                }
+                this.mainStage.setScene(this.adminSettingsScene);
             }
         });
     }

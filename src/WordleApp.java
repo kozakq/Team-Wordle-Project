@@ -25,7 +25,7 @@ public class WordleApp {
     static WordStorage wordStorage;
     private static Dictionary dictionary;
     private static String goalWord;
-    private static int wordLength = 3;
+    private static int wordLength = 5;
 
     public static void initialize() {
         dictionary = new Dictionary();
@@ -242,7 +242,17 @@ public class WordleApp {
     public static void reloadAccounts() {
         accountList = new ArrayList<>();
         loadAccounts();
+    }
 
+    public static Dictionary getDictionary() {
+        return dictionary;
+    }
 
+    public static void setWordLength(int length) {
+        wordLength = length;
+    }
+
+    public static int getWordLength() {
+        return wordLength;
     }
 }
