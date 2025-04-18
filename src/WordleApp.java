@@ -25,6 +25,7 @@ public class WordleApp {
     static WordStorage wordStorage;
     private static Dictionary dictionary;
     private static String goalWord;
+    protected static AdminLogging adminLogging;
 
     public static void initialize() {
         dictionary = new Dictionary();
@@ -32,6 +33,7 @@ public class WordleApp {
         wordStorage = new WordStorage();
         loadAccounts();
         changeGoalWord();
+        adminLogging = null; 
     }
 
     public static boolean changeDictionary(String filePath) {
@@ -94,6 +96,7 @@ public class WordleApp {
     public static boolean createAccount(String username, String password) {
         if (isValidUsername(username) && !password.isEmpty()) {
             currentAccount = new Account(username, password);
+            adminLogging = new AdminLogging(currentAccount.getAccountID());
             accountList.add(currentAccount);
             return true;
         }
@@ -116,6 +119,7 @@ public class WordleApp {
         Account account = validateLogin(username, password);
         if (account != null) {
             currentAccount = account;
+            adminLogging = new AdminLogging(currentAccount.getAccountID());
             return true;
         } else {
             return false;
@@ -171,6 +175,7 @@ public class WordleApp {
     public static void save() {
         if (currentAccount != null) {
             currentAccount.saveToFile();
+
         }
         if (wordStorage != null) {
             wordStorage.saveToFile();

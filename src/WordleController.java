@@ -142,14 +142,23 @@ public class WordleController {
                     keyLabel.setPrefSize(50, 50);
                     keyLabel.setMaxSize(50, 50);
                     if (j == 0) {
-                        keyLabel.setOnMousePressed((e) -> enter());
+                        keyLabel.setOnMousePressed((e) -> {
+                            enter();
+                            logKeyPress("ENTER");
+                        });
                     } else {
-                        keyLabel.setOnMousePressed((e) -> backspace());
+                        keyLabel.setOnMousePressed((e) -> {
+                            backspace();
+                            logKeyPress("BACKSPACE");
+                        });
                     }
                 } else {
                     keyLabel.setPrefSize(33, 50);
                     keyLabel.setMaxSize(33, 50);
-                    keyLabel.setOnMousePressed((e) -> enterCharacter(key));
+                    keyLabel.setOnMousePressed((e) -> {
+                        enterCharacter(key);
+                        logKeyPress(key);
+                    });
                 }
                 keyLabels[i][j] = keyLabel;
                 keyBox.getChildren().add(keyLabel);
@@ -164,10 +173,19 @@ public class WordleController {
     private void keyPressed(KeyEvent e) {
         if (e.getCode().isLetterKey()) {
             enterCharacter(e.getCode().getChar());
+            logKeyPress(e.getCode().getChar());
         } else if (e.getCode().toString().equals("ENTER")) {
             enter();
+            logKeyPress("ENTER");
         } else if (e.getCode().toString().equals("BACK_SPACE")) {
             backspace();
+            logKeyPress("BACKSPACE");
+        }
+    }
+
+    private void logKeyPress(String keyInput) {
+        if (WordleApp.adminLogging != null) {
+            WordleApp.adminLogging.log(keyInput);
         }
     }
 
@@ -210,13 +228,11 @@ public class WordleController {
             isGameWon = won;
 
             WordleApp.addGuessCount(guessCount);
-
+            WordleApp.adminLogging.log("Game Over, Game Won? : " + isGameWon);
             if (WordleApp.isLoggedIn() && WordleApp.currentAccount != null) {
                 Account currentAccount = WordleApp.currentAccount;
                 currentAccount.recordGameResult(won);
-
                 WordleApp.save();
-
                 System.out.println("Game ended: " + (won ? "WON" : "LOST") +
                         " - Total games: " + currentAccount.getTotalGames() +
                         ", Wins: " + currentAccount.getGamesWon() +
@@ -304,17 +320,22 @@ public class WordleController {
 
         goalWord = WordleApp.changeGoalWord();
         guiController.reset();
-
         remainingHints = 3;
         hintButton.setDisable(false);
         updateHintButton();
+        logKeyPress("Restart");
 
         stage.close();
     }
 
     public EventHandler<WindowEvent> closeGame() {
         System.out.println("Closing!");
+        logKeyPress("Closed Game");
+
         WordleApp.save();
+        if (WordleApp.adminLogging != null) {
+            WordleApp.adminLogging.close();
+        }
         return null;
     }
 
@@ -342,6 +363,7 @@ public class WordleController {
 
     public void hintPressed(ActionEvent actionEvent) {
         getHint();
+        logKeyPress("Hint used");
 
         if (remainingHints <= 0) {
             hintButton.setDisable(true);
