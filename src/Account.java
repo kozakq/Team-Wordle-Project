@@ -24,6 +24,7 @@ public class Account {
     private String password;
     private String username;
     private UserType userType;
+    private int time = 0;
     private int gamesWon = 0;
     private int gamesLost = 0;
     private int totalGames = 0;
@@ -211,6 +212,13 @@ public class Account {
         return totalGames;
     }
 
+    public int getTime() {
+        if (gameStats != null && gameStats.containsKey("time")) {
+            return gameStats.get("time");
+        }
+        return time;
+    }
+
     public void recordGameResult(boolean won) {
         totalGames++;
         if (won) {
@@ -218,12 +226,15 @@ public class Account {
         } else {
             gamesLost++;
         }
-
+        gameStats.put("time", time);
         gameStats.put("total", totalGames);
         gameStats.put("wins", gamesWon);
         gameStats.put("losses", gamesLost);
 
         saveToFile();
+    }
+    public void reportTime(int time) {
+        this.time = time;
     }
 
 

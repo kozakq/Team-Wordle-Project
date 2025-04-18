@@ -9,8 +9,10 @@ import java.util.Map;
 
 public class StatsController {
 
+    public Button leaderboard;
     private Stage mainStage;
     private Scene gameScene;
+    private Scene leaderboardScene;
     @FXML
     private Label stats;
 
@@ -53,6 +55,16 @@ public class StatsController {
                 if (mainStage != null && gameScene != null) {
                     System.out.println("Returning to game scene.");
                     mainStage.setScene(gameScene);
+                } else {
+                    System.out.println("Error: MainStage or GameScene not set.");
+                }
+            });
+        }
+        if (leaderboard != null) {
+            leaderboard.setOnAction(event -> {
+                if (mainStage != null && gameScene != null) {
+                    System.out.println("Going to leaderboard scene.");
+                    mainStage.setScene(leaderboardScene);
                 } else {
                     System.out.println("Error: MainStage or GameScene not set.");
                 }
@@ -182,8 +194,9 @@ public class StatsController {
             int totalGames = WordleApp.currentAccount.getTotalGames();
             int gamesWon = WordleApp.currentAccount.getGamesWon();
             int gamesLost = WordleApp.currentAccount.getGamesLost();
+            int time = WordleApp.currentAccount.getTime();
 
-            System.out.println("Account stats: Total=" + totalGames + ", Won=" + gamesWon + ", Lost=" + gamesLost);
+            System.out.println("Account stats: Total=" + totalGames + ", Won=" + gamesWon + ", Lost=" + gamesLost + "Time= " + time + "s");
 
             gamesPlayedLabel.setText(String.valueOf(totalGames));
             gamesWonLabel.setText(String.valueOf(gamesWon));
@@ -193,5 +206,9 @@ public class StatsController {
         } else {
             System.out.println("No current account found for stats update");
         }
+    }
+
+    public void setStageScene(Scene leaderboardScene) {
+        this.leaderboardScene = leaderboardScene;
     }
 }

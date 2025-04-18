@@ -22,6 +22,7 @@ public class SettingsController {
     private static final int ONE_MINUTE = 60;
     private static final int THREE_MINUTES = 180;
     private int timeLeft = 100;
+    private int time;
     private int gamemode = 3;
     private Timeline timeline = new Timeline();
     public void setGameScene(Scene gameScene) {
@@ -79,6 +80,7 @@ public class SettingsController {
     private void updateProgress(int time) {
         timeline.stop();
         progressBar.setVisible(true);
+        this.time = time;
         timeLeft = time;
         timeline = new Timeline(new KeyFrame(Duration.seconds(1), y -> {
             timeLeft--;
@@ -91,7 +93,9 @@ public class SettingsController {
         timeline.play();
         switchToGame();
     }
-
+    public int recordTime() {
+        return time - timeLeft;
+    }
     public int getGamemode() {
         return gamemode;
     }

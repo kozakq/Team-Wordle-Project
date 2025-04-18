@@ -4,56 +4,55 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane fx:controller="StatsController" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1"
-      fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-      prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;">
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="StatsController">
 
    <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="10.0">
 
       <!-- Title -->
       <Label alignment="CENTER" prefHeight="58.0" prefWidth="270.0" text="WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
          <font>
-            <Font name="System Bold" size="40.0"/>
+            <Font name="System Bold" size="40.0" />
          </font>
       </Label>
       <!-- Back Button -->
-      <Button fx:id="back" mnemonicParsing="false" text="Back"
-              style="-fx-background-color: #538d4e; -fx-text-fill: white; -fx-font-weight: bold;"/>
+      <Button fx:id="back" mnemonicParsing="false" style="-fx-background-color: #538d4e; -fx-text-fill: white; -fx-font-weight: bold;" text="Back" />
+      <Button fx:id="leaderboard" mnemonicParsing="false" style="-fx-background-color: #538d4e; -fx-text-fill: white; -fx-font-weight: bold;" text="Leaderboard" />
+
       <!-- Display Average Guesses -->
-      <Label fx:id="stats" text="Average Guesses: " textFill="WHITE"/>
+      <Label fx:id="stats" text="Average Guesses: " textFill="WHITE" />
 
       <!-- Game Statistics Summary - New Section -->
-      <HBox spacing="20" alignment="CENTER">
-         <VBox styleClass="stat-box" alignment="CENTER">
-            <Label fx:id="gamesPlayedLabel" styleClass="stat-number" text="0"/>
-            <Label styleClass="stat-label" text="Played" textFill="#d7d8dc"/>
+      <HBox alignment="CENTER" spacing="20">
+         <VBox alignment="CENTER" styleClass="stat-box">
+            <Label fx:id="gamesPlayedLabel" styleClass="stat-number" text="0" />
+            <Label styleClass="stat-label" text="Played" textFill="#d7d8dc" />
          </VBox>
-         <VBox styleClass="stat-box" alignment="CENTER">
-            <Label fx:id="gamesWonLabel" styleClass="stat-number" text="0"/>
-            <Label styleClass="stat-label" text="Won" textFill="#d7d8dc"/>
+         <VBox alignment="CENTER" styleClass="stat-box">
+            <Label fx:id="gamesWonLabel" styleClass="stat-number" text="0" />
+            <Label styleClass="stat-label" text="Won" textFill="#d7d8dc" />
          </VBox>
-         <VBox styleClass="stat-box" alignment="CENTER">
-            <Label fx:id="winRateLabel" styleClass="stat-number" text="0%"/>
-            <Label styleClass="stat-label" text="Win Rate" textFill="#d7d8dc"/>
+         <VBox alignment="CENTER" styleClass="stat-box">
+            <Label fx:id="winRateLabel" styleClass="stat-number" text="0%" />
+            <Label styleClass="stat-label" text="Win Rate" textFill="#d7d8dc" />
          </VBox>
       </HBox>
 
       <!-- Most Guessed Words Section -->
-      <Label text="Most Guessed Words" textFill="#d7d8dc"/>
+      <Label text="Most Guessed Words" textFill="#d7d8dc" />
       <GridPane fx:id="guessedWordsTable" alignment="CENTER" hgap="10" vgap="10">
          <!-- Table content will be dynamically populated from the controller -->
       </GridPane>
 
       <!-- Most Guessed Letters Section -->
-      <Label text="Most Guessed Letters" textFill="#d7d8dc"/>
+      <Label text="Most Guessed Letters" textFill="#d7d8dc" />
       <GridPane fx:id="mostGuessedLettersTable" alignment="CENTER" hgap="10" vgap="10">
          <!-- Table content will be dynamically populated from the controller -->
       </GridPane>
 
       <!-- Guessed Words Section (Added VBox) -->
-      <Label text="Guessed Words" textFill="#d7d8dc"/>
+      <Label text="Guessed Words" textFill="#d7d8dc" />
       <VBox fx:id="guessedWords" alignment="TOP_CENTER" spacing="10.0">
-         <Label text="Guessed words will appear here." textFill="#d7d8dc"/>
+         <Label text="Guessed words will appear here." textFill="#d7d8dc" />
       </VBox>
 
    </VBox>

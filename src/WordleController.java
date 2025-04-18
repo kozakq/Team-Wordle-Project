@@ -67,6 +67,7 @@ public class WordleController {
     private AdminStatsController adminStatsController;
     private StatsController playerStatsController;
     public SettingsController settingsController;
+    private LeaderboardController leaderboardController;
 
     private boolean isGameWon;
     private int remainingHints = 3;
@@ -227,9 +228,13 @@ public class WordleController {
 
             if (WordleApp.isLoggedIn() && WordleApp.currentAccount != null) {
                 Account currentAccount = WordleApp.currentAccount;
+                currentAccount.reportTime(settingsController.recordTime());
                 currentAccount.recordGameResult(won);
 
                 WordleApp.save();
+
+                int time = currentAccount.getTime();
+                leaderboardController.getLeaderboard().addToLeaderboard(time);
 
                 System.out.println("Game ended: " + (won ? "WON" : "LOST") +
                         " - Total games: " + currentAccount.getTotalGames() +
@@ -487,5 +492,9 @@ public class WordleController {
     public void runSettings() {
         settingsController.setWordleController(this);
         settingsController.setCountdownBar(countdownBar);
+    }
+
+    public void setLeaderboardController(LeaderboardController leaderboardController) {
+        this.leaderboardController = leaderboardController;
     }
 }

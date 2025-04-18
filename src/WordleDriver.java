@@ -46,11 +46,19 @@ public class WordleDriver extends Application {
         Scene playerStatsScene = new Scene(playerStatsFxmlLoader.load());
         StatsController playerStatsController = playerStatsFxmlLoader.getController();
 
+        FXMLLoader leaderboardFXMLLoader = new FXMLLoader(getClass().getResource("gui/leaderboard.fxml"));
+        Scene leaderboardScene = new Scene(leaderboardFXMLLoader.load());
+        LeaderboardController leaderboardController = leaderboardFXMLLoader.getController();
+
         gameController.setSettingsController(settingsController);
         settingsController.setCountdownBar(gameController.countdownBar);
         settingsController.setWordleController(gameController);
         settingsController.setupButtons();
 
+
+        leaderboardController.setGameScene(gameScene);
+        leaderboardController.setMainStage(stage);
+        leaderboardController.initialize();
 
         settingsController.setGameScene(gameScene);
         settingsController.setMainStage(stage);
@@ -63,9 +71,11 @@ public class WordleDriver extends Application {
         playerStatsController.setGameScene(gameScene);
         playerStatsController.setMainStage(stage);
         playerStatsController.initialize();
+        playerStatsController.setStageScene(leaderboardScene);
 
         gameController.setAdminStatsController(adminStatsController);
         gameController.setPlayerStatsController(playerStatsController);
+        gameController.setLeaderboardController(leaderboardController);
         gameController.setStageScene(stage, adminStatsScene, playerStatsScene, settingsScene);
         stage.setScene(loginScene);
         stage.setOnCloseRequest(e -> gameController.closeGame());
