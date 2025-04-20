@@ -1,7 +1,4 @@
-import javafx.animation.Interpolator;
-import javafx.animation.ScaleTransition;
-import javafx.animation.SequentialTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -20,7 +17,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -43,7 +39,7 @@ public class WordleController {
     private static final int MAX_GUESSES = 6;
     private final GUIController guiController;
     private final List<String> guessedWords;
-    private final Label[][] letterLabels;
+    private final List<List<Label>> letterLabels;
     private final Label[][] keyLabels;
     private final HBox[] wordBoxes;
     private final ImageView lightbulb = new ImageView(new Image("gui/lightbulb.png"));
@@ -55,11 +51,15 @@ public class WordleController {
     private int guessCount;
     private Scene adminStatsScene;
     private Scene playerStatsScene;
+    private Scene adminSettingsScene;
     private AdminStatsController adminStatsController;
     private StatsController playerStatsController;
+    private AdminSettingsController adminSettingsController;
     private boolean isGameWon;
     private int remainingHints = 3;
     Stage endGameStage = new Stage();
+    private boolean isFlipping = false;
+
     @FXML
     private VBox words;
     @FXML
@@ -69,12 +69,13 @@ public class WordleController {
     @FXML
     private ImageView stats;
     @FXML
+    private ImageView settings;
+    @FXML
     private Label adminLabel;
-
 
     public WordleController() {
         goalWord = WordleApp.getGoalWord();
-        letterLabels = new Label[MAX_GUESSES][goalWord.length()];
+        letterLabels = new ArrayList<>();
         keyLabels = new Label[][]{{null, null, null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null, null}};
         guiController = new GUIController(keyLabels);
         currentWord = "";
@@ -83,10 +84,9 @@ public class WordleController {
         statsScene = null;
         adminStatsController = null;
         playerStatsController = null;
+        adminSettingsController = null;
         isGameWon = false;
         wordBoxes = new HBox[MAX_GUESSES];
-
-
     }
 
     @FXML
@@ -107,7 +107,7 @@ public class WordleController {
             wordBox.setAlignment(Pos.CENTER);
             wordBox.setPrefHeight(55);
             wordBox.setSpacing(5);
-
+            List<Label> row = new ArrayList<>();
             for (int j = 0; j < goalWord.length(); j++) {
                 Label letterLabel = new Label();
                 letterLabel.setAlignment(Pos.CENTER);
@@ -116,9 +116,10 @@ public class WordleController {
                 letterLabel.setFont(new Font("System Bold", 32));
                 letterLabel.setTextFill(Color.WHITE);
                 letterLabel.setStyle("-fx-border-color: #323234; -fx-border-width: 2;");
-                letterLabels[i][j] = letterLabel;
+                row.add(letterLabel);
                 wordBox.getChildren().add(letterLabel);
             }
+            letterLabels.add(row);
             words.getChildren().add(wordBox);
             wordBoxes[i] = wordBox;
         }
@@ -160,7 +161,6 @@ public class WordleController {
         updateHintButton();
     }
 
-
     private void keyPressed(KeyEvent e) {
         if (e.getCode().isLetterKey()) {
             enterCharacter(e.getCode().getChar());
@@ -173,8 +173,8 @@ public class WordleController {
 
     private void enterCharacter(String key) {
         if (currentWord.length() < goalWord.length() && guessCount < MAX_GUESSES) {
-            letterLabels[guessCount][currentWord.length()].setText(key);
-            letterLabels[guessCount][currentWord.length()].setStyle("-fx-border-color: #545456; -fx-border-width: 2;");
+            letterLabels.get(guessCount).get(currentWord.length()).setText(key);
+            letterLabels.get(guessCount).get(currentWord.length()).setStyle("-fx-border-color: #545456; -fx-border-width: 2;");
             currentWord += key;
         }
     }
@@ -183,11 +183,11 @@ public class WordleController {
         if (currentWord.length() == goalWord.length()) {
             String info = WordleApp.checkWord(currentWord.toLowerCase());
             if (!info.isEmpty()) {
-                flipLabel(letterLabels[guessCount], info, 0);
+                isFlipping = true;
+                flipLabel(letterLabels.get(guessCount), info, 0);
                 guessedWords.add(currentWord.toLowerCase());
                 guessCount++;
                 guiController.updateView(currentWord, info);
-                isGameOver();
                 currentWord = "";
             } else {
                 shakeNode(wordBoxes[guessCount]);
@@ -195,11 +195,10 @@ public class WordleController {
         }
     }
 
-
     private void backspace() {
         if (!currentWord.isEmpty()) {
-            letterLabels[guessCount][currentWord.length() - 1].setText("");
-            letterLabels[guessCount][currentWord.length() - 1].setStyle("-fx-border-color: #323234; -fx-border-width: 2;");
+            letterLabels.get(guessCount).get(currentWord.length() - 1).setText("");
+            letterLabels.get(guessCount).get(currentWord.length() - 1).setStyle("-fx-border-color: #323234; -fx-border-width: 2;");
             currentWord = currentWord.substring(0, currentWord.length() - 1);
         }
     }
@@ -233,6 +232,7 @@ public class WordleController {
             showEndGameWindow();
         }
     }
+
     public void showEndGameWindow() {
         endGameStage.setWidth(400);
         endGameStage.setHeight(400);
@@ -246,7 +246,11 @@ public class WordleController {
 
         Button restartButton = new Button("Restart Game");
         restartButton.getStyleClass().add("restart-button");
-        restartButton.setOnAction(e -> restartGame(endGameStage));
+        restartButton.setOnAction(e -> {
+            System.out.println("Restarting");
+            endGameStage.close();
+            if (!isFlipping) restartGame();
+        });
 
         Button closeButton = new Button("Exit Game");
         closeButton.getStyleClass().add("exit-button");
@@ -258,7 +262,9 @@ public class WordleController {
 
         Button statsButton = new Button("Player Stats");
         statsButton.getStyleClass().add("stats-button");
-        statsButton.setOnAction(e -> showPlayerStats());
+        statsButton.setOnAction(e -> {
+            if (!isFlipping) showPlayerStats();
+        });
 
         VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
         layout.setAlignment(Pos.CENTER);
@@ -283,13 +289,12 @@ public class WordleController {
                 playerStatsController.updateStats();
             }
         }
+
         endGameStage.close();
-        restartGame(endGameStage);
+        restartGame();
     }
 
-
-
-    public void restartGame(Stage stage) {
+    public void restartGame() {
         guessCount = 0;
         if (guessedWords != null) {
             guessedWords.clear();
@@ -297,19 +302,45 @@ public class WordleController {
 
         for (int i = 0; i < MAX_GUESSES; i++) {
             for (int j = 0; j < goalWord.length(); j++) {
-                letterLabels[i][j].setText("");
-                letterLabels[i][j].setStyle("-fx-border-color: #323234; -fx-border-width: 2;");
+                letterLabels.get(i).get(j).setText("");
+                letterLabels.get(i).get(j).setStyle("-fx-border-color: #323234; -fx-border-width: 2;");
             }
         }
 
         goalWord = WordleApp.changeGoalWord();
+
+        updateLabelLength();
+
         guiController.reset();
 
         remainingHints = 3;
         hintButton.setDisable(false);
         updateHintButton();
+    }
 
-        stage.close();
+    private void updateLabelLength() {
+        int difference = letterLabels.getFirst().size() - goalWord.length();
+        if (difference < 0) {
+            for (int i = 0; i < MAX_GUESSES; i++) {
+                for (int j = 0; j < Math.abs(difference); j++) {
+                    Label letterLabel = new Label();
+                    letterLabel.setAlignment(Pos.CENTER);
+                    letterLabel.setPrefSize(55, 55);
+                    letterLabel.setMaxSize(55, 55);
+                    letterLabel.setFont(new Font("System Bold", 32));
+                    letterLabel.setTextFill(Color.WHITE);
+                    letterLabel.setStyle("-fx-border-color: #323234; -fx-border-width: 2;");
+                    letterLabels.get(i).add(letterLabel);
+                    wordBoxes[i].getChildren().add(letterLabel);
+                }
+            }
+        } else if (difference > 0) {
+            for (int i = 0; i < MAX_GUESSES; i++) {
+                for (int j = 0; j < difference; j++) {
+                    wordBoxes[i].getChildren().remove(letterLabels.get(i).removeLast());
+                }
+            }
+        }
     }
 
     public EventHandler<WindowEvent> closeGame() {
@@ -384,10 +415,15 @@ public class WordleController {
         this.playerStatsController = controller;
     }
 
-    public void setStageScene(Stage stage, Scene adminScene, Scene playerScene) {
+    public void setAdminSettingsController(AdminSettingsController controller) {
+        this.adminSettingsController = controller;
+    }
+
+    public void setStageScene(Stage stage, Scene adminScene, Scene playerScene, Scene adminSettingsScene) {
         this.mainStage = stage;
         this.adminStatsScene = adminScene;
         this.playerStatsScene = playerScene;
+        this.adminSettingsScene = adminSettingsScene;
 
         this.stats.setOnMouseClicked(e -> {
             if (WordleApp.isAdmin()) {
@@ -400,6 +436,15 @@ public class WordleController {
                     playerStatsController.updateStats();
                 }
                 this.mainStage.setScene(this.playerStatsScene);
+            }
+        });
+
+        this.settings.setOnMouseClicked(e -> {
+            if (WordleApp.isAdmin()) {
+                if (adminSettingsController != null) {
+                    adminSettingsController.updateBox();
+                }
+                this.mainStage.setScene(this.adminSettingsScene);
             }
         });
     }
@@ -424,33 +469,39 @@ public class WordleController {
         shake.play();
     }
 
-
-    private void flipLabel(Label[] labels, String info, int index) {
-        Label label = labels[index];
-        ScaleTransition shrink = new ScaleTransition(Duration.millis(150), label);
+    private void flipLabel(List<Label> labels, String info, int index) {
+        Label label = labels.get(index);
+        ScaleTransition shrink = new ScaleTransition(Duration.millis(750 / goalWord.length()), label);
         shrink.setToY(0);
         shrink.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
 
         shrink.setOnFinished(e -> {
-            if (index < labels.length - 1) {
+            if (index < labels.size() - 1) {
                 flipLabel(labels, info, index + 1);
             }
-            switch (info.charAt(index)) {
-                case 'x' ->
-                        labels[index].setStyle("-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;");
-                case 'y' ->
-                        labels[index].setStyle("-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;");
-                case 'g' ->
-                        labels[index].setStyle("-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;");
+            if (index < labels.size()) {
+                switch (info.charAt(index)) {
+                    case 'x' ->
+                            labels.get(index).setStyle("-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;");
+                    case 'y' ->
+                            labels.get(index).setStyle("-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;");
+                    case 'g' ->
+                            labels.get(index).setStyle("-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;");
+                }
             }
         });
 
-        ScaleTransition expand = new ScaleTransition(Duration.millis(150), label);
+        ScaleTransition expand = new ScaleTransition(Duration.millis(750 / goalWord.length()), label);
         expand.setToY(1);
         expand.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
+        if (index == labels.size() - 1) {
+            expand.setOnFinished(e -> {
+                isFlipping = false;
+                isGameOver();
+            });
+        }
 
         SequentialTransition flip = new SequentialTransition(shrink, expand);
         flip.play();
     }
-
 }

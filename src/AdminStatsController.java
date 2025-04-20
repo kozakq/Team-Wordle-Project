@@ -18,7 +18,7 @@ import java.util.Map;
 public class AdminStatsController {
     private Stage mainStage;
     private Scene gameScene;
-    private boolean cssLoaded = false;  // Add this flag
+    private boolean cssLoaded = false;
 
     @FXML
     private Label stats;

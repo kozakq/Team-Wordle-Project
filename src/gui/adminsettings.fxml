@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AdminSettingsController">
+
+   <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="10.0">
+
+      <!-- Title -->
+      <Label alignment="CENTER" prefHeight="58.0" prefWidth="270.0" text="WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Label>
+      <!-- Back Button -->
+      <Button fx:id="back" mnemonicParsing="false" style="-fx-background-color: #538d4e; -fx-text-fill: white; -fx-font-weight: bold;" text="Back" />
+      <HBox alignment="CENTER" prefHeight="31.0" prefWidth="600.0" spacing="15.0">
+         <children>
+            <Label text="Word Length" textFill="#d7d8dc" />
+            <ChoiceBox fx:id="lengthSelector" prefHeight="25.0" prefWidth="54.0" />
+         </children>
+      </HBox>
+      <Button fx:id="loadDictionary" mnemonicParsing="false" text="Load Dictionary" />
+      <Label fx:id="loadFeedback" textFill="RED" />
+
+   </VBox>
+</Pane>
