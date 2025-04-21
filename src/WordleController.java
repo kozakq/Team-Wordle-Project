@@ -4,11 +4,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -23,6 +25,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +49,11 @@ public class WordleController {
     private final Label[][] keyLabels;
     private final HBox[] wordBoxes;
     private final ImageView lightbulb = new ImageView(new Image("gui/lightbulb.png"));
+    private final ImageView settings = new ImageView(new Image("gui/settings.png"));
+
     public Button hintButton;
+    public Button settingButton;
+    public ProgressBar countdownBar;
     private Stage mainStage;
     private Scene statsScene;
     private String goalWord;
@@ -55,9 +62,14 @@ public class WordleController {
     private Scene adminStatsScene;
     private Scene playerStatsScene;
     private Scene adminSettingsScene;
+    private Scene settingsScene;
+
     private AdminStatsController adminStatsController;
     private StatsController playerStatsController;
     private AdminSettingsController adminSettingsController;
+    public SettingsController settingsController;
+    private LeaderboardController leaderboardController;
+
     private boolean isGameWon;
     private int remainingHints = 3;
     Stage endGameStage = new Stage();
@@ -98,6 +110,9 @@ public class WordleController {
     @FXML
     public void initialize() {
         createHintButton();
+        createSettingsButton();
+        countdownBar.setVisible(false);
+
 
         pane.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if (newScene != null) {
@@ -108,7 +123,7 @@ public class WordleController {
         pane.setFocusTraversable(true);
         pane.requestFocus();
 
-        for (int i = 0; i < MAX_GUESSES; i++) { // creating letter labels
+        for (int i = 0; i < MAX_GUESSES; i++) {
             HBox wordBox = new HBox();
             wordBox.setAlignment(Pos.CENTER);
             wordBox.setPrefHeight(55);
@@ -131,7 +146,7 @@ public class WordleController {
         }
 
         String[][] keyTexts = {{"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"}, {"A", "S", "D", "F", "G", "H", "J", "K", "L"}, {"ENTER", "Z", "X", "C", "V", "B", "N", "M", "⌫"}};
-        for (int i = 0; i < keyTexts.length; i++) { // creating key labels
+        for (int i = 0; i < keyTexts.length; i++) {
             HBox keyBox = new HBox();
             keyBox.setAlignment(Pos.CENTER);
             keyBox.setPrefHeight(50);
@@ -252,7 +267,7 @@ public class WordleController {
     }
 
     public void isGameOver() {
-        if (guessedWords != null && ((guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES)) {
+        if (guessedWords != null && ((guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES) || settingsController.gameOver()) {
             boolean won = guessedWords.contains(goalWord);
             isGameWon = won;
 
@@ -260,9 +275,14 @@ public class WordleController {
             WordleApp.adminLogging.log("Game Over, Game Won? : " + isGameWon);
             if (WordleApp.isLoggedIn() && WordleApp.currentAccount != null) {
                 Account currentAccount = WordleApp.currentAccount;
+                currentAccount.reportTime(settingsController.recordTime());
                 currentAccount.recordGameResult(won);
 
                 WordleApp.save();
+
+                int time = currentAccount.getTime();
+                leaderboardController.getLeaderboard().addToLeaderboard(time);
+                leaderboardController.updateLeaderboard();
 
                 System.out.println("Game ended: " + (won ? "WON" : "LOST") +
                         " - Total games: " + currentAccount.getTotalGames() +
@@ -285,10 +305,14 @@ public class WordleController {
         endGameStage.setHeight(400);
         endGameStage.setTitle("Game Over");
 
-        Label message = new Label((guessedWords.contains(goalWord)) ? "You Win!" : "Game Over!");
+        Label message = new Label((guessedWords.contains(goalWord)) ? "You Win!" : "You Lost!");
         message.getStyleClass().add("game-over-text");
 
-        Label guessInfo = new Label("It took you " + guessCount + " guesses!");
+        Label guessInfo = new Label("You used " + guessCount + " guesses!");
+        Label timeTaken = new Label((guessedWords.contains(goalWord)) ? "It took you " +
+                settingsController.recordTime() + " seconds!" : "You used all the time!");
+        timeTaken.setVisible(false);
+
         guessInfo.getStyleClass().add("guess-info");
 
         Button restartButton = new Button("Restart Game");
@@ -313,7 +337,10 @@ public class WordleController {
             if (!isFlipping) showPlayerStats();
         });
 
-        VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
+        VBox layout = new VBox(20, message, guessInfo, timeTaken, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
+        if (WordleApp.isLoggedIn() && settingsController.getGamemode() != 3) {
+            timeTaken.setVisible(true);
+        }
         layout.setAlignment(Pos.CENTER);
         layout.getStyleClass().add("end-game-layout");
 
@@ -342,6 +369,7 @@ public class WordleController {
 
     public void restartGame() {
         guessCount = 0;
+        currentWord = "";
         if (guessedWords != null) {
             guessedWords.clear();
         }
@@ -363,7 +391,11 @@ public class WordleController {
         hintButton.setDisable(false);
         updateHintButton();
         logKeyPress("Restart");
-
+        runSettings();
+        settingsController.restartBar(settingsController.getGamemode());
+        if (stage != null) {
+            stage.close();
+        }
     }
 
     private void updateLabelLength() {
@@ -434,11 +466,18 @@ public class WordleController {
     }
 
     private void createHintButton() {
-        lightbulb.setStyle("-fx-opacity: 1.0"); // Make it fully visible
-        lightbulb.setFitWidth(40);
-        lightbulb.setFitHeight(40);
+        lightbulb.setStyle("-fx-opacity: 1.0");
+        lightbulb.setFitWidth(30);
+        lightbulb.setFitHeight(30);
 
         updateHintButton();
+    }
+
+    private void createSettingsButton() {
+        settingButton.setGraphic(settings);
+        settingButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+        settings.setFitWidth(30);
+        settings.setFitHeight(30);
     }
 
     private void updateHintButton() {
@@ -469,14 +508,17 @@ public class WordleController {
         this.playerStatsController = controller;
     }
 
+    public void setSettingsController(SettingsController controller) {this.settingsController = controller;}
+
     public void setAdminSettingsController(AdminSettingsController controller) {
         this.adminSettingsController = controller;
     }
 
-    public void setStageScene(Stage stage, Scene adminScene, Scene playerScene, Scene adminSettingsScene) {
+    public void setStageScene(Stage stage, Scene adminScene, Scene playerScene, Scene adminSettingsScene, Scene SettingScene) {
         this.mainStage = stage;
         this.adminStatsScene = adminScene;
         this.playerStatsScene = playerScene;
+        this.settingsScene = settingsScene;
 
         this.stats.setOnMouseClicked(e -> {
             if (WordleApp.isAdmin()) {
@@ -498,6 +540,10 @@ public class WordleController {
                     adminSettingsController.updateBox();
                 }
                 this.mainStage.setScene(this.adminSettingsScene);
+            } else {
+                if(settingsController != null){
+                    settingsController
+                }
             }
         });
     }
@@ -558,4 +604,19 @@ public class WordleController {
         flip.play();
     }
 
+    public void settingPressed(ActionEvent actionEvent) {
+        openGamemodeWindow();
+    }
+    private void openGamemodeWindow() {
+            this.mainStage.setScene(this.settingsScene);
+    }
+
+    public void runSettings() {
+        settingsController.setWordleController(this);
+        settingsController.setCountdownBar(countdownBar);
+    }
+
+    public void setLeaderboardController(LeaderboardController leaderboardController) {
+        this.leaderboardController = leaderboardController;
+    }
 }

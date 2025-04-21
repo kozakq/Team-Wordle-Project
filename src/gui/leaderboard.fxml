@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LeaderboardController">
+
+   <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="10.0">
+
+      <!-- Title -->
+      <Label alignment="CENTER" prefHeight="58.0" prefWidth="270.0" text="WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
+         <font>
+            <Font name="System Bold" size="40.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER" layoutX="175.0" layoutY="10.0" prefHeight="12.0" prefWidth="270.0" text="Leaderboard" textAlignment="CENTER" textFill="#d7d8dc">
+         <font>
+            <Font name="System Bold" size="20.0" />
+         </font>
+      </Label>
+      <!-- Back Button -->
+      <Button fx:id="back" mnemonicParsing="false" style="-fx-background-color: #538d4e; -fx-text-fill: white; -fx-font-weight: bold;" text="Back" />
+      <VBox fx:id="vBox" alignment="TOP_CENTER" prefHeight="404.0" prefWidth="600.0" />
+
+   </VBox>
+</Pane>

@@ -5,11 +5,11 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WordleController">
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WordleController">
    <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="50.0">
-      <VBox alignment="TOP_CENTER" prefHeight="63.0" prefWidth="600.0">
+      <VBox alignment="TOP_CENTER" prefHeight="105.0" prefWidth="600.0">
          <HBox alignment="CENTER" prefHeight="58.0" prefWidth="393.0" spacing="15.0">
-            <ImageView fitHeight="38.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.4;">
+            <ImageView fitHeight="24.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.4;">
                <image>
                   <Image url="@help.png" />
                </image>
@@ -19,12 +19,13 @@
                   <Font name="Book Antiqua" size="12.0" />
                </font>
             </Button>
+            <Label alignment="CENTER" prefHeight="58.0" prefWidth="192.0" text=" WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
             <Label alignment="CENTER" prefHeight="58.0" prefWidth="228.0" text="WORDLE  " textAlignment="CENTER" textFill="#d7d8dc">
                <font>
                   <Font name="System Bold" size="40.0" />
                </font>
             </Label>
-            <ImageView fx:id="stats" fitHeight="38.0" fitWidth="22.0" layoutX="147.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.4;">
+            <ImageView fx:id="stats" fitHeight="30.0" fitWidth="37.0" layoutX="147.0" layoutY="27.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.4;">
                <image>
                   <Image url="@stats.png" />
                </image>
@@ -37,8 +38,11 @@
          </HBox>
          <Separator opacity="0.5" prefWidth="200.0" style="-fx-max-width: 400;" />
          <Label fx:id="adminLabel" alignment="TOP_CENTER" prefHeight="15.0" prefWidth="173.0" text="ADMINISTRATOR " textAlignment="JUSTIFY" textFill="#d7d8dc" visible="false" />
+         <Separator maxWidth="411.0" opacity="0.5" prefHeight="3.0" prefWidth="411.0" style="-fx-max-width: 400;" />
+         <Label fx:id="adminLabel" alignment="TOP_CENTER" prefHeight="15.0" prefWidth="173.0" text="ADMINISTRATOR " textAlignment="JUSTIFY" textFill="#d7d8dc" visible="false" />
       </VBox>
       <VBox fx:id="words" alignment="TOP_CENTER" prefHeight="348.0" prefWidth="600.0" spacing="5.0" />
       <VBox fx:id="keys" maxHeight="300.0" prefHeight="300.0" prefWidth="600.0" spacing="4.0" />
    </VBox>
+   <ProgressBar fx:id="countdownBar" layoutX="185.0" layoutY="70.0" prefHeight="20.0" prefWidth="230.0" progress="0.0" style="-fx-accent: #538d4e; -fx-background-radius: 15; -fx-border-radius: 15; -fx-background-color: #323234;" />
 </Pane>
