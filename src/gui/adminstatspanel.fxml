@@ -7,6 +7,9 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TextArea?>
 <VBox xmlns="http://javafx.com/javafx"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="AdminStatsController"
@@ -21,6 +24,7 @@
    <HBox alignment="CENTER" spacing="10">
       <Button fx:id="back" text="Back" styleClass="control-button"/>
       <ComboBox fx:id="accountsComboBox" styleClass="account-selector"/>
+      <Button fx:id="viewLogsButton" text="View Logs" styleClass="control-button" disable="true"/>
    </HBox>
 
    <!-- Stats Summary Section -->
@@ -48,12 +52,26 @@
       <Button fx:id="toggleViewButton" text="Show All" styleClass="control-button"/>
    </HBox>
 
-   <!-- Stats Table -->
-   <TableView fx:id="statsTable" styleClass="stats-table" VBox.vgrow="ALWAYS">
-      <columns>
-         <TableColumn fx:id="itemColumn" text="Item" styleClass="table-column" prefWidth="${statsTable.width * 0.5}"/>
-         <TableColumn fx:id="countColumn" text="Count" styleClass="table-column" prefWidth="${statsTable.width * 0.5}"/>
-      </columns>
-   </TableView>
-
+   <!-- Tabbed Content -->
+   <TabPane fx:id="tabPane" VBox.vgrow="ALWAYS" styleClass="admin-tab-pane">
+      <Tab text="Statistics" closable="false">
+         <content>
+            <!-- Stats Table -->
+            <TableView fx:id="statsTable" styleClass="stats-table" VBox.vgrow="ALWAYS">
+               <columns>
+                  <TableColumn fx:id="itemColumn" text="Item" styleClass="table-column" prefWidth="${statsTable.width * 0.5}"/>
+                  <TableColumn fx:id="countColumn" text="Count" styleClass="table-column" prefWidth="${statsTable.width * 0.5}"/>
+               </columns>
+            </TableView>
+         </content>
+      </Tab>
+      <Tab text="User Logs" closable="false">
+         <content>
+            <VBox spacing="10" styleClass="logs-container">
+               <TextArea fx:id="logTextArea" styleClass="log-text-area" VBox.vgrow="ALWAYS" 
+                         editable="false" wrapText="true"/>
+            </VBox>
+         </content>
+      </Tab>
+   </TabPane>
 </VBox>

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdminLogging {
-    private static final String LOG_DIRECTORY = "logs";
+    public static final String LOG_DIRECTORY = "logs";
     private final int accountID;
     private File logFile;
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -22,6 +22,11 @@ public class AdminLogging {
 
     private void initializeLogger() {
         try {
+            File logDir = new File(LOG_DIRECTORY);
+            if (!logDir.exists()) {
+                logDir.mkdirs();
+                System.out.println("Created logs directory: " + logDir.getAbsolutePath());
+            }
             File dir = new File(LOG_DIRECTORY);
             if (!dir.exists()) {
                 dir.mkdirs();
@@ -46,6 +51,8 @@ public class AdminLogging {
         String timeStamp = LocalDateTime.now().format(formatter);
         String logEntry = timeStamp + " - " + keyInput;
         logEntries.add(logEntry);
+        
+        writeToFile();
     }
 
     private void writeToFile() {
