@@ -235,6 +235,7 @@ public class WordleController {
 
                 int time = currentAccount.getTime();
                 leaderboardController.getLeaderboard().addToLeaderboard(time);
+                leaderboardController.updateLeaderboard();
 
                 System.out.println("Game ended: " + (won ? "WON" : "LOST") +
                         " - Total games: " + currentAccount.getTotalGames() +
@@ -257,10 +258,14 @@ public class WordleController {
         endGameStage.setHeight(400);
         endGameStage.setTitle("Game Over");
 
-        Label message = new Label((guessedWords.contains(goalWord)) ? "You Win!" : "Game Over!");
+        Label message = new Label((guessedWords.contains(goalWord)) ? "You Win!" : "You Lost!");
         message.getStyleClass().add("game-over-text");
 
-        Label guessInfo = new Label("It took you " + guessCount + " guesses!");
+        Label guessInfo = new Label("You used " + guessCount + " guesses!");
+        Label timeTaken = new Label((guessedWords.contains(goalWord)) ? "It took you " +
+                settingsController.recordTime() + " seconds!" : "You used all the time!");
+        timeTaken.setVisible(false);
+
         guessInfo.getStyleClass().add("guess-info");
 
         Button restartButton = new Button("Restart Game");
@@ -279,7 +284,10 @@ public class WordleController {
         statsButton.getStyleClass().add("stats-button");
         statsButton.setOnAction(e -> showPlayerStats());
 
-        VBox layout = new VBox(20, message, guessInfo, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
+        VBox layout = new VBox(20, message, guessInfo, timeTaken, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
+        if (WordleApp.isLoggedIn()) {
+            timeTaken.setVisible(true);
+        }
         layout.setAlignment(Pos.CENTER);
         layout.getStyleClass().add("end-game-layout");
 

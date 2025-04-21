@@ -47,7 +47,6 @@ public class Leaderboard {
         for (Integer val : leaderboard) {
             if (!existing.contains(val)) {
                 toAppend.add(val);
-                existing.add(val);
             }
         }
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
@@ -64,6 +63,7 @@ public class Leaderboard {
     public void addToLeaderboard(int time) {
         leaderboard.add(time);
         saveToFile(file);
+
     }
     public int getListValue(int index) {
         return leaderboard.get(index);

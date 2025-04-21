@@ -27,14 +27,7 @@ public class LeaderboardController {
     }
 
     public void initialize() {
-        for (int i = 0; i < 10 && !hasRun; i++) {
-            if (i < leaderboard.getListLength()) {
-                Label label = new Label("#" + (i+1) + " " + leaderboard.getListValue(i) + " seconds");
-                label.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
-                vBox.getChildren().add(label);
-            }
-        }
-        hasRun = true;
+        updateLeaderboard();
         if (back != null) {
             back.setOnAction(event -> {
                 if (mainStage != null && gameScene != null) {
@@ -48,5 +41,15 @@ public class LeaderboardController {
     }
     public Leaderboard getLeaderboard() {
         return leaderboard;
+    }
+    public void updateLeaderboard() {
+        for (int i = 0; i < 10 && !hasRun; i++) {
+            if (i < leaderboard.getListLength()) {
+                Label label = new Label("#" + (i+1) + " " + leaderboard.getListValue(i) + " seconds");
+                label.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
+                vBox.getChildren().add(label);
+            }
+        }
+        hasRun = true;
     }
 }
