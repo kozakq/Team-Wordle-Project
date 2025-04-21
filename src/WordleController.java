@@ -20,7 +20,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -59,6 +58,7 @@ public class WordleController {
     private StatsController playerStatsController;
     private boolean isGameWon;
     private int remainingHints = 3;
+    public boolean isHardMode = false;
     Stage endGameStage = new Stage();
     @FXML
     private VBox words;
@@ -102,7 +102,7 @@ public class WordleController {
         pane.setFocusTraversable(true);
         pane.requestFocus();
 
-        for (int i = 0; i < MAX_GUESSES; i++) { // creating letter labels
+        for (int i = 0; i < MAX_GUESSES; i++) {
             HBox wordBox = new HBox();
             wordBox.setAlignment(Pos.CENTER);
             wordBox.setPrefHeight(55);
@@ -124,7 +124,7 @@ public class WordleController {
         }
 
         String[][] keyTexts = {{"Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"}, {"A", "S", "D", "F", "G", "H", "J", "K", "L"}, {"ENTER", "Z", "X", "C", "V", "B", "N", "M", "⌫"}};
-        for (int i = 0; i < keyTexts.length; i++) { // creating key labels
+        for (int i = 0; i < keyTexts.length; i++) {
             HBox keyBox = new HBox();
             keyBox.setAlignment(Pos.CENTER);
             keyBox.setPrefHeight(50);
@@ -185,8 +185,16 @@ public class WordleController {
             if (!info.isEmpty()) {
                 flipLabel(letterLabels[guessCount], info, 0);
                 guessedWords.add(currentWord.toLowerCase());
+
+                if (!isHardMode) {
+                    guiController.updateView(currentWord, info);
+                }
+
+                if (isHardMode) {
+                    clearEnteredWord();
+                }
+
                 guessCount++;
-                guiController.updateView(currentWord, info);
                 isGameOver();
                 currentWord = "";
             } else {
@@ -195,6 +203,13 @@ public class WordleController {
         }
     }
 
+    private void clearEnteredWord() {
+        System.out.println("works here");
+        for (int i = 0; i < goalWord.length(); i++) {
+
+            letterLabels[guessCount][i].setText("");
+        }
+    }
 
     private void backspace() {
         if (!currentWord.isEmpty()) {
@@ -349,7 +364,7 @@ public class WordleController {
     }
 
     private void createHintButton() {
-        lightbulb.setStyle("-fx-opacity: 1.0"); // Make it fully visible
+        lightbulb.setStyle("-fx-opacity: 1.0");
         lightbulb.setFitWidth(40);
         lightbulb.setFitHeight(40);
 
@@ -429,28 +444,45 @@ public class WordleController {
         Label label = labels[index];
         ScaleTransition shrink = new ScaleTransition(Duration.millis(150), label);
         shrink.setToY(0);
-        shrink.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
+        shrink.setInterpolator(Interpolator.EASE_BOTH);
 
         shrink.setOnFinished(e -> {
             if (index < labels.length - 1) {
                 flipLabel(labels, info, index + 1);
             }
+
             switch (info.charAt(index)) {
-                case 'x' ->
-                        labels[index].setStyle("-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;");
-                case 'y' ->
-                        labels[index].setStyle("-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;");
-                case 'g' ->
-                        labels[index].setStyle("-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;");
+                case 'x' -> {
+                    labels[index].setStyle("-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;");
+                    if (isHardMode) {
+                        labels[index].setText("");
+                    }
+                }
+                case 'y' -> {
+                    labels[index].setStyle("-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;");
+                    if (isHardMode) {
+                        labels[index].setText("");
+                    }
+                }
+                case 'g' -> {
+                    labels[index].setStyle("-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;");
+                    if (isHardMode) {
+                        labels[index].setText("");
+                    }
+                }
             }
         });
 
         ScaleTransition expand = new ScaleTransition(Duration.millis(150), label);
         expand.setToY(1);
-        expand.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
+        expand.setInterpolator(Interpolator.EASE_BOTH);
 
         SequentialTransition flip = new SequentialTransition(shrink, expand);
         flip.play();
     }
 
+    public void setHardMode(boolean isHardMode) {
+        this.isHardMode = isHardMode;
+        System.out.println("Hard mode? " + this.isHardMode);
+    }
 }

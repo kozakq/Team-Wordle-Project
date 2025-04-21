@@ -225,12 +225,8 @@ public class Account {
 
         saveToFile();
     }
-
-
     public Map<String, Integer> getGuesses() {
-        System.out.println("Account Guesses: " + guesses); // Debug print
+        System.out.println("Account Guesses: " + guesses);
         return guesses;
     }
-
-
 }
