@@ -3,6 +3,7 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -17,6 +18,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -24,6 +26,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import javafx.animation.PauseTransition;
 
 /*
  * Course: Software Tools & Process
@@ -183,16 +186,39 @@ public class WordleController {
         if (currentWord.length() == goalWord.length()) {
             String info = WordleApp.checkWord(currentWord.toLowerCase());
             if (!info.isEmpty()) {
-                isFlipping = true;
-                flipLabel(letterLabels.get(guessCount), info, 0);
-                guessedWords.add(currentWord.toLowerCase());
-                guessCount++;
-                guiController.updateView(currentWord, info);
-                currentWord = "";
+                if (info.equals("excluded")) {
+                    exclusionPopUp();
+                } else {
+                    isFlipping = true;
+                    flipLabel(letterLabels.get(guessCount), info, 0);
+                    guessedWords.add(currentWord.toLowerCase());
+                    guessCount++;
+                    guiController.updateView(currentWord, info);
+                    currentWord = "";
+                }
             } else {
                 shakeNode(wordBoxes[guessCount]);
             }
         }
+    }
+
+    private void exclusionPopUp() {
+        shakeNode(wordBoxes[guessCount]);
+        Label messageLabel = new Label("Word is excluded!");
+        messageLabel.setTextFill(Color.RED);
+        messageLabel.setStyle("-fx-font-weight: bold;");
+        Popup popup = new Popup();
+        VBox content = new VBox(messageLabel);
+        content.setAlignment(Pos.CENTER);
+        content.setStyle("-fx-background-color: #3d3d3d; -fx-background-radius: 5;");
+        popup.getContent().add(content);
+
+        // Show popup and auto-hide after 2 seconds
+        popup.show(pane.getScene().getWindow());
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(2));
+        delay.setOnFinished(e -> popup.hide());
+        delay.play();
     }
 
     private void backspace() {

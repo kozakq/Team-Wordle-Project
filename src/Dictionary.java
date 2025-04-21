@@ -13,7 +13,7 @@ public class Dictionary {
 
     public Dictionary() {
         wordDictionary = new HashMap<>();
-        loadToList(Dictionary.class.getResource("data/words.txt").getPath());
+        loadToList("src/data/words.txt"); // Make sure this file is in resources/data
     }
 
     public Dictionary(String resourcePath) {

@@ -40,6 +40,11 @@ public class WordleApp {
     }
 
     public static String checkWord(String word) {
+        // Check if the word is in the exclusion list
+        if (ExclusionManager.get().isExcluded(word, goalWord)) {
+            return "excluded";
+        }
+        
         if (dictionary.isValidWord(word)) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {

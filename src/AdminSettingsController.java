@@ -8,11 +8,14 @@
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -46,6 +49,22 @@ public class AdminSettingsController {
 
     @FXML
     private Button back;
+    
+    // Exclusion list UI elements
+    @FXML
+    private TextField exclusionField;
+    
+    @FXML
+    private Button addExclusionBtn;
+    
+    @FXML
+    private Button removeExclusionBtn;
+    
+    @FXML
+    private ListView<String> exclusionListView;
+    
+    @FXML
+    private Label exclusionFeedback;
 
     public void setGameScene(Scene gameScene) {
         this.gameScene = gameScene;
@@ -112,6 +131,62 @@ public class AdminSettingsController {
                     System.out.println("File selection cancelled.");
                 }
             });
+        }
+        
+        // Initialize exclusion list functionality
+        initializeExclusionControls();
+    }
+    
+    private void initializeExclusionControls() {
+        // Update the list view with current exclusions
+        updateExclusionListView();
+        
+        // Add word to exclusion list
+        if (addExclusionBtn != null) {
+            addExclusionBtn.setOnAction(event -> {
+                String word = exclusionField.getText().trim();
+                if (!word.isEmpty()) {
+                    ExclusionManager.get().add(word);
+                    exclusionField.clear();
+                    updateExclusionListView();
+                    exclusionFeedback.setTextFill(Color.GREEN);
+                    exclusionFeedback.setText("'" + word + "' added to exclusion list");
+                } else {
+                    exclusionFeedback.setTextFill(Color.RED);
+                    exclusionFeedback.setText("Please enter a word");
+                }
+            });
+        }
+        
+        if (removeExclusionBtn != null) {
+            removeExclusionBtn.setOnAction(event -> {
+                String selected = exclusionListView.getSelectionModel().getSelectedItem();
+                if (selected != null) {
+                    ExclusionManager.get().remove(selected);
+                    updateExclusionListView();
+                    exclusionFeedback.setTextFill(Color.GREEN);
+                    exclusionFeedback.setText("'" + selected + "' removed from exclusion list");
+                } else {
+                    String word = exclusionField.getText().trim();
+                    if (!word.isEmpty()) {
+                        ExclusionManager.get().remove(word);
+                        exclusionField.clear();
+                        updateExclusionListView();
+                        exclusionFeedback.setTextFill(Color.GREEN);
+                        exclusionFeedback.setText("'" + word + "' removed from exclusion list");
+                    } else {
+                        exclusionFeedback.setTextFill(Color.RED);
+                        exclusionFeedback.setText("Select a word from the list or enter a word to remove");
+                    }
+                }
+            });
+        }
+    }
+    
+    private void updateExclusionListView() {
+        if (exclusionListView != null) {
+            Set<String> exclusions = ExclusionManager.get().list();
+            exclusionListView.setItems(FXCollections.observableArrayList(exclusions));
         }
     }
 

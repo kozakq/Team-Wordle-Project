@@ -1,0 +1,105 @@
+.settings-panel {
+    -fx-background-color: #121214;
+    -fx-padding: 20;
+}
+
+.settings-header {
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+/* Button styling */
+Button {
+    -fx-background-color: #3d3d3d;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-padding: 8 15;
+    -fx-background-radius: 5;
+}
+
+Button:hover {
+    -fx-background-color: #4d4d4d;
+}
+
+/* Choice box styling */
+ChoiceBox {
+    -fx-background-color: #3d3d3d;
+    -fx-mark-color: #ffffff;
+}
+
+ChoiceBox .context-menu {
+    -fx-background-color: #3d3d3d;
+}
+
+ChoiceBox .menu-item:focused {
+    -fx-background-color: #4d4d4d;
+}
+
+ChoiceBox .menu-item > .label {
+    -fx-text-fill: #ffffff;
+}
+
+/* TextField styling */
+TextField {
+    -fx-background-color: #3d3d3d;
+    -fx-text-fill: #ffffff;
+    -fx-prompt-text-fill: #b0b0b0;
+    -fx-background-radius: 5;
+    -fx-padding: 5 10;
+}
+
+/* ListView styling */
+ListView {
+    -fx-background-color: #2d2d2d;
+    -fx-background-radius: 5;
+    -fx-border-color: #3d3d3d;
+    -fx-border-radius: 5;
+}
+
+ListView .list-cell {
+    -fx-background-color: #2d2d2d;
+    -fx-text-fill: #ffffff;
+    -fx-padding: 5 10;
+}
+
+ListView .list-cell:odd {
+    -fx-background-color: #252525;
+}
+
+ListView .list-cell:filled:selected, ListView .list-cell:filled:selected:hover {
+    -fx-background-color: #538d4e;
+    -fx-text-fill: white;
+}
+
+ListView .list-cell:filled:hover {
+    -fx-background-color: #3d3d3d;
+}
+
+/* Label styling */
+Label {
+    -fx-text-fill: #d7d8dc;
+}
+
+/* Separator styling */
+Separator {
+    -fx-background-color: #3d3d3d;
+    -fx-opacity: 0.6;
+}
+
+/* Add and Remove buttons */
+#addExclusionBtn {
+    -fx-background-color: #538d4e;
+}
+
+#addExclusionBtn:hover {
+    -fx-background-color: #63a55e;
+}
+
+#removeExclusionBtn {
+    -fx-background-color: #a73c3c;
+}
+
+#removeExclusionBtn:hover {
+    -fx-background-color: #b85050;
+} 

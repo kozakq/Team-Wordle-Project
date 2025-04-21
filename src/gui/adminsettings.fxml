@@ -4,12 +4,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AdminSettingsController">
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" stylesheets="@adminsettings.css" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AdminSettingsController">
 
-   <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="10.0">
+   <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="10.0" styleClass="settings-panel">
 
       <!-- Title -->
-      <Label alignment="CENTER" prefHeight="58.0" prefWidth="270.0" text="WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
+      <Label alignment="CENTER" prefHeight="58.0" prefWidth="270.0" styleClass="settings-header" text="WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
          <font>
             <Font name="System Bold" size="40.0" />
          </font>
@@ -24,6 +24,24 @@
       </HBox>
       <Button fx:id="loadDictionary" mnemonicParsing="false" text="Load Dictionary" />
       <Label fx:id="loadFeedback" textFill="RED" />
+      
+      <!-- Exclusion List Management Section -->
+      <Separator prefWidth="500.0" />
+      <Label styleClass="settings-header" text="Exclusion List Management" textFill="#d7d8dc">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <HBox alignment="CENTER" prefHeight="31.0" prefWidth="600.0" spacing="10.0">
+         <children>
+            <TextField fx:id="exclusionField" prefWidth="200.0" promptText="Enter word to exclude" />
+            <Button fx:id="addExclusionBtn" mnemonicParsing="false" text="Add" />
+            <Button fx:id="removeExclusionBtn" mnemonicParsing="false" text="Remove" />
+         </children>
+      </HBox>
+      <Label text="Current Exclusions:" textFill="#d7d8dc" />
+      <ListView fx:id="exclusionListView" prefHeight="150.0" prefWidth="500.0" />
+      <Label fx:id="exclusionFeedback" textFill="GREEN" />
 
    </VBox>
 </Pane>
