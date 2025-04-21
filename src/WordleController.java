@@ -285,7 +285,7 @@ public class WordleController {
         statsButton.setOnAction(e -> showPlayerStats());
 
         VBox layout = new VBox(20, message, guessInfo, timeTaken, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
-        if (WordleApp.isLoggedIn()) {
+        if (WordleApp.isLoggedIn() && settingsController.getGamemode() != 3) {
             timeTaken.setVisible(true);
         }
         layout.setAlignment(Pos.CENTER);
