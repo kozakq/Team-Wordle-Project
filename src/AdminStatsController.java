@@ -10,9 +10,15 @@ import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class AdminStatsController {
@@ -41,6 +47,15 @@ public class AdminStatsController {
     @FXML
     private TableColumn<StatEntry, Integer> countColumn;
 
+    @FXML
+    private TabPane tabPane;
+    
+    @FXML
+    private TextArea logTextArea;
+    
+    @FXML
+    private Button viewLogsButton;
+
     private boolean isDisplayingWords = true;
 
     private int displayLimit = 5;
@@ -65,6 +80,7 @@ public class AdminStatsController {
         setupButton();
         populateAccounts();
         setupToggleViewButton();
+        setupViewLogsButton();
         loadStylesheet();
         updateGameStats("Global Stats");
     }
@@ -114,6 +130,92 @@ public class AdminStatsController {
         });
     }
 
+    private void setupViewLogsButton() {
+        if (viewLogsButton != null) {
+            viewLogsButton.setOnAction(e -> {
+                String selected = accountsComboBox.getValue();
+                if (!"Global Stats".equals(selected)) {
+                    loadLogsForAccount(selected);
+                    if (tabPane != null) {
+                        tabPane.getSelectionModel().select(1); // Switch to logs tab
+                    }
+                }
+            });
+        }
+        
+        // Also handle tab selection
+        if (tabPane != null) {
+            tabPane.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue.intValue() == 1) { // Logs tab selected
+                    String selected = accountsComboBox.getValue();
+                    if (!"Global Stats".equals(selected)) {
+                        loadLogsForAccount(selected);
+                    }
+                }
+            });
+        }
+    }
+
+    private void loadLogsForAccount(String username) {
+        if (logTextArea == null) return;
+        
+        logTextArea.clear();
+        
+        // Find the account
+        Account selectedAccount = WordleApp.accountList.stream()
+                .filter(account -> account.getUsername().equals(username))
+                .findFirst()
+                .orElse(null);
+                
+        if (selectedAccount == null) {
+            logTextArea.setText("No account found with username: " + username);
+            return;
+        }
+        
+        int accountId = selectedAccount.getAccountID();
+        String logFilePath = String.format("%s/user%07d_keylog.txt", AdminLogging.LOG_DIRECTORY, accountId);
+        File logFile = new File(logFilePath);
+        
+        System.out.println("Looking for log file: " + logFile.getAbsolutePath());
+        
+        if (!logFile.exists()) {
+            logTextArea.setText("No log file found at: " + logFile.getAbsolutePath() + 
+                               "\nMake sure logs are being created when using this account.");
+            
+            // Check if logs directory exists
+            File logsDir = new File(AdminLogging.LOG_DIRECTORY);
+            if (!logsDir.exists()) {
+                System.out.println("Logs directory doesn't exist. Creating: " + logsDir.getAbsolutePath());
+                logsDir.mkdirs();
+            } else {
+                System.out.println("Logs directory exists at: " + logsDir.getAbsolutePath());
+                System.out.println("Contents: " + String.join(", ", logsDir.list() != null ? logsDir.list() : new String[]{"<empty>"}));
+            }
+            return;
+        }
+        
+        try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+            StringBuilder logContent = new StringBuilder();
+            String line;
+            int lineCount = 0;
+            while ((line = reader.readLine()) != null) {
+                logContent.append(line).append("\n");
+                lineCount++;
+            }
+            
+            if (lineCount > 0) {
+                logTextArea.setText(logContent.toString());
+                System.out.println("Loaded " + lineCount + " lines from log file");
+            } else {
+                logTextArea.setText("Log file exists but is empty: " + logFile.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            logTextArea.setText("Error reading log file: " + e.getMessage());
+            System.err.println("Error reading log file: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
     private void populateAccounts() {
         accountsComboBox.getItems().clear();
         accountsComboBox.getItems().add("Global Stats");
@@ -127,6 +229,11 @@ public class AdminStatsController {
             String selected = accountsComboBox.getValue();
             refreshCurrentView(selected);
             updateGameStats(selected);
+            
+            // Enable or disable log button based on selection
+            if (viewLogsButton != null) {
+                viewLogsButton.setDisable("Global Stats".equals(selected));
+            }
         });
     }
 
@@ -270,6 +377,17 @@ public class AdminStatsController {
             String selected = accountsComboBox.getValue();
             refreshCurrentView(selected);
             updateGameStats(selected);
+            
+            // Also refresh logs if a specific user is selected
+            if (!"Global Stats".equals(selected)) {
+                loadLogsForAccount(selected);
+                if (viewLogsButton != null) {
+                    viewLogsButton.setDisable(false);
+                }
+            } else if (viewLogsButton != null) {
+                viewLogsButton.setDisable(true);
+            }
+            
             System.out.println("Refreshed stats for: " + selected); // Debug print
         }
     }

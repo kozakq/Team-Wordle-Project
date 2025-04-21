@@ -76,6 +76,7 @@ public class WordleController {
     @FXML
     private Label adminLabel;
 
+
     public WordleController() {
         goalWord = WordleApp.getGoalWord();
         letterLabels = new ArrayList<>();
@@ -90,6 +91,8 @@ public class WordleController {
         adminSettingsController = null;
         isGameWon = false;
         wordBoxes = new HBox[MAX_GUESSES];
+
+
     }
 
     @FXML
@@ -146,14 +149,23 @@ public class WordleController {
                     keyLabel.setPrefSize(50, 50);
                     keyLabel.setMaxSize(50, 50);
                     if (j == 0) {
-                        keyLabel.setOnMousePressed((e) -> enter());
+                        keyLabel.setOnMousePressed((e) -> {
+                            enter();
+                            logKeyPress("ENTER");
+                        });
                     } else {
-                        keyLabel.setOnMousePressed((e) -> backspace());
+                        keyLabel.setOnMousePressed((e) -> {
+                            backspace();
+                            logKeyPress("BACKSPACE");
+                        });
                     }
                 } else {
                     keyLabel.setPrefSize(33, 50);
                     keyLabel.setMaxSize(33, 50);
-                    keyLabel.setOnMousePressed((e) -> enterCharacter(key));
+                    keyLabel.setOnMousePressed((e) -> {
+                        enterCharacter(key);
+                        logKeyPress(key);
+                    });
                 }
                 keyLabels[i][j] = keyLabel;
                 keyBox.getChildren().add(keyLabel);
@@ -164,13 +176,23 @@ public class WordleController {
         updateHintButton();
     }
 
+
     private void keyPressed(KeyEvent e) {
         if (e.getCode().isLetterKey()) {
             enterCharacter(e.getCode().getChar());
+            logKeyPress(e.getCode().getChar());
         } else if (e.getCode().toString().equals("ENTER")) {
             enter();
+            logKeyPress("ENTER");
         } else if (e.getCode().toString().equals("BACK_SPACE")) {
             backspace();
+            logKeyPress("BACKSPACE");
+        }
+    }
+
+    private void logKeyPress(String keyInput) {
+        if (WordleApp.adminLogging != null) {
+            WordleApp.adminLogging.log(keyInput);
         }
     }
 
@@ -235,7 +257,7 @@ public class WordleController {
             isGameWon = won;
 
             WordleApp.addGuessCount(guessCount);
-
+            WordleApp.adminLogging.log("Game Over, Game Won? : " + isGameWon);
             if (WordleApp.isLoggedIn() && WordleApp.currentAccount != null) {
                 Account currentAccount = WordleApp.currentAccount;
                 currentAccount.recordGameResult(won);
@@ -258,7 +280,6 @@ public class WordleController {
             showEndGameWindow();
         }
     }
-
     public void showEndGameWindow() {
         endGameStage.setWidth(400);
         endGameStage.setHeight(400);
@@ -315,7 +336,6 @@ public class WordleController {
                 playerStatsController.updateStats();
             }
         }
-
         endGameStage.close();
         restartGame();
     }
@@ -342,6 +362,8 @@ public class WordleController {
         remainingHints = 3;
         hintButton.setDisable(false);
         updateHintButton();
+        logKeyPress("Restart");
+
     }
 
     private void updateLabelLength() {
@@ -371,7 +393,12 @@ public class WordleController {
 
     public EventHandler<WindowEvent> closeGame() {
         System.out.println("Closing!");
+        logKeyPress("Closed Game");
+
         WordleApp.save();
+        if (WordleApp.adminLogging != null) {
+            WordleApp.adminLogging.close();
+        }
         return null;
     }
 
@@ -399,6 +426,7 @@ public class WordleController {
 
     public void hintPressed(ActionEvent actionEvent) {
         getHint();
+        logKeyPress("Hint used");
 
         if (remainingHints <= 0) {
             hintButton.setDisable(true);
@@ -449,7 +477,6 @@ public class WordleController {
         this.mainStage = stage;
         this.adminStatsScene = adminScene;
         this.playerStatsScene = playerScene;
-        this.adminSettingsScene = adminSettingsScene;
 
         this.stats.setOnMouseClicked(e -> {
             if (WordleApp.isAdmin()) {
@@ -530,4 +557,5 @@ public class WordleController {
         SequentialTransition flip = new SequentialTransition(shrink, expand);
         flip.play();
     }
+
 }

@@ -25,7 +25,7 @@ public class WordleApp {
     static WordStorage wordStorage;
     private static Dictionary dictionary;
     private static String goalWord;
-    private static int wordLength = 5;
+    protected static AdminLogging adminLogging;
 
     public static void initialize() {
         dictionary = new Dictionary();
@@ -40,11 +40,6 @@ public class WordleApp {
     }
 
     public static String checkWord(String word) {
-        // Check if the word is in the exclusion list
-        if (ExclusionManager.get().isExcluded(word, goalWord)) {
-            return "excluded";
-        }
-        
         if (dictionary.isValidWord(word)) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
@@ -66,6 +61,7 @@ public class WordleApp {
             if (currentAccount != null) {
                 currentAccount.addGuess(word);
                 wordStorage.addWord(word);
+
             }
             return sb.toString();
         } else {
@@ -91,19 +87,15 @@ public class WordleApp {
         return count;
     }
 
-    public void changeWordLength(int length) {
-        wordLength = length;
-    }
-
     public static String changeGoalWord() {
-        goalWord = dictionary.getRandomWord(wordLength);
-        System.out.println(goalWord);
+        goalWord = dictionary.getRandomWord();
         return goalWord;
     }
 
     public static boolean createAccount(String username, String password) {
         if (isValidUsername(username) && !password.isEmpty()) {
             currentAccount = new Account(username, password);
+            adminLogging = new AdminLogging(currentAccount.getAccountID());
             accountList.add(currentAccount);
             return true;
         }
@@ -126,6 +118,7 @@ public class WordleApp {
         Account account = validateLogin(username, password);
         if (account != null) {
             currentAccount = account;
+            adminLogging = new AdminLogging(currentAccount.getAccountID());
             return true;
         } else {
             return false;
@@ -181,6 +174,7 @@ public class WordleApp {
     public static void save() {
         if (currentAccount != null) {
             currentAccount.saveToFile();
+
         }
         if (wordStorage != null) {
             wordStorage.saveToFile();
