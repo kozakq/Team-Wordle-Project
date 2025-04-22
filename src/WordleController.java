@@ -49,10 +49,10 @@ public class WordleController {
     private final Label[][] keyLabels;
     private final HBox[] wordBoxes;
     private final ImageView lightbulb = new ImageView(new Image("gui/lightbulb.png"));
+    @FXML
     private final ImageView settings = new ImageView(new Image("gui/settings.png"));
 
     public Button hintButton;
-    public Button settingButton;
     public ProgressBar countdownBar;
     private Stage mainStage;
     private Scene statsScene;
@@ -84,8 +84,6 @@ public class WordleController {
     @FXML
     private ImageView stats;
     @FXML
-    private ImageView settings;
-    @FXML
     private Label adminLabel;
 
 
@@ -110,7 +108,6 @@ public class WordleController {
     @FXML
     public void initialize() {
         createHintButton();
-        createSettingsButton();
         countdownBar.setVisible(false);
 
 
@@ -393,9 +390,7 @@ public class WordleController {
         logKeyPress("Restart");
         runSettings();
         settingsController.restartBar(settingsController.getGamemode());
-        if (stage != null) {
-            stage.close();
-        }
+
     }
 
     private void updateLabelLength() {
@@ -473,12 +468,7 @@ public class WordleController {
         updateHintButton();
     }
 
-    private void createSettingsButton() {
-        settingButton.setGraphic(settings);
-        settingButton.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
-        settings.setFitWidth(30);
-        settings.setFitHeight(30);
-    }
+
 
     private void updateHintButton() {
         if (remainingHints > 0) {
@@ -519,6 +509,7 @@ public class WordleController {
         this.adminStatsScene = adminScene;
         this.playerStatsScene = playerScene;
         this.settingsScene = settingsScene;
+        this.adminSettingsScene = adminSettingsScene;
 
         this.stats.setOnMouseClicked(e -> {
             if (WordleApp.isAdmin()) {
@@ -540,10 +531,6 @@ public class WordleController {
                     adminSettingsController.updateBox();
                 }
                 this.mainStage.setScene(this.adminSettingsScene);
-            } else {
-                if(settingsController != null){
-                    settingsController
-                }
             }
         });
     }

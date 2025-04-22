@@ -26,6 +26,7 @@ public class WordleApp {
     private static Dictionary dictionary;
     private static String goalWord;
     protected static AdminLogging adminLogging;
+    private static int wordLength = 5;
 
     public static void initialize() {
         dictionary = new Dictionary();
@@ -40,6 +41,10 @@ public class WordleApp {
     }
 
     public static String checkWord(String word) {
+        if (ExclusionManager.get().isExcluded(word, goalWord)) {
+            return "excluded";
+        }
+
         if (dictionary.isValidWord(word)) {
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
@@ -88,7 +93,8 @@ public class WordleApp {
     }
 
     public static String changeGoalWord() {
-        goalWord = dictionary.getRandomWord();
+        goalWord = dictionary.getRandomWord(wordLength);
+        System.out.println(goalWord);
         System.out.println(goalWord);
         return goalWord;
     }
@@ -223,7 +229,6 @@ public class WordleApp {
                 letterCounts.put(c, letterCounts.getOrDefault(c, 0) + wordCount);
             }
         }
-
         Object LinkedHashMap;
         return letterCounts.entrySet().stream()
                 .sorted(Map.Entry.<Character, Integer>comparingByValue().reversed())

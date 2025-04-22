@@ -48,17 +48,17 @@ public class SettingsController {
     public void setupButtons() {
         unlimitedButton.setOnAction(e -> {
             gamemode = 3;
-            wordleController.restartGame(null);
+            wordleController.restartGame();
         });
 
         mediumButton.setOnAction(e -> {
             gamemode = 0;
-            wordleController.restartGame(null);
+            wordleController.restartGame();
         });
 
         hardButton.setOnAction(e -> {
             gamemode = 1;
-            wordleController.restartGame(null);
+            wordleController.restartGame();
         });
     }
 

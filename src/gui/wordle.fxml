@@ -19,7 +19,6 @@
                   <Font name="Book Antiqua" size="12.0" />
                </font>
             </Button>
-            <Label alignment="CENTER" prefHeight="58.0" prefWidth="192.0" text=" WORDLE" textAlignment="CENTER" textFill="#d7d8dc">
             <Label alignment="CENTER" prefHeight="58.0" prefWidth="228.0" text="WORDLE  " textAlignment="CENTER" textFill="#d7d8dc">
                <font>
                   <Font name="System Bold" size="40.0" />
@@ -36,8 +35,6 @@
                </image>
             </ImageView>
          </HBox>
-         <Separator opacity="0.5" prefWidth="200.0" style="-fx-max-width: 400;" />
-         <Label fx:id="adminLabel" alignment="TOP_CENTER" prefHeight="15.0" prefWidth="173.0" text="ADMINISTRATOR " textAlignment="JUSTIFY" textFill="#d7d8dc" visible="false" />
          <Separator maxWidth="411.0" opacity="0.5" prefHeight="3.0" prefWidth="411.0" style="-fx-max-width: 400;" />
          <Label fx:id="adminLabel" alignment="TOP_CENTER" prefHeight="15.0" prefWidth="173.0" text="ADMINISTRATOR " textAlignment="JUSTIFY" textFill="#d7d8dc" visible="false" />
       </VBox>
