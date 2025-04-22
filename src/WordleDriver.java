@@ -75,6 +75,8 @@ public class WordleDriver extends Application {
 
         leaderboardController.setGameScene(gameScene);
         leaderboardController.setMainStage(stage);
+        settingsController.setupButtons();
+
 
         gameController.setAdminStatsController(adminStatsController);
         gameController.setPlayerStatsController(playerStatsController);

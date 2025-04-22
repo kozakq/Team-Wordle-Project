@@ -227,29 +227,22 @@ public class WordleController {
                     isFlipping = true;
                     flipLabel(letterLabels.get(guessCount), info, 0);
                     guessedWords.add(currentWord.toLowerCase());
+                    if (!isHardMode) {
+                        guiController.updateView(currentWord, info);
+                    }
+
+                    if (isHardMode) {
+                        clearEnteredWord();
+                    }
                     guessCount++;
-                    guiController.updateView(currentWord, info);
                     currentWord = "";
-                flipLabel(letterLabels[guessCount], info, 0);
-                guessedWords.add(currentWord.toLowerCase());
 
-                if (!isHardMode) {
-                    guiController.updateView(currentWord, info);
                 }
-
-                if (isHardMode) {
-                    clearEnteredWord();
+            }else{
+                    shakeNode(wordBoxes[guessCount]);
                 }
-
-                guessCount++;
-                isGameOver();
-                currentWord = "";
-            } else {
-                shakeNode(wordBoxes[guessCount]);
             }
         }
-            }
-    }
 
     private void exclusionPopUp() {
         shakeNode(wordBoxes[guessCount]);
@@ -272,8 +265,7 @@ public class WordleController {
     private void clearEnteredWord() {
         System.out.println("works here");
         for (int i = 0; i < goalWord.length(); i++) {
-
-            letterLabels[guessCount][i].setText("");
+            letterLabels.get(guessCount).get(i).setText("");
         }
     }
 
@@ -592,24 +584,25 @@ public class WordleController {
             }
             if (index < labels.size()) {
                 switch (info.charAt(index)) {
-                    case 'x' ->
-                            labels.get(index).setStyle("-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;");
-                    if (isHardMode) {
-                        labels[index].setText("");
+                    case 'x' -> {
+                        labels.get(index).setStyle("-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;");
+                        if (isHardMode) {
+                            labels.get(index).setText("");
+                        }
                     }
+                    case 'y' -> {
+                        labels.get(index).setStyle("-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;");
+                        if (isHardMode) {
+                            labels.get(index).setText("");
+                        }
                     }
-                    case 'y' ->{
-                            labels.get(index).setStyle("-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;");
-                if (isHardMode) {
-                    labels[index].setText("");
-                }
-                    case 'g' ->{
+                        case 'g' -> {
                             labels.get(index).setStyle("-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;");
-                if (isHardMode) {
-                    labels[index].setText("");
-                }
-            }
-                }
+                            if (isHardMode) {
+                                labels.get(index).setText("");
+                            }
+                        }
+                    }
                 }
         });
 
@@ -625,6 +618,7 @@ public class WordleController {
 
         SequentialTransition flip = new SequentialTransition(shrink, expand);
         flip.play();
+
     }
 
     public void runSettings() {
