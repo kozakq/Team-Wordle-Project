@@ -508,7 +508,7 @@ public class WordleController {
         this.mainStage = stage;
         this.adminStatsScene = adminScene;
         this.playerStatsScene = playerScene;
-        this.settingsScene = settingsScene;
+        this.settingsScene = SettingScene;
         this.adminSettingsScene = adminSettingsScene;
 
         this.stats.setOnMouseClicked(e -> {
@@ -531,6 +531,11 @@ public class WordleController {
                     adminSettingsController.updateBox();
                 }
                 this.mainStage.setScene(this.adminSettingsScene);
+            } else {
+                if (settingsController != null) {
+                    settingsController.initialize();
+                }
+                this.mainStage.setScene(this.settingsScene);
             }
         });
     }
@@ -590,14 +595,7 @@ public class WordleController {
         SequentialTransition flip = new SequentialTransition(shrink, expand);
         flip.play();
     }
-
-    public void settingPressed(ActionEvent actionEvent) {
-        openGamemodeWindow();
-    }
-    private void openGamemodeWindow() {
-            this.mainStage.setScene(this.settingsScene);
-    }
-
+    
     public void runSettings() {
         settingsController.setWordleController(this);
         settingsController.setCountdownBar(countdownBar);
