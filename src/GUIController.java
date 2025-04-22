@@ -35,7 +35,8 @@ public class GUIController {
                                 l.setStyle("-fx-background-color: #b39f39; -fx-border-radius: 5; -fx-background-radius: 5;");
                             }
                         }
-                        case 'g' -> l.setStyle("-fx-background-color: #538d4c; -fx-border-radius: 5; -fx-background-radius: 5;");
+                        case 'g' ->
+                                l.setStyle("-fx-background-color: #538d4c; -fx-border-radius: 5; -fx-background-radius: 5;");
                     }
                 }
 

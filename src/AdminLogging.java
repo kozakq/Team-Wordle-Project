@@ -9,9 +9,9 @@ import java.util.List;
 
 public class AdminLogging {
     public static final String LOG_DIRECTORY = "logs";
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private final int accountID;
     private File logFile;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private boolean isClosed = false;
     private List<String> logEntries = new ArrayList<>();
 
@@ -51,7 +51,7 @@ public class AdminLogging {
         String timeStamp = LocalDateTime.now().format(formatter);
         String logEntry = timeStamp + " - " + keyInput;
         logEntries.add(logEntry);
-        
+
         writeToFile();
     }
 

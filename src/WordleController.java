@@ -1,10 +1,12 @@
-import javafx.animation.*;
+import javafx.animation.Interpolator;
+import javafx.animation.PauseTransition;
+import javafx.animation.ScaleTransition;
+import javafx.animation.SequentialTransition;
+import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -25,11 +27,8 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javafx.animation.PauseTransition;
 
 /*
  * Course: Software Tools & Process
@@ -49,11 +48,13 @@ public class WordleController {
     private final Label[][] keyLabels;
     private final HBox[] wordBoxes;
     private final ImageView lightbulb = new ImageView(new Image("gui/lightbulb.png"));
-    @FXML
-    private ImageView settings = new ImageView(new Image("gui/settings.png"));
-
     public Button hintButton;
     public ProgressBar countdownBar;
+    public SettingsController settingsController;
+    public boolean isHardMode = false;
+    Stage endGameStage = new Stage();
+    @FXML
+    private ImageView settings = new ImageView(new Image("gui/settings.png"));
     private Stage mainStage;
     private Scene statsScene;
     private String goalWord;
@@ -63,17 +64,12 @@ public class WordleController {
     private Scene playerStatsScene;
     private Scene adminSettingsScene;
     private Scene settingsScene;
-
     private AdminStatsController adminStatsController;
     private StatsController playerStatsController;
     private AdminSettingsController adminSettingsController;
-    public SettingsController settingsController;
     private LeaderboardController leaderboardController;
-
     private boolean isGameWon;
     private int remainingHints = 3;
-    public boolean isHardMode = false;
-    Stage endGameStage = new Stage();
     private boolean isFlipping = false;
 
     @FXML
@@ -238,11 +234,11 @@ public class WordleController {
                     currentWord = "";
 
                 }
-            }else{
-                    shakeNode(wordBoxes[guessCount]);
-                }
+            } else {
+                shakeNode(wordBoxes[guessCount]);
             }
         }
+    }
 
     private void exclusionPopUp() {
         shakeNode(wordBoxes[guessCount]);
@@ -262,6 +258,7 @@ public class WordleController {
         delay.setOnFinished(e -> popup.hide());
         delay.play();
     }
+
     private void clearEnteredWord() {
         for (int i = 0; i < goalWord.length(); i++) {
             letterLabels.get(guessCount).get(i).setText("");
@@ -310,6 +307,7 @@ public class WordleController {
             showEndGameWindow();
         }
     }
+
     public void showEndGameWindow() {
         endGameStage.setWidth(400);
         endGameStage.setHeight(400);
@@ -359,6 +357,7 @@ public class WordleController {
         endGameStage.setScene(scene);
         endGameStage.show();
     }
+
     private void showPlayerStats() {
         if (WordleApp.isAdmin()) {
             if (adminStatsController != null) {
@@ -592,14 +591,14 @@ public class WordleController {
                             labels.get(index).setText("");
                         }
                     }
-                        case 'g' -> {
-                            labels.get(index).setStyle("-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;");
-                            if (isHardMode) {
-                                labels.get(index).setText("");
-                            }
+                    case 'g' -> {
+                        labels.get(index).setStyle("-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;");
+                        if (isHardMode) {
+                            labels.get(index).setText("");
                         }
                     }
                 }
+            }
         });
 
         ScaleTransition expand = new ScaleTransition(Duration.millis(750 / goalWord.length()), label);
@@ -627,6 +626,7 @@ public class WordleController {
     public void setLeaderboardController(LeaderboardController leaderboardController) {
         this.leaderboardController = leaderboardController;
     }
+
     public void setHardMode(boolean isHardMode) {
         this.isHardMode = isHardMode;
     }

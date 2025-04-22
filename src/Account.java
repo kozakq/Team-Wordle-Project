@@ -13,7 +13,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Account {
     public static final String ACCOUNT_DIRECTORY = "accounts";
@@ -21,6 +25,7 @@ public class Account {
     private int accountID;
     private Map<Integer, Integer> guessCounts;
     private Map<String, Integer> gameStats;
+    private Map<String, Integer> gameTime;
     private String password;
     private String username;
     private UserType userType;
@@ -36,6 +41,7 @@ public class Account {
         guesses = new HashMap<>();
         guessCounts = new HashMap<>(Map.of(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0));
         gameStats = new HashMap<>(Map.of("wins", 0, "losses", 0, "total", 0));
+        gameTime = new HashMap<>(Map.of("time", 0));
         userType = UserType.USER;
     }
 
@@ -46,6 +52,7 @@ public class Account {
         guesses = new HashMap<>();
         guessCounts = new HashMap<>(Map.of(1, 0, 2, 0, 3, 0, 4, 0, 5, 0, 6, 0));
         gameStats = new HashMap<>(Map.of("wins", 0, "losses", 0, "total", 0));
+        gameTime = new HashMap<>(Map.of("time", 0));
         if (accountID == 0) {
             userType = UserType.ADMIN;
         } else {
@@ -72,6 +79,13 @@ public class Account {
             while (lineIndex < 15) {
                 String[] splits = lines.get(lineIndex).split(":");
                 gameStats.put(splits[0], Integer.parseInt(splits[1]));
+                lineIndex++;
+            }
+            gameTime = new HashMap<>();
+            lineIndex++;
+            while (lineIndex < 17) {
+                String[] splits = lines.get(lineIndex).split(":");
+                gameTime.put(splits[0], Integer.parseInt(splits[1]));
                 lineIndex++;
             }
 
@@ -155,7 +169,11 @@ public class Account {
             for (String key : gameStats.keySet()) {
                 writer.write(String.format("%s:%d\n", key, gameStats.get(key)));
             }
+            writer.write("\n");
 
+            for (String key : gameTime.keySet()) {
+                writer.write(String.format("%s:%d\n", key, gameTime.get(key)));
+            }
             writer.write("\n");
 
             for (String key : guesses.keySet()) {
@@ -231,11 +249,12 @@ public class Account {
         gameStats.put("total", totalGames);
         gameStats.put("wins", gamesWon);
         gameStats.put("losses", gamesLost);
-        gameStats.put("time", time);
+        gameTime.put("time", time);
 
 
         saveToFile();
     }
+
     public void reportTime(int time) {
         this.time = time;
     }

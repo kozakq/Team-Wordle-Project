@@ -7,7 +7,11 @@
  */
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -21,11 +25,11 @@ import java.util.stream.Collectors;
 public class WordleApp {
     public static boolean isAdmin;
     protected static Account currentAccount;
+    protected static AdminLogging adminLogging;
     static List<Account> accountList;
     static WordStorage wordStorage;
     private static Dictionary dictionary;
     private static String goalWord;
-    protected static AdminLogging adminLogging;
     private static int wordLength = 5;
 
     public static void initialize() {
@@ -252,11 +256,11 @@ public class WordleApp {
         return dictionary;
     }
 
-    public static void setWordLength(int length) {
-        wordLength = length;
-    }
-
     public static int getWordLength() {
         return wordLength;
+    }
+
+    public static void setWordLength(int length) {
+        wordLength = length;
     }
 }

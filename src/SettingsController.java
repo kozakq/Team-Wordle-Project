@@ -7,10 +7,10 @@ import javafx.scene.control.ProgressBar;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import java.sql.Time;
-
 public class SettingsController {
 
+    private static final int ONE_MINUTE = 60;
+    private static final int THREE_MINUTES = 180;
     public Label settingsPrompt;
     public Button unlimitedButton;
     public Button mediumButton;
@@ -19,12 +19,11 @@ public class SettingsController {
     private Stage mainStage;
     private ProgressBar progressBar;
     private WordleController wordleController;
-    private static final int ONE_MINUTE = 60;
-    private static final int THREE_MINUTES = 180;
     private int timeLeft = 100;
     private int time;
     private int gamemode = 3;
     private Timeline timeline = new Timeline();
+
     public void setGameScene(Scene gameScene) {
         this.gameScene = gameScene;
     }
@@ -33,17 +32,22 @@ public class SettingsController {
         this.mainStage = mainStage;
     }
 
-    public void setWordleController(WordleController wordleController) { this.wordleController = wordleController; }
+    public void setWordleController(WordleController wordleController) {
+        this.wordleController = wordleController;
+    }
 
     public void initialize() {
 
     }
+
     private void switchToGame() {
         mainStage.setScene(gameScene);
     }
+
     public void setCountdownBar(ProgressBar progressBar) {
         this.progressBar = progressBar;
     }
+
     public void setupButtons() {
         unlimitedButton.setOnAction(e -> {
             gamemode = 3;
@@ -64,6 +68,7 @@ public class SettingsController {
     public boolean gameOver() {
         return timeLeft == 0;
     }
+
     public void restartBar(int gamemode) {
         switch (gamemode) {
             case 0 -> updateProgress(THREE_MINUTES);
@@ -92,9 +97,11 @@ public class SettingsController {
         timeline.play();
         switchToGame();
     }
+
     public int recordTime() {
         return time - timeLeft;
     }
+
     public int getGamemode() {
         return gamemode;
     }

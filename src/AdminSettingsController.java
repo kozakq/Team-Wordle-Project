@@ -74,7 +74,9 @@ public class AdminSettingsController {
         this.mainStage = mainStage;
     }
 
-    public void setWordleController(WordleController wordleController) { this.wordleController = wordleController; }
+    public void setWordleController(WordleController wordleController) {
+        this.wordleController = wordleController;
+    }
 
     public void initialize() {
         if (back != null) {

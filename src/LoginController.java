@@ -1,6 +1,11 @@
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -10,7 +15,7 @@ import javafx.stage.Stage;
  * Fall 2024-2025
  * Class LoginController Purpose:
  * Allows user login or guest play, and mode selection (Normal / Hard).
- *
+ * <p>
  * Author: childressg
  * Version: created on 3/11/2025
  */
