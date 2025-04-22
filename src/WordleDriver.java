@@ -38,40 +38,22 @@ public class WordleDriver extends Application {
         Scene adminStatsScene = new Scene(adminStatsFxmlLoader.load());
         AdminStatsController adminStatsController = adminStatsFxmlLoader.getController();
 
-        FXMLLoader settingsFXMLLoader = new FXMLLoader(getClass().getResource("gui/settings.fxml"));
-        Scene settingsScene = new Scene(settingsFXMLLoader.load());
-        SettingsController settingsController = settingsFXMLLoader.getController();
-
         FXMLLoader playerStatsFxmlLoader = new FXMLLoader(getClass().getResource("gui/stats.fxml"));
         Scene playerStatsScene = new Scene(playerStatsFxmlLoader.load());
         StatsController playerStatsController = playerStatsFxmlLoader.getController();
 
-        FXMLLoader leaderboardFXMLLoader = new FXMLLoader(getClass().getResource("gui/leaderboard.fxml"));
-        Scene leaderboardScene = new Scene(leaderboardFXMLLoader.load());
-        LeaderboardController leaderboardController = leaderboardFXMLLoader.getController();
+        FXMLLoader leaderboardFxmlLoader = new FXMLLoader(getClass().getResource("gui/leaderboard.fxml"));
+        Scene leaderboardScene = new Scene(leaderboardFxmlLoader.load());
+        LeaderboardController leaderboardController = leaderboardFxmlLoader.getController();
 
-        gameController.setSettingsController(settingsController);
-        settingsController.setCountdownBar(gameController.countdownBar);
-        settingsController.setWordleController(gameController);
-        settingsController.setupButtons();
-
-
-        leaderboardController.setGameScene(gameScene);
-        leaderboardController.setMainStage(stage);
-        leaderboardController.initialize();
+        FXMLLoader settingsLoader = new FXMLLoader(getClass().getResource("gui/settings.fxml"));
+        Scene settingsScene = new Scene(settingsLoader.load());
+        SettingsController settingsController = settingsLoader.getController();
 
         settingsController.setGameScene(gameScene);
         settingsController.setMainStage(stage);
         settingsController.initialize();
-
-        adminStatsController.setGameScene(gameScene);
-        adminStatsController.setMainStage(stage);
-        adminStatsController.initialize();
-
-        playerStatsController.setGameScene(gameScene);
-        playerStatsController.setMainStage(stage);
-        playerStatsController.initialize();
-        playerStatsController.setStageScene(leaderboardScene);
+        settingsController.setWordleController(gameController);
 
         FXMLLoader adminSettingsLoader = new FXMLLoader(getClass().getResource("gui/adminsettings.fxml"));
         Scene adminSettingsScene = new Scene(adminSettingsLoader.load());
@@ -82,10 +64,23 @@ public class WordleDriver extends Application {
         adminSettingsController.initialize();
         adminSettingsController.setWordleController(gameController);
 
+        adminStatsController.setGameScene(gameScene);
+        adminStatsController.setMainStage(stage);
+        adminStatsController.initialize();
+
+        playerStatsController.setGameScene(gameScene);
+        playerStatsController.setMainStage(stage);
+        playerStatsController.initialize();
+        playerStatsController.setStageScene(leaderboardScene);
+
+        leaderboardController.setGameScene(gameScene);
+        leaderboardController.setMainStage(stage);
+
         gameController.setAdminStatsController(adminStatsController);
         gameController.setPlayerStatsController(playerStatsController);
         gameController.setLeaderboardController(leaderboardController);
         gameController.setAdminSettingsController(adminSettingsController);
+        gameController.setSettingsController(settingsController);
         gameController.setStageScene(stage, adminStatsScene, playerStatsScene, adminSettingsScene, settingsScene);
         stage.setScene(loginScene);
         stage.setOnCloseRequest(e -> gameController.closeGame());

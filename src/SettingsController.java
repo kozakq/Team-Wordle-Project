@@ -33,6 +33,8 @@ public class SettingsController {
         this.mainStage = mainStage;
     }
 
+    public void setWordleController(WordleController wordleController) { this.wordleController = wordleController; }
+
     public void initialize() {
 
     }
@@ -41,9 +43,6 @@ public class SettingsController {
     }
     public void setCountdownBar(ProgressBar progressBar) {
         this.progressBar = progressBar;
-    }
-    public void setWordleController(WordleController wordleController) {
-        this.wordleController = wordleController;
     }
     public void setupButtons() {
         unlimitedButton.setOnAction(e -> {

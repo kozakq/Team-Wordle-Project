@@ -50,7 +50,7 @@ public class WordleController {
     private final HBox[] wordBoxes;
     private final ImageView lightbulb = new ImageView(new Image("gui/lightbulb.png"));
     @FXML
-    private final ImageView settings = new ImageView(new Image("gui/settings.png"));
+    private ImageView settings = new ImageView(new Image("gui/settings.png"));
 
     public Button hintButton;
     public ProgressBar countdownBar;
@@ -390,7 +390,6 @@ public class WordleController {
         logKeyPress("Restart");
         runSettings();
         settingsController.restartBar(settingsController.getGamemode());
-
     }
 
     private void updateLabelLength() {
@@ -498,7 +497,9 @@ public class WordleController {
         this.playerStatsController = controller;
     }
 
-    public void setSettingsController(SettingsController controller) {this.settingsController = controller;}
+    public void setSettingsController(SettingsController settingsController) {
+        this.settingsController = settingsController;
+    }
 
     public void setAdminSettingsController(AdminSettingsController controller) {
         this.adminSettingsController = controller;
@@ -508,8 +509,8 @@ public class WordleController {
         this.mainStage = stage;
         this.adminStatsScene = adminScene;
         this.playerStatsScene = playerScene;
-        this.settingsScene = SettingScene;
         this.adminSettingsScene = adminSettingsScene;
+        this.settingsScene = SettingScene;
 
         this.stats.setOnMouseClicked(e -> {
             if (WordleApp.isAdmin()) {
@@ -597,8 +598,10 @@ public class WordleController {
     }
     
     public void runSettings() {
-        settingsController.setWordleController(this);
-        settingsController.setCountdownBar(countdownBar);
+        if (settingsController != null) {
+            settingsController.setWordleController(this);
+            settingsController.setCountdownBar(countdownBar);
+        }
     }
 
     public void setLeaderboardController(LeaderboardController leaderboardController) {
