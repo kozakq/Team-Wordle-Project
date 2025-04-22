@@ -95,7 +95,6 @@ public class WordleApp {
     public static String changeGoalWord() {
         goalWord = dictionary.getRandomWord(wordLength);
         System.out.println(goalWord);
-        System.out.println(goalWord);
         return goalWord;
     }
 

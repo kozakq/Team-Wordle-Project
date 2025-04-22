@@ -263,7 +263,6 @@ public class WordleController {
         delay.play();
     }
     private void clearEnteredWord() {
-        System.out.println("works here");
         for (int i = 0; i < goalWord.length(); i++) {
             letterLabels.get(guessCount).get(i).setText("");
         }
@@ -295,10 +294,10 @@ public class WordleController {
                 leaderboardController.getLeaderboard().addToLeaderboard(time);
                 leaderboardController.updateLeaderboard();
 
-                System.out.println("Game ended: " + (won ? "WON" : "LOST") +
-                        " - Total games: " + currentAccount.getTotalGames() +
-                        ", Wins: " + currentAccount.getGamesWon() +
-                        ", Losses: " + currentAccount.getGamesLost());
+//                System.out.println("Game ended: " + (won ? "WON" : "LOST") +
+//                        " - Total games: " + currentAccount.getTotalGames() +
+//                        ", Wins: " + currentAccount.getGamesWon() +
+//                        ", Losses: " + currentAccount.getGamesLost());
             }
 
             if (playerStatsController != null) {
@@ -329,7 +328,6 @@ public class WordleController {
         Button restartButton = new Button("Restart Game");
         restartButton.getStyleClass().add("restart-button");
         restartButton.setOnAction(e -> {
-            System.out.println("Restarting");
             endGameStage.close();
             if (!isFlipping) restartGame();
         });
@@ -432,7 +430,6 @@ public class WordleController {
     }
 
     public EventHandler<WindowEvent> closeGame() {
-        System.out.println("Closing!");
         logKeyPress("Closed Game");
 
         WordleApp.save();
@@ -498,7 +495,6 @@ public class WordleController {
             hintButton.setGraphic(lightbulb);
         }
     }
-
 
     public void setAdminStatsController(AdminStatsController controller) {
         this.adminStatsController = controller;
@@ -633,6 +629,5 @@ public class WordleController {
     }
     public void setHardMode(boolean isHardMode) {
         this.isHardMode = isHardMode;
-        System.out.println("Hard mode? " + this.isHardMode);
     }
 }
