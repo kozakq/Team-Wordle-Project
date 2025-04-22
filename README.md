@@ -15,6 +15,18 @@ TBD
 ## Contributing
 TBD
 
+## Licensing
+
+MIT No Attribution License
+
+Copyright 2025 Gavin Childress, Jaden Griffith, Quinn Kozak, Pele Orugbani
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so.
+
+THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+We chose this license as it is a good open source license that allows all permissions to the project. Specifically, this was because we do not believe this project to be new or significant enough to want to prohibit others from the use of the source code, also WORDLE already exists so it is not entirely our idea either. An open source license that allows all permissions allows for the software development world to grow too without the need for fear of legal issues. 
+
 ## Authors and acknowledgment
 Gavin Childress - childressg@msoe.edu
 
