@@ -359,6 +359,8 @@ public class WordleController {
     }
 
     private void showPlayerStats() {
+        endGameStage.close();
+        restartGame();
         if (WordleApp.isAdmin()) {
             if (adminStatsController != null) {
                 this.mainStage.setScene(this.adminStatsScene);
@@ -371,8 +373,7 @@ public class WordleController {
                 playerStatsController.updateStats();
             }
         }
-        endGameStage.close();
-        restartGame();
+
     }
 
     public void restartGame() {
