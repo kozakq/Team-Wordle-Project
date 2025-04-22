@@ -1,17 +1,6 @@
-/*
- * Course: SWE2410-121
- * Fall 2024-2025
- * File header contains class LoginController
- * Name: childressg
- * Created 3/11/2025
- */
-
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -20,9 +9,10 @@ import javafx.stage.Stage;
  * Course SWE2410-121
  * Fall 2024-2025
  * Class LoginController Purpose:
+ * Allows user login or guest play, and mode selection (Normal / Hard).
  *
- * @author childressg
- * @version created on 3/11/2025 3:30 PM
+ * Author: childressg
+ * Version: created on 3/11/2025
  */
 public class LoginController {
     private WordleController wordleController;
@@ -50,6 +40,15 @@ public class LoginController {
     @FXML
     private Button guestButton;
 
+    @FXML
+    private RadioButton normalModeRadio;
+
+    @FXML
+    private RadioButton hardModeRadio;
+
+    @FXML
+    private ToggleGroup modeGroup;
+
     public void setWordleController(WordleController wordleController) {
         this.wordleController = wordleController;
     }
@@ -63,6 +62,11 @@ public class LoginController {
     }
 
     public void initialize() {
+        modeGroup = new ToggleGroup();
+        normalModeRadio.setToggleGroup(modeGroup);
+        hardModeRadio.setToggleGroup(modeGroup);
+        normalModeRadio.setSelected(true);
+
         guestButton.setOnAction(e -> switchToGame());
 
         createButton.setOnAction(e -> {
@@ -89,10 +93,12 @@ public class LoginController {
     }
 
     private void switchToGame() {
+        boolean isHardMode = hardModeRadio.isSelected();
+
         if (wordleController != null) {
+            wordleController.setHardMode(isHardMode);
             wordleController.updateAdminUI();
         }
         mainStage.setScene(gameScene);
-
     }
 }

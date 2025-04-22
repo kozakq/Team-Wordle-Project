@@ -72,6 +72,7 @@ public class WordleController {
 
     private boolean isGameWon;
     private int remainingHints = 3;
+    public boolean isHardMode = false;
     Stage endGameStage = new Stage();
     private boolean isFlipping = false;
 
@@ -229,11 +230,25 @@ public class WordleController {
                     guessCount++;
                     guiController.updateView(currentWord, info);
                     currentWord = "";
+                flipLabel(letterLabels[guessCount], info, 0);
+                guessedWords.add(currentWord.toLowerCase());
+
+                if (!isHardMode) {
+                    guiController.updateView(currentWord, info);
                 }
+
+                if (isHardMode) {
+                    clearEnteredWord();
+                }
+
+                guessCount++;
+                isGameOver();
+                currentWord = "";
             } else {
                 shakeNode(wordBoxes[guessCount]);
             }
         }
+            }
     }
 
     private void exclusionPopUp() {
@@ -253,6 +268,13 @@ public class WordleController {
         PauseTransition delay = new PauseTransition(Duration.seconds(2));
         delay.setOnFinished(e -> popup.hide());
         delay.play();
+    }
+    private void clearEnteredWord() {
+        System.out.println("works here");
+        for (int i = 0; i < goalWord.length(); i++) {
+
+            letterLabels[guessCount][i].setText("");
+        }
     }
 
     private void backspace() {
@@ -452,7 +474,6 @@ public class WordleController {
 
     public void hintPressed(ActionEvent actionEvent) {
         getHint();
-        logKeyPress("Hint used");
 
         if (remainingHints <= 0) {
             hintButton.setDisable(true);
@@ -466,8 +487,6 @@ public class WordleController {
 
         updateHintButton();
     }
-
-
 
     private void updateHintButton() {
         if (remainingHints > 0) {
@@ -565,7 +584,7 @@ public class WordleController {
         Label label = labels.get(index);
         ScaleTransition shrink = new ScaleTransition(Duration.millis(750 / goalWord.length()), label);
         shrink.setToY(0);
-        shrink.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
+        shrink.setInterpolator(Interpolator.EASE_BOTH);
 
         shrink.setOnFinished(e -> {
             if (index < labels.size() - 1) {
@@ -575,12 +594,23 @@ public class WordleController {
                 switch (info.charAt(index)) {
                     case 'x' ->
                             labels.get(index).setStyle("-fx-border-color: #323234; -fx-border-width: 2; -fx-background-color: #323234;");
-                    case 'y' ->
+                    if (isHardMode) {
+                        labels[index].setText("");
+                    }
+                    }
+                    case 'y' ->{
                             labels.get(index).setStyle("-fx-border-color: #b39f39; -fx-border-width: 2; -fx-background-color: #b39f39;");
-                    case 'g' ->
+                if (isHardMode) {
+                    labels[index].setText("");
+                }
+                    case 'g' ->{
                             labels.get(index).setStyle("-fx-border-color: #538d4c; -fx-border-width: 2; -fx-background-color: #538d4c;");
+                if (isHardMode) {
+                    labels[index].setText("");
                 }
             }
+                }
+                }
         });
 
         ScaleTransition expand = new ScaleTransition(Duration.millis(750 / goalWord.length()), label);
@@ -596,7 +626,7 @@ public class WordleController {
         SequentialTransition flip = new SequentialTransition(shrink, expand);
         flip.play();
     }
-    
+
     public void runSettings() {
         if (settingsController != null) {
             settingsController.setWordleController(this);
@@ -606,5 +636,9 @@ public class WordleController {
 
     public void setLeaderboardController(LeaderboardController leaderboardController) {
         this.leaderboardController = leaderboardController;
+    }
+    public void setHardMode(boolean isHardMode) {
+        this.isHardMode = isHardMode;
+        System.out.println("Hard mode? " + this.isHardMode);
     }
 }

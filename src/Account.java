@@ -228,10 +228,11 @@ public class Account {
         } else {
             gamesLost++;
         }
-        gameStats.put("time", time);
         gameStats.put("total", totalGames);
         gameStats.put("wins", gamesWon);
         gameStats.put("losses", gamesLost);
+        gameStats.put("time", time);
+
 
         saveToFile();
     }
@@ -241,9 +242,7 @@ public class Account {
 
 
     public Map<String, Integer> getGuesses() {
-        System.out.println("Account Guesses: " + guesses); // Debug print
+        System.out.println("Account Guesses: " + guesses);
         return guesses;
     }
-
-
 }
