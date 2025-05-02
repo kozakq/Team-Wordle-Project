@@ -36,9 +36,7 @@ public class SettingsController {
         this.wordleController = wordleController;
     }
 
-    public void initialize() {
 
-    }
 
     private void switchToGame() {
         mainStage.setScene(gameScene);

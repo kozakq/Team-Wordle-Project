@@ -52,7 +52,6 @@ public class WordleDriver extends Application {
 
         settingsController.setGameScene(gameScene);
         settingsController.setMainStage(stage);
-        settingsController.initialize();
         settingsController.setWordleController(gameController);
 
         FXMLLoader adminSettingsLoader = new FXMLLoader(getClass().getResource("gui/adminsettings.fxml"));

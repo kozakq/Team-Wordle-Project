@@ -289,7 +289,6 @@ public class WordleController {
 
                 int time = currentAccount.getTime();
                 leaderboardController.getLeaderboard().addToLeaderboard(time);
-                leaderboardController.updateLeaderboard();
 
 //                System.out.println("Game ended: " + (won ? "WON" : "LOST") +
 //                        " - Total games: " + currentAccount.getTotalGames() +
@@ -359,6 +358,7 @@ public class WordleController {
     }
 
     private void showPlayerStats() {
+        playerStatsController.setLeaderboardController(leaderboardController);
         endGameStage.close();
         restartGame();
         if (WordleApp.isAdmin()) {
@@ -540,9 +540,7 @@ public class WordleController {
                 }
                 this.mainStage.setScene(this.adminSettingsScene);
             } else {
-                if (settingsController != null) {
-                    settingsController.initialize();
-                }
+
                 this.mainStage.setScene(this.settingsScene);
             }
         });

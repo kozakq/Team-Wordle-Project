@@ -12,7 +12,6 @@ public class LeaderboardController {
     public VBox vBox;
     private Scene gameScene;
     private Stage mainStage;
-    private boolean hasRun = false;
 
 
     public void setGameScene(Scene gameScene) {
@@ -42,13 +41,13 @@ public class LeaderboardController {
     }
 
     public void updateLeaderboard() {
-        for (int i = 0; i < 10 && !hasRun; i++) {
+        vBox.getChildren().clear();
+        for (int i = 0; i < 10; i++) {
             if (i < leaderboard.getListLength()) {
                 Label label = new Label("#" + (i + 1) + " " + leaderboard.getListValue(i) + " seconds");
                 label.setStyle("-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;");
                 vBox.getChildren().add(label);
             }
         }
-        hasRun = true;
     }
 }
