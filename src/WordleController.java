@@ -358,7 +358,6 @@ public class WordleController {
     }
 
     private void showPlayerStats() {
-        playerStatsController.setLeaderboardController(leaderboardController);
         endGameStage.close();
         restartGame();
         if (WordleApp.isAdmin()) {
