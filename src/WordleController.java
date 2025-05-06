@@ -57,7 +57,6 @@ public class WordleController {
     private ImageView settings = new ImageView(new Image("gui/settings.png"));
     private Stage mainStage;
     private Scene statsScene;
-    private String goalWord;
     private String currentWord;
     private int guessCount;
     private Scene adminStatsScene;
@@ -85,7 +84,6 @@ public class WordleController {
 
 
     public WordleController() {
-        goalWord = WordleApp.getGoalWord();
         letterLabels = new ArrayList<>();
         keyLabels = new Label[][]{{null, null, null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null, null}, {null, null, null, null, null, null, null, null, null}};
         guiController = new GUIController(keyLabels);
@@ -123,7 +121,7 @@ public class WordleController {
             wordBox.setPrefHeight(55);
             wordBox.setSpacing(5);
             List<Label> row = new ArrayList<>();
-            for (int j = 0; j < goalWord.length(); j++) {
+            for (int j = 0; j < WordleApp.getGoalWord().length(); j++) {
                 Label letterLabel = new Label();
                 letterLabel.setAlignment(Pos.CENTER);
                 letterLabel.setPrefSize(55, 55);
@@ -206,7 +204,7 @@ public class WordleController {
     }
 
     private void enterCharacter(String key) {
-        if (currentWord.length() < goalWord.length() && guessCount < MAX_GUESSES) {
+        if (currentWord.length() < WordleApp.getGoalWord().length() && guessCount < MAX_GUESSES) {
             letterLabels.get(guessCount).get(currentWord.length()).setText(key);
             letterLabels.get(guessCount).get(currentWord.length()).setStyle("-fx-border-color: #545456; -fx-border-width: 2;");
             currentWord += key;
@@ -214,7 +212,8 @@ public class WordleController {
     }
 
     private void enter() {
-        if (currentWord.length() == goalWord.length()) {
+        if (currentWord.length() == WordleApp.getGoalWord().length()) {
+
             String info = WordleApp.checkWord(currentWord.toLowerCase());
             if (!info.isEmpty()) {
                 if (info.equals("excluded")) {
@@ -226,13 +225,11 @@ public class WordleController {
                     if (!isHardMode) {
                         guiController.updateView(currentWord, info);
                     }
-
                     if (isHardMode) {
                         clearEnteredWord();
                     }
                     guessCount++;
                     currentWord = "";
-
                 }
             } else {
                 shakeNode(wordBoxes[guessCount]);
@@ -260,7 +257,7 @@ public class WordleController {
     }
 
     private void clearEnteredWord() {
-        for (int i = 0; i < goalWord.length(); i++) {
+        for (int i = 0; i < WordleApp.getGoalWord().length(); i++) {
             letterLabels.get(guessCount).get(i).setText("");
         }
     }
@@ -274,12 +271,12 @@ public class WordleController {
     }
 
     public void isGameOver() {
-        if (guessedWords != null && ((guessedWords.contains(goalWord)) || guessCount == MAX_GUESSES) || settingsController.gameOver()) {
-            boolean won = guessedWords.contains(goalWord);
+        if (guessedWords != null && ((guessedWords.contains(WordleApp.getGoalWord())) || guessCount == MAX_GUESSES) || settingsController.gameOver()) {
+            boolean won = guessedWords.contains(WordleApp.getGoalWord());
             isGameWon = won;
 
             WordleApp.addGuessCount(guessCount);
-            WordleApp.adminLogging.log("Game Over, Game Won? : " + isGameWon);
+//            WordleApp.adminLogging.log("Game Over, Game Won? : " + isGameWon);
             if (WordleApp.isLoggedIn() && WordleApp.currentAccount != null) {
                 Account currentAccount = WordleApp.currentAccount;
                 currentAccount.reportTime(settingsController.recordTime());
@@ -313,11 +310,11 @@ public class WordleController {
         endGameStage.setHeight(400);
         endGameStage.setTitle("Game Over");
 
-        Label message = new Label((guessedWords.contains(goalWord)) ? "You Win!" : "You Lost!");
+        Label message = new Label((guessedWords.contains(WordleApp.getGoalWord())) ? "You Win!" : "You Lost!");
         message.getStyleClass().add("game-over-text");
 
         Label guessInfo = new Label("You used " + guessCount + " guesses!");
-        Label timeTaken = new Label((guessedWords.contains(goalWord)) ? "It took you " +
+        Label timeTaken = new Label((guessedWords.contains(WordleApp.getGoalWord())) ? "It took you " +
                 settingsController.recordTime() + " seconds!" : "You used all the time!");
         timeTaken.setVisible(false);
 
@@ -344,7 +341,7 @@ public class WordleController {
             if (!isFlipping) showPlayerStats();
         });
 
-        VBox layout = new VBox(20, message, guessInfo, timeTaken, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
+        VBox layout = new VBox(20, message, guessInfo, timeTaken, new Label("Word was: " + WordleApp.getGoalWord()), restartButton, statsButton, closeButton);
         if (WordleApp.isLoggedIn() && settingsController.getGamemode() != 3) {
             timeTaken.setVisible(true);
         }
@@ -373,7 +370,6 @@ public class WordleController {
                 playerStatsController.updateStats();
             }
         }
-
     }
 
     public void restartGame() {
@@ -384,13 +380,13 @@ public class WordleController {
         }
 
         for (int i = 0; i < MAX_GUESSES; i++) {
-            for (int j = 0; j < goalWord.length(); j++) {
+            for (int j = 0; j < WordleApp.getGoalWord().length(); j++) {
                 letterLabels.get(i).get(j).setText("");
                 letterLabels.get(i).get(j).setStyle("-fx-border-color: #323234; -fx-border-width: 2;");
             }
         }
 
-        goalWord = WordleApp.changeGoalWord();
+        WordleApp.changeGoalWord();
 
         updateLabelLength();
 
@@ -405,7 +401,7 @@ public class WordleController {
     }
 
     private void updateLabelLength() {
-        int difference = letterLabels.getFirst().size() - goalWord.length();
+        int difference = letterLabels.getFirst().size() - WordleApp.getGoalWord().length();
         if (difference < 0) {
             for (int i = 0; i < MAX_GUESSES; i++) {
                 for (int j = 0; j < Math.abs(difference); j++) {
@@ -450,9 +446,9 @@ public class WordleController {
     }
 
     private void getHint() {
-        if (currentWord.length() != goalWord.length() && remainingHints > 0) {
+        if (currentWord.length() != WordleApp.getGoalWord().length() && remainingHints > 0) {
             String hintLetter = "";
-            hintLetter = goalWord.substring(currentWord.length(), currentWord.length() + 1);
+            hintLetter = WordleApp.getGoalWord().substring(currentWord.length(), currentWord.length() + 1);
             enterCharacter(hintLetter.toUpperCase());
 
             remainingHints--;
@@ -570,7 +566,7 @@ public class WordleController {
 
     private void flipLabel(List<Label> labels, String info, int index) {
         Label label = labels.get(index);
-        ScaleTransition shrink = new ScaleTransition(Duration.millis(750 / goalWord.length()), label);
+        ScaleTransition shrink = new ScaleTransition(Duration.millis(750 / WordleApp.getGoalWord().length()), label);
         shrink.setToY(0);
         shrink.setInterpolator(Interpolator.EASE_BOTH);
 
@@ -602,7 +598,7 @@ public class WordleController {
             }
         });
 
-        ScaleTransition expand = new ScaleTransition(Duration.millis(750 / goalWord.length()), label);
+        ScaleTransition expand = new ScaleTransition(Duration.millis(750 / WordleApp.getGoalWord().length()), label);
         expand.setToY(1);
         expand.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
         if (index == labels.size() - 1) {
@@ -630,5 +626,11 @@ public class WordleController {
 
     public void setHardMode(boolean isHardMode) {
         this.isHardMode = isHardMode;
+    }
+
+    public void setEvilMode(boolean isEvilMode) {
+        if (isEvilMode) {
+            WordleApp.changeToEvilDictionary();
+        }
     }
 }
