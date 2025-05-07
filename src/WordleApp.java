@@ -6,6 +6,8 @@
  * Created 2/19/2025
  */
 
+import javafx.scene.Scene;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +33,7 @@ public class WordleApp {
     private static Dictionary dictionary;
     private static String goalWord;
     private static int wordLength = 5;
+    private static boolean adminViewMode = false;
 
     public static void initialize() {
         dictionary = new Dictionary();
@@ -262,5 +265,16 @@ public class WordleApp {
 
     public static void setWordLength(int length) {
         wordLength = length;
+    }
+
+    public static boolean getAdminViewMode() {
+        return adminViewMode;
+    }
+    public static void setAdminViewMode(boolean isAdminViewMode) {
+        adminViewMode = isAdminViewMode;
+    }
+
+    public static void toggleAdminView() {
+        adminViewMode = !adminViewMode;
     }
 }

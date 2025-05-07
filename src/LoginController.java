@@ -9,6 +9,7 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.application.Platform;
 
 /**
  * Course SWE2410-121
@@ -78,7 +79,12 @@ public class LoginController {
             String username = usernameField.getText();
             String password = passwordField.getText();
             if (WordleApp.createAccount(username, password)) {
+                if (WordleApp.isAdmin()) {
+                    WordleApp.setAdminViewMode(true);
+                }
                 switchToGame();
+                usernameField.setText("");
+                passwordField.setText("");
             } else {
                 loginPrompt.setText("Invalid Username or Password");
                 loginPrompt.setTextFill(Color.RED);
@@ -89,7 +95,12 @@ public class LoginController {
             String username = usernameField.getText();
             String password = passwordField.getText();
             if (WordleApp.login(username, password)) {
+                if (WordleApp.isAdmin()) {
+                    WordleApp.setAdminViewMode(true);
+                }
                 switchToGame();
+                usernameField.setText("");
+                passwordField.setText("");
             } else {
                 loginPrompt.setText("Invalid Username or Password");
                 loginPrompt.setTextFill(Color.RED);
@@ -103,7 +114,7 @@ public class LoginController {
         if (wordleController != null) {
             wordleController.setHardMode(isHardMode);
             wordleController.updateAdminUI();
+            mainStage.setScene(gameScene);
         }
-        mainStage.setScene(gameScene);
     }
-}
+    }

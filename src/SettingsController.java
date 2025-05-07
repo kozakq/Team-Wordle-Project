@@ -105,4 +105,14 @@ public class SettingsController {
     public int getGamemode() {
         return gamemode;
     }
+    public void stopTime() {
+        timeline.stop();
+        if (progressBar != null) {
+            progressBar.setVisible(false);
+        }
+    }
+
+    public void setGamemode(int gamemode) {
+        this.gamemode = gamemode;
+    }
 }

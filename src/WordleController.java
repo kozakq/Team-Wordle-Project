@@ -10,9 +10,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -64,6 +62,8 @@ public class WordleController {
     private Scene playerStatsScene;
     private Scene adminSettingsScene;
     private Scene settingsScene;
+    private Scene loginScene;
+    private Scene gameScene;
     private AdminStatsController adminStatsController;
     private StatsController playerStatsController;
     private AdminSettingsController adminSettingsController;
@@ -82,6 +82,10 @@ public class WordleController {
     private ImageView stats;
     @FXML
     private Label adminLabel;
+    @FXML
+    private Button viewToggleButton;
+    @FXML
+    private ImageView logoutIcon = new ImageView(new Image("gui/logout.png"));
 
 
     public WordleController() {
@@ -106,25 +110,28 @@ public class WordleController {
     public void initialize() {
         createHintButton();
         countdownBar.setVisible(false);
-
-
+        setupLogoutButton();
+        setupViewToggleButton();
+        
         pane.sceneProperty().addListener((observable, oldScene, newScene) -> {
             if (newScene != null) {
                 Scene scene = pane.getScene();
                 scene.setOnKeyPressed(this::keyPressed);
+                
+                javafx.application.Platform.runLater(() -> {
+                    pane.requestFocus();
+                });
             }
         });
+        
         pane.setFocusTraversable(true);
-        pane.requestFocus();
-
         for (int i = 0; i < MAX_GUESSES; i++) {
             HBox wordBox = new HBox();
             wordBox.setAlignment(Pos.CENTER);
             wordBox.setPrefHeight(55);
             wordBox.setSpacing(5);
             List<Label> row = new ArrayList<>();
-            for (int j = 0; j < goalWord.length(); j++) {
-                Label letterLabel = new Label();
+            for (int j = 0; j < goalWord.length(); j++) {Label letterLabel = new Label();
                 letterLabel.setAlignment(Pos.CENTER);
                 letterLabel.setPrefSize(55, 55);
                 letterLabel.setMaxSize(55, 55);
@@ -185,7 +192,6 @@ public class WordleController {
         updateHintButton();
     }
 
-
     private void keyPressed(KeyEvent e) {
         if (e.getCode().isLetterKey()) {
             enterCharacter(e.getCode().getChar());
@@ -232,7 +238,11 @@ public class WordleController {
                     }
                     guessCount++;
                     currentWord = "";
-
+                    
+                    // Update admin info if in admin view
+                    if (WordleApp.isAdmin() && WordleApp.getAdminViewMode()) {
+                        displayAdminInfo();
+                    }
                 }
             } else {
                 shakeNode(wordBoxes[guessCount]);
@@ -251,7 +261,6 @@ public class WordleController {
         content.setStyle("-fx-background-color: #3d3d3d; -fx-background-radius: 5;");
         popup.getContent().add(content);
 
-        // Show popup and auto-hide after 2 seconds
         popup.show(pane.getScene().getWindow());
 
         PauseTransition delay = new PauseTransition(Duration.seconds(2));
@@ -303,8 +312,9 @@ public class WordleController {
             if (adminStatsController != null) {
                 adminStatsController.refreshAllStats();
             }
-
-            showEndGameWindow();
+            if (!isFlipping) {
+                showEndGameWindow();
+            }
         }
     }
 
@@ -345,7 +355,7 @@ public class WordleController {
         });
 
         VBox layout = new VBox(20, message, guessInfo, timeTaken, new Label("Word was: " + goalWord), restartButton, statsButton, closeButton);
-        if (WordleApp.isLoggedIn() && settingsController.getGamemode() != 3) {
+        if (WordleApp.isLoggedIn() && settingsController.getGamemode() != 3  && !WordleApp.getAdminViewMode()) {
             timeTaken.setVisible(true);
         }
         layout.setAlignment(Pos.CENTER);
@@ -401,7 +411,10 @@ public class WordleController {
         updateHintButton();
         logKeyPress("Restart");
         runSettings();
+        if(!WordleApp.getAdminViewMode()){
         settingsController.restartBar(settingsController.getGamemode());
+        }
+        updateAdminUI();
     }
 
     private void updateLabelLength() {
@@ -440,12 +453,27 @@ public class WordleController {
     }
 
     public void updateAdminUI() {
-        if (WordleApp.isAdmin()) {
-            adminLabel.setVisible(true);
-            adminLabel.setManaged(true);
-        } else {
-            adminLabel.setVisible(false);
-            adminLabel.setManaged(false);
+        boolean isAdmin = WordleApp.isAdmin();
+        boolean isAdminView =  WordleApp.getAdminViewMode();
+        
+        if (adminLabel != null) {
+            adminLabel.setVisible(isAdminView);
+
+            if (isAdminView) {
+                adminLabel.setText("ADMINISTRATOR VIEW: Goal Word: " + goalWord);
+            }
+        }
+        
+        if (viewToggleButton != null) {
+            viewToggleButton.setVisible(isAdmin);
+            viewToggleButton.setText(WordleApp.getAdminViewMode() ? "Admin View" : "User View");
+            
+            if (WordleApp.getAdminViewMode()) {
+                viewToggleButton.setStyle("-fx-background-color: #538d4e; -fx-text-fill: white;");
+                settingsController.setGamemode(3);
+            } else {
+                viewToggleButton.setStyle("-fx-background-color: #808586; -fx-text-fill: white;");
+            }
         }
     }
 
@@ -454,9 +482,7 @@ public class WordleController {
             String hintLetter = "";
             hintLetter = goalWord.substring(currentWord.length(), currentWord.length() + 1);
             enterCharacter(hintLetter.toUpperCase());
-
             remainingHints--;
-
             updateHintButton();
         }
     }
@@ -496,6 +522,85 @@ public class WordleController {
         }
     }
 
+    private void setupViewToggleButton() {
+        if (viewToggleButton != null) {
+            viewToggleButton.setText(WordleApp.getAdminViewMode() ? "Admin View" : "User View");
+            viewToggleButton.setVisible(WordleApp.isAdmin());
+
+            viewToggleButton.setOnMouseClicked(e -> {
+                if (!isFlipping) {
+
+                    WordleApp.toggleAdminView();
+                    boolean isAdminView = WordleApp.getAdminViewMode();
+                    viewToggleButton.setText(isAdminView ? "Admin View" : "User View");
+
+                    if (isAdminView) {
+                        adminLabel.setVisible(true);
+                        adminLabel.setText("ADMINISTRATOR VIEW: Goal Word: " + goalWord);
+                        if (settingsController != null) {
+                            settingsController.stopTime();
+                        }
+                        viewToggleButton.setStyle("-fx-background-color: #538d4e; -fx-text-fill: white;");
+                    } else {
+                        adminLabel.setVisible(false);
+                        if (settingsController != null && settingsController.getGamemode() != 3) {
+                            settingsController.restartBar(settingsController.getGamemode());
+                        }
+                    }
+                    Platform.runLater(() -> {
+                        pane.requestFocus();
+
+                    });
+                }
+            });
+        }
+    }
+    
+    private void displayAdminInfo() {
+        // Show the current goal word and other admin details
+        StringBuilder info = new StringBuilder("ADMIN VIEW: ");
+        info.append("Goal Word: ").append(goalWord);
+        
+        if (WordleApp.isLoggedIn() && WordleApp.currentAccount != null) {
+            info.append(" | User: ").append(WordleApp.currentAccount.getUsername());
+        }
+        
+        adminLabel.setText(info.toString());
+    }
+
+    private void setupLogoutButton() {
+        if (logoutIcon != null) {
+            logoutIcon.setFitWidth(30);
+            logoutIcon.setFitHeight(30);
+            logoutIcon.setStyle("-fx-cursor: hand;");
+            
+            logoutIcon.setOnMouseClicked(e -> handleLogout());
+        }
+    }
+
+    private void handleLogout() {
+        Alert confirmAlert = new Alert(Alert.AlertType.CONFIRMATION);
+        confirmAlert.setTitle("Confirm Logout");
+        confirmAlert.setHeaderText("Are you sure you want to log out?");
+        confirmAlert.setContentText("Your progress will be saved.(if applicable)");
+
+        confirmAlert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                WordleApp.save();
+                
+                if (WordleApp.getAdminViewMode()) {
+                    WordleApp.setAdminViewMode(false);
+                }
+                settingsController.setGamemode(3);
+                WordleApp.logout();
+                restartGame();
+                if (loginScene != null) {
+                    mainStage.setScene(loginScene);
+                }
+            }
+        });
+    }
+
     public void setAdminStatsController(AdminStatsController controller) {
         this.adminStatsController = controller;
     }
@@ -519,8 +624,9 @@ public class WordleController {
         this.adminSettingsScene = adminSettingsScene;
         this.settingsScene = SettingScene;
 
+
         this.stats.setOnMouseClicked(e -> {
-            if (WordleApp.isAdmin()) {
+            if (WordleApp.isAdmin() && WordleApp.getAdminViewMode()) {
                 if (adminStatsController != null) {
                     adminStatsController.refreshAllStats();
                 }
@@ -534,7 +640,7 @@ public class WordleController {
         });
 
         this.settings.setOnMouseClicked(e -> {
-            if (WordleApp.isAdmin()) {
+            if (WordleApp.isAdmin() && WordleApp.getAdminViewMode()) {
                 if (adminSettingsController != null) {
                     adminSettingsController.updateBox();
                 }
@@ -630,5 +736,12 @@ public class WordleController {
 
     public void setHardMode(boolean isHardMode) {
         this.isHardMode = isHardMode;
+    }
+    public void setLoginScene(Scene loginScene) {
+        this.loginScene = loginScene;
+    }
+
+    public void setGameScene(Scene gameScene) {
+        this.gameScene = gameScene;
     }
 }

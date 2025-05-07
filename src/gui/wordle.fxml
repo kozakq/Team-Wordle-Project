@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WordleController">
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="679.0" prefWidth="600.0" style="-fx-background-color: #121214;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="WordleController">
    <VBox alignment="TOP_CENTER" prefHeight="679.0" prefWidth="600.0" spacing="50.0">
       <VBox alignment="TOP_CENTER" prefHeight="105.0" prefWidth="600.0">
          <HBox alignment="CENTER" prefHeight="58.0" prefWidth="393.0" spacing="15.0">
@@ -34,9 +40,19 @@
                   <Image url="@settings.png" />
                </image>
             </ImageView>
+            <ImageView fx:id="logoutIcon" fitHeight="38.0" fitWidth="22.0" layoutX="497.0" layoutY="28.0" pickOnBounds="true" preserveRatio="true" style="-fx-opacity: 0.4;">
+               <image>
+                  <Image url="@logout.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="viewToggleButton" mnemonicParsing="false" text="Admin View" visible="false">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Button>
          </HBox>
          <Separator maxWidth="411.0" opacity="0.5" prefHeight="3.0" prefWidth="411.0" style="-fx-max-width: 400;" />
-         <Label fx:id="adminLabel" alignment="TOP_CENTER" prefHeight="15.0" prefWidth="173.0" text="ADMINISTRATOR " textAlignment="JUSTIFY" textFill="#d7d8dc" visible="false" />
+         <Label fx:id="adminLabel" alignment="TOP_CENTER" prefHeight="17.0" prefWidth="308.0" text="ADMINISTRATOR " textAlignment="JUSTIFY" textFill="#d7d8dc" visible="false" />
       </VBox>
       <VBox fx:id="words" alignment="TOP_CENTER" prefHeight="348.0" prefWidth="600.0" spacing="5.0" />
       <VBox fx:id="keys" maxHeight="300.0" prefHeight="300.0" prefWidth="600.0" spacing="4.0" />
