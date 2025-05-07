@@ -14,4 +14,4 @@ public class Launcher {
 
     }
 }
-//java -jar s25-flynn-group1.jar
+//java -jar s25-flynn-group2.jar

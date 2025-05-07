@@ -460,7 +460,7 @@ public class WordleController {
             adminLabel.setVisible(isAdminView);
 
             if (isAdminView) {
-                adminLabel.setText("ADMINISTRATOR VIEW: Goal Word: " + goalWord);
+                adminLabel.setText("ADMINISTRATOR VIEW: Goal Word: " + WordleApp.getGoalWord());
             }
         }
 
@@ -538,7 +538,7 @@ public class WordleController {
 
                     if (isAdminView) {
                         adminLabel.setVisible(true);
-                        adminLabel.setText("ADMINISTRATOR VIEW: Goal Word: " + goalWord);
+                        adminLabel.setText("ADMINISTRATOR VIEW: Goal Word: " + WordleApp.getGoalWord());
                         if (settingsController != null) {
                             settingsController.stopTime();
                         }
@@ -561,7 +561,7 @@ public class WordleController {
     private void displayAdminInfo() {
         // Show the current goal word and other admin details
         StringBuilder info = new StringBuilder("ADMIN VIEW: ");
-        info.append("Goal Word: ").append(goalWord);
+        info.append("Goal Word: ").append(WordleApp.getGoalWord());
 
         if (WordleApp.isLoggedIn() && WordleApp.currentAccount != null) {
             info.append(" | User: ").append(WordleApp.currentAccount.getUsername());
@@ -677,7 +677,7 @@ public class WordleController {
 
     private void flipLabel(List<Label> labels, String info, int index) {
         Label label = labels.get(index);
-        ScaleTransition shrink = new ScaleTransition(Duration.millis(750 / goalWord.length()), label);
+        ScaleTransition shrink = new ScaleTransition(Duration.millis(750 / WordleApp.getGoalWord().length()), label);
         shrink.setToY(0);
         shrink.setInterpolator(Interpolator.EASE_BOTH);
 
@@ -709,7 +709,7 @@ public class WordleController {
             }
         });
 
-        ScaleTransition expand = new ScaleTransition(Duration.millis(750 / goalWord.length()), label);
+        ScaleTransition expand = new ScaleTransition(Duration.millis(750 / WordleApp.getGoalWord().length()), label);
         expand.setToY(1);
         expand.setInterpolator(javafx.animation.Interpolator.EASE_BOTH);
         if (index == labels.size() - 1) {
