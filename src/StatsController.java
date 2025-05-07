@@ -33,6 +33,8 @@ public class StatsController {
 
     @FXML
     private Label winRateLabel;
+    private LeaderboardController leaderboardController;
+
 
     @FXML
     public void initialize() {
@@ -62,6 +64,7 @@ public class StatsController {
         }
         if (leaderboard != null) {
             leaderboard.setOnAction(event -> {
+                leaderboardController.updateLeaderboard();
                 if (mainStage != null && gameScene != null) {
                     System.out.println("Going to leaderboard scene.");
                     mainStage.setScene(leaderboardScene);
@@ -210,5 +213,8 @@ public class StatsController {
 
     public void setStageScene(Scene leaderboardScene) {
         this.leaderboardScene = leaderboardScene;
+    }
+    public void setLeaderboardController(LeaderboardController leaderboardController) {
+        this.leaderboardController = leaderboardController;
     }
 }
