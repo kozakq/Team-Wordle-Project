@@ -33,6 +33,7 @@ public class WordleApp {
     private static Dictionary dictionary;
     private static String goalWord;
     private static int wordLength = 5;
+    private static boolean isEvilMode = false;
     private static boolean adminViewMode = false;
 
     public static void initialize() {
@@ -47,12 +48,23 @@ public class WordleApp {
         return false;
     }
 
+    public static void changeToEvilDictionary() {
+        dictionary.changeToEvilMode();
+        isEvilMode = true;
+    }
+
     public static String checkWord(String word) {
         if (ExclusionManager.get().isExcluded(word, goalWord)) {
             return "excluded";
         }
 
         if (dictionary.isValidWord(word)) {
+            if (isEvilMode) {
+                dictionary.minimizeResponse(word);
+                goalWord = dictionary.getRandomWord(wordLength);
+                System.out.println(goalWord);
+            }
+
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < word.length(); i++) {
                 char guess_letter = word.charAt(i);
@@ -99,10 +111,12 @@ public class WordleApp {
         return count;
     }
 
-    public static String changeGoalWord() {
+    public static void changeGoalWord() {
+        if (isEvilMode) {
+            dictionary.resetEvil();
+        }
         goalWord = dictionary.getRandomWord(wordLength);
         System.out.println(goalWord);
-        return goalWord;
     }
 
     public static boolean createAccount(String username, String password) {

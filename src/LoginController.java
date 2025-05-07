@@ -53,6 +53,9 @@ public class LoginController {
     private RadioButton hardModeRadio;
 
     @FXML
+    private RadioButton evilModeRadio;
+
+    @FXML
     private ToggleGroup modeGroup;
 
     public void setWordleController(WordleController wordleController) {
@@ -71,6 +74,7 @@ public class LoginController {
         modeGroup = new ToggleGroup();
         normalModeRadio.setToggleGroup(modeGroup);
         hardModeRadio.setToggleGroup(modeGroup);
+        evilModeRadio.setToggleGroup(modeGroup);
         normalModeRadio.setSelected(true);
 
         guestButton.setOnAction(e -> switchToGame());
@@ -110,9 +114,11 @@ public class LoginController {
 
     private void switchToGame() {
         boolean isHardMode = hardModeRadio.isSelected();
+        boolean isEvilMode = evilModeRadio.isSelected();
 
         if (wordleController != null) {
             wordleController.setHardMode(isHardMode);
+            wordleController.setEvilMode(isEvilMode);
             wordleController.updateAdminUI();
             mainStage.setScene(gameScene);
         }
